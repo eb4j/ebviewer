@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,6 +14,9 @@ import java.util.Base64;
 public final class Utils {
 
     static final Logger LOG = LoggerFactory.getLogger(EBDict.class.getName());
+
+    private Utils() {
+    }
 
     /**
      * Convert XBM image to lossless WebP and convert to Base64 String.

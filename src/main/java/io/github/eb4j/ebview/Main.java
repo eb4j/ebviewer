@@ -5,7 +5,10 @@ import java.io.File;
 /**
  * Main class for main command.
  */
-public class Main {
+public final class Main {
+
+    private Main() {
+    }
 
     /**
      * Main function.

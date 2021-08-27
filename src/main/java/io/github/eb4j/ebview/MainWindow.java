@@ -1,22 +1,38 @@
 package io.github.eb4j.ebview;
 
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.JViewport;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.HierarchyEvent;
+import java.util.List;
 
 public class MainWindow extends JFrame {
-    JPanel panel1;
-    JTextField searchWordField;
-    JButton searchButton;
-    JScrollPane articlePane;
+    private JPanel panel1;
+    private JTextField searchWordField;
+    private JButton searchButton;
+    private JScrollPane articlePane;
 
-    public MainWindow(EBDict ebDict) {
+    public MainWindow(final EBDict ebDict) {
         super("EBViewer");
         setPreferredSize(new Dimension(415, 405));
         setLayout(new BorderLayout());
@@ -45,17 +61,18 @@ public class MainWindow extends JFrame {
              * @param e the event to be processed
              */
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 String word = searchWordField.getText();
-                DictionarySearcher searcher = new DictionarySearcher(threadPane, ebDict);
-                searcher.setWord(word);
-                searcher.start();
+                new Thread(() -> {
+                    List<DictionaryEntry> result = ebDict.readArticles(word);
+                    SwingUtilities.invokeLater(() -> threadPane.setFoundResult(result));
+                }).start();
             }
         });
 
         // Resize
         this.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent event) {
+            public void componentResized(final ComponentEvent event) {
                 updateMargin(threadPane);
             }
         });
@@ -66,7 +83,7 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
-    static void updateMargin(JTextPane textPane) {
+    static void updateMargin(final JTextPane textPane) {
         JViewport viewport = (JViewport)
                 SwingUtilities.getAncestorOfClass(JViewport.class, textPane);
 
@@ -98,7 +115,7 @@ public class MainWindow extends JFrame {
 
         textPane.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent event) {
+            public void componentResized(final ComponentEvent event) {
                 updateMargin(textPane);
             }
         });
@@ -109,17 +126,17 @@ public class MainWindow extends JFrame {
             }
 
             @Override
-            public void changedUpdate(DocumentEvent event) {
+            public void changedUpdate(final DocumentEvent event) {
                 updateTextPane();
             }
 
             @Override
-            public void insertUpdate(DocumentEvent event) {
+            public void insertUpdate(final DocumentEvent event) {
                 updateTextPane();
             }
 
             @Override
-            public void removeUpdate(DocumentEvent event) {
+            public void removeUpdate(final DocumentEvent event) {
                 updateTextPane();
             }
         });

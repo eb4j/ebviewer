@@ -1,6 +1,10 @@
 package io.github.eb4j.ebview;
 
-import io.github.eb4j.*;
+import io.github.eb4j.Book;
+import io.github.eb4j.EBException;
+import io.github.eb4j.Result;
+import io.github.eb4j.Searcher;
+import io.github.eb4j.SubBook;
 import io.github.eb4j.hook.Hook;
 import io.github.eb4j.hook.HookAdapter;
 import org.slf4j.Logger;

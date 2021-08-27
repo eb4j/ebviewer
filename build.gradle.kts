@@ -24,7 +24,7 @@ group = "io.github.eb4j"
 
 application {
     mainClassName = "io.github.eb4j.ebview.Main"
-    applicationName = "ebview"
+    applicationName = "ebviewer"
 }
 
 repositories {
@@ -68,7 +68,7 @@ nativeImage {
     buildType { it.executable {
         main = "io.github.eb4j.ebview.Main"
     }}
-    executableName = "ebview"
+    executableName = "ebviewer"
     outputDirectory = file("$buildDir/bin")
     arguments {
         add("--verbose")

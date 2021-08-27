@@ -5,7 +5,7 @@ public class DictionaryEntry {
     private final String word;
     private String article;
 
-    public DictionaryEntry(String word, String article) {
+    public DictionaryEntry(final String word, final String article) {
         this.word = word;
         this.article = article;
     }

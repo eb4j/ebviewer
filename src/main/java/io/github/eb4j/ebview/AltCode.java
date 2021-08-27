@@ -16,12 +16,12 @@ public class AltCode {
 
     public AltCode(final SubBook subBook) {
         String title = subBook.getTitle();
-        subAppendix = subBook.getSubAppendix();
         try {
             unicodeMap = new UnicodeMap(title, new File(subBook.getBook().getPath()));
         } catch (EBException e) {
             unicodeMap = null;
         }
+        subAppendix = subBook.getSubAppendix();
     }
 
     public String getAltCode(final int code, final boolean narrow) {

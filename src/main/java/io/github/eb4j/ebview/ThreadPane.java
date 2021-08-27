@@ -3,17 +3,16 @@ package io.github.eb4j.ebview;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Caret;
 import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,26 +20,7 @@ public class ThreadPane extends JTextPane {
 
     static final Logger LOG = LoggerFactory.getLogger(ThreadPane.class.getName());
 
-    private static final String EXPLANATION = "Dictionary search result";
-
     protected final List<String> displayedWords = new ArrayList<>();
-
-    public enum EditorColor {
-        COLOR_BACKGROUND(UIManager.getColor("TextPane.background")), // Also used for EditorPane.background
-        COLOR_FOREGROUND(UIManager.getColor("TextPane.foreground"));
-
-        private Color color;
-
-        EditorColor(Color defaultColor) {
-            this.color = defaultColor;
-        }
-
-        public String toHex() {
-            return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-        }
-
-    }
-
 
     public ThreadPane() {
         super();
@@ -50,12 +30,10 @@ public class ThreadPane extends JTextPane {
         setFont(getFont());
         setMinimumSize(new Dimension(400, 300));
         setEditable(false);
-        setText(EXPLANATION);
-        makeCaretAlwaysVisible(this);
     }
 
     @Override
-    public void setFont(Font font) {
+    public void setFont(final Font font) {
         super.setFont(font);
         Document doc = getDocument();
         if (!(doc instanceof HTMLDocument)) {
@@ -66,9 +44,9 @@ public class ThreadPane extends JTextPane {
                 + " font-size: " + font.getSize() + "; "
                 + " font-style: " + (font.getStyle() == Font.BOLD ? "bold"
                 : font.getStyle() == Font.ITALIC ? "italic" : "normal") + "; "
-                + " color: " + EditorColor.COLOR_FOREGROUND.toHex() + "; "
-                + " background: " + EditorColor.COLOR_BACKGROUND.toHex() + "; "
-                + " }");
+                + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
+                + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; "
+                + " }");  // noqa
     }
 
     /** Clears up the pane. */
@@ -78,23 +56,7 @@ public class ThreadPane extends JTextPane {
         displayedWords.clear();
     }
 
-    /**
-     * Make caret visible even when the {@link JTextComponent} is not editable.
-     */
-    private static FocusListener makeCaretAlwaysVisible(final JTextComponent comp) {
-        FocusListener listener = new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                Caret caret = comp.getCaret();
-                caret.setVisible(true);
-                caret.setSelectionVisible(true);
-            }
-        };
-        comp.addFocusListener(listener);
-        return listener;
-    }
-
-    public void setFoundResult(List<DictionaryEntry> data) {
+    public void setFoundResult(final List<DictionaryEntry> data) {
         clear();
 
         if (data == null) {
@@ -133,6 +95,10 @@ public class ThreadPane extends JTextPane {
                 LOG.warn(e.getMessage());
             }
         }
+    }
+
+    private String toHex(final Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
 }
