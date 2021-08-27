@@ -33,12 +33,48 @@ public class EBDict {
             try {
                 eBookDictionary = new Book(eBookDirectory);
             } catch (EBException e) {
-                Utils.logEBError(e);
+                logEBError(e);
                 throw new Exception("EPWING: There is no supported dictionary");
             }
         }
         subBooks = eBookDictionary.getSubBooks();
 
+    }
+
+    /**
+     * convert Zenkaku alphabet to Hankaku.
+     * <p>
+     * convert (\uFF01 - \uFF5E) to (\u0021- \u007E) and \u3000 to \u0020
+     *
+     * @param text source text with zenkaku.
+     * @return String converted
+     */
+    private static String convertZen2Han(final String text) {
+        StringBuilder result = new StringBuilder(text.length());
+        for (int i = 0; i < text.length(); i++) {
+            int cp = text.codePointAt(i);
+            if (0xFF00 < cp && cp < 0xFF5F) {
+                result.append((char) (cp - 0xFEE0));
+            } else if (cp == 0x3000) {
+                result.append("\u0020");
+            } else {
+                result.appendCodePoint(cp);
+            }
+        }
+        return result.toString();
+    }
+
+    private static void logEBError(final EBException e) {
+        switch (e.getErrorCode()) {
+            case EBException.CANT_READ_DIR:
+                LOG.warn("EPWING error: cannot read directory:" + e.getMessage());
+                break;
+            case EBException.DIR_NOT_FOUND:
+                LOG.warn("EPWING error: cannot found directory:" + e.getMessage());
+            default:
+                LOG.warn("EPWING error: " + e.getMessage());
+                break;
+        }
     }
 
     /*
@@ -67,7 +103,7 @@ public class EBDict {
                         result.add(new DictionaryEntry(word, article));
                     }
                 } catch (EBException e) {
-                    Utils.logEBError(e);
+                    logEBError(e);
                 }
             }
         }
@@ -86,7 +122,7 @@ public class EBDict {
         private boolean narrow = false;
         private int decType;
         // private final ExtFont extFont;
-        private final AltCode altCode;
+        private final Gaiji gaiji;
 
         public EBDictStringHook(final SubBook sb) {
             this(sb, 500);
@@ -98,7 +134,7 @@ public class EBDict {
             // becuase of limitation on dictionary pane
             // extFont = sb.getFont();
             maxlines = lines;
-            altCode = new AltCode(sb);
+            gaiji = new Gaiji(sb);
         }
 
         /**
@@ -144,7 +180,7 @@ public class EBDict {
         @Override
         public void append(final String text) {
             if (narrow) {
-                output.append(Utils.convertZen2Han(text));
+                output.append(convertZen2Han(text));
             } else {
                 output.append(text);
             }
@@ -157,7 +193,7 @@ public class EBDict {
          */
         @Override
         public void append(final int code) {
-            output.append(altCode.getAltCode(code, narrow));
+            output.append(gaiji.getAltCode(code, narrow));
         }
 
         /**

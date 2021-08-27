@@ -16,13 +16,13 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreadPane extends JTextPane {
+public class DictionaryPane extends JTextPane implements IThreadPane {
 
-    static final Logger LOG = LoggerFactory.getLogger(ThreadPane.class.getName());
+    static final Logger LOG = LoggerFactory.getLogger(DictionaryPane.class.getName());
 
     protected final List<String> displayedWords = new ArrayList<>();
 
-    public ThreadPane() {
+    public DictionaryPane() {
         super();
 
         setContentType("text/html");
@@ -49,13 +49,7 @@ public class ThreadPane extends JTextPane {
                 + " }");  // noqa
     }
 
-    /** Clears up the pane. */
-    public void clear() {
-        setText(null);
-        scrollRectToVisible(new Rectangle());
-        displayedWords.clear();
-    }
-
+    @Override
     public void setFoundResult(final List<DictionaryEntry> data) {
         clear();
 
@@ -80,6 +74,13 @@ public class ThreadPane extends JTextPane {
             i++;
         }
         appendText(txt.toString());
+    }
+
+    /** Clears up the pane. */
+    private void clear() {
+        setText(null);
+        scrollRectToVisible(new Rectangle());
+        displayedWords.clear();
     }
 
     private void appendText(final String txt) {

@@ -1,21 +1,33 @@
 package io.github.eb4j.ebview;
-
 import io.github.eb4j.EBException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.github.eb4j.SubAppendix;
+import io.github.eb4j.SubBook;
+import io.github.eb4j.ext.UnicodeMap;
+import io.github.eb4j.util.HexUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 
-public final class Utils {
 
-    static final Logger LOG = LoggerFactory.getLogger(EBDict.class.getName());
+public class Gaiji {
 
-    private Utils() {
+    private final SubAppendix subAppendix;
+    private UnicodeMap unicodeMap;
+
+    public Gaiji(final SubBook subBook) {
+        String title = subBook.getTitle();
+        try {
+            unicodeMap = new UnicodeMap(title, new File(subBook.getBook().getPath()));
+        } catch (EBException e) {
+            unicodeMap = null;
+        }
+        subAppendix = subBook.getSubAppendix();
     }
 
     /**
@@ -27,7 +39,7 @@ public final class Utils {
      * @return String Base64 encoded BMP data.
      * @throws IOException when the image is broken or caused error.
      */
-    static String convert2Image(final byte[] data, final int height, final int width) throws IOException {
+    private static String convert2Image(final byte[] data, final int height, final int width) throws IOException {
         final BufferedImage res = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -55,7 +67,7 @@ public final class Utils {
     /**
      * convert unicode escape sequence to unicode code.
      */
-    static String getUnicode(final String text) {
+    private static String getUnicode(final String text) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             int cp = text.codePointAt(i);
@@ -63,39 +75,35 @@ public final class Utils {
         return sb.toString();
     }
 
-    /**
-     * convert Zenkaku alphabet to Hankaku.
-     * <p>
-     * convert (\uFF01 - \uFF5E) to (\u0021- \u007E) and \u3000 to \u0020
-     *
-     * @param text source text with zenkaku.
-     * @return String converted
-     */
-    static String convertZen2Han(final String text) {
-        StringBuilder result = new StringBuilder(text.length());
-        for (int i = 0; i < text.length(); i++) {
-            int cp = text.codePointAt(i);
-            if (0xFF00 < cp && cp < 0xFF5F) {
-                result.append((char) (cp - 0xFEE0));
-            } else if (cp == 0x3000) {
-                result.append("\u0020");
-            } else {
-                result.appendCodePoint(cp);
+    public String getAltCode(final int code, final boolean narrow) {
+        String str = null;
+        // Check DDWIN style unicode map
+        if (unicodeMap != null) {
+            str = unicodeMap.get(code);
+            if (!StringUtils.isBlank(str)) {
+                return str;
             }
         }
-        return result.toString();
-    }
-
-    static void logEBError(final EBException e) {
-        switch (e.getErrorCode()) {
-            case EBException.CANT_READ_DIR:
-                LOG.warn("EPWING error: cannot read directory:" + e.getMessage());
-                break;
-            case EBException.DIR_NOT_FOUND:
-                LOG.warn("EPWING error: cannot found directory:" + e.getMessage());
-            default:
-                LOG.warn("EPWING error: " + e.getMessage());
-                break;
+        // libEB appendix alternation w/ unicode escape support
+        if (subAppendix != null) {
+            try {
+                if (narrow) {
+                    str = subAppendix.getNarrowFontAlt(code);
+                } else {
+                    str = subAppendix.getWideFontAlt(code);
+                }
+            } catch (EBException ignore) {
+            }
+            if (!StringUtils.isBlank(str)) {
+                return str;
+            }
+        }
+        // no alternation, insert code hex instead.
+        if (narrow) {
+            return "[GAIJI=n" + HexUtil.toHexString(code) + "]";
+        } else {
+            return "[GAIJI=w" + HexUtil.toHexString(code) + "]";
         }
     }
 }
+
