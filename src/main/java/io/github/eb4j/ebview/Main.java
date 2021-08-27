@@ -3,7 +3,7 @@ package io.github.eb4j.ebview;
 import java.io.File;
 
 /**
- * Main class for main command.
+ * Main class for command.
  */
 public final class Main {
 

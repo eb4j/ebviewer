@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Main class to handle EPWING dictionary.
+ */
 public class EBDict {
 
     static final Logger LOG = LoggerFactory.getLogger(EBDict.class.getName());

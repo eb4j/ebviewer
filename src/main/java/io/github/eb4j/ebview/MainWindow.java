@@ -1,6 +1,5 @@
 package io.github.eb4j.ebview;
 
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,6 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Swing main window.
+ * @author Hiroshi Miura
+ */
 public class MainWindow extends JFrame {
     private JPanel panel1;
     private JTextField searchWordField;

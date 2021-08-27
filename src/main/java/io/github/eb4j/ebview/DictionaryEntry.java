@@ -1,6 +1,8 @@
 package io.github.eb4j.ebview;
 
-
+/**
+ * Dictionary article data POJO class.
+ */
 public class DictionaryEntry {
     private final String word;
     private String article;

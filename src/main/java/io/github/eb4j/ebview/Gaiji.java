@@ -1,4 +1,5 @@
 package io.github.eb4j.ebview;
+
 import io.github.eb4j.EBException;
 import io.github.eb4j.SubAppendix;
 import io.github.eb4j.SubBook;
@@ -15,6 +16,10 @@ import java.io.IOException;
 import java.util.Base64;
 
 
+/**
+ * Gaiji handling class.
+ * @author Hiroshi Miura
+ */
 public class Gaiji {
 
     private final SubAppendix subAppendix;

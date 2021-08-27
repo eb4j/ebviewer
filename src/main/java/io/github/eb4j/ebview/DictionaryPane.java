@@ -16,6 +16,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dictionary article display that accept threading update.
+ * @author Hiroshi Miura
+ */
 public class DictionaryPane extends JTextPane implements IThreadPane {
 
     static final Logger LOG = LoggerFactory.getLogger(DictionaryPane.class.getName());
