@@ -16,9 +16,17 @@ Java 11 and later is necessary to be installed already.
 build/bin/ebviewer /epwing/dictionary/folder/path
 ```
 
+## Origin
+
+Some codes are borrowed from omegat-plugin-epwing and omegat project.
+These are GPL3 projects.
+
+
 ## License
 
-Copyright (C) 2021  Hiroshi Miura
+Copyright (C) 2016-2021 Hiroshi Miura
+
+Copyright (C) 2015 Aaron Madlon-Kay (from OmegaT)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
