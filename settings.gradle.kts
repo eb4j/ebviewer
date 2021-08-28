@@ -1,2 +1,2 @@
-rootProject.name = "ebview4j"
+rootProject.name = "ebviewer"
 

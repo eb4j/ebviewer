@@ -13,8 +13,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Dictionary article display that accept threading update.
@@ -31,7 +33,11 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
         setContentType("text/html");
         ((HTMLDocument) getDocument()).setPreservesUnknownTags(false);
-        setFont(getFont());
+        Font font = getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+        font = font.deriveFont(attributes);
+        setFont(font);
         setMinimumSize(new Dimension(400, 300));
         setEditable(false);
     }
@@ -73,7 +79,14 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             txt.append("<b><span id=\"" + i + "\">");
             txt.append(de.getWord());
             txt.append("</span></b>");
-            txt.append(" - ").append(de.getArticle());
+            txt.append(" - ");
+            for (String article: de.getArticle()) {
+                if (StringUtils.isSymbol(article.codePointAt(0))) {
+                    txt.append("<span style=\"color:blue\">").append(article).append("</span>");
+                } else {
+                    txt.append(article);
+                }
+            }
             displayedWords.add(de.getWord().toLowerCase());
             i++;
         }

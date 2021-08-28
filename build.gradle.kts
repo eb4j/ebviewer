@@ -29,10 +29,11 @@ application {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    implementation("io.github.eb4j:eb4j:2.1.11")
+    implementation("io.github.eb4j:eb4j:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("org.apache.commons:commons-lang3:3.11")
     testImplementation("org.codehaus.groovy:groovy-all:3.0.5")
