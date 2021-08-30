@@ -43,7 +43,15 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
         font = font.deriveFont(attributes);
         setFont(font);
-        makeCaretAlwaysVisible(this);
+        FocusListener listener = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                Caret caret = getCaret();
+                caret.setVisible(true);
+                caret.setSelectionVisible(true);
+            }
+        };
+        addFocusListener(listener);
         setMinimumSize(new Dimension(400, 300));
         setEditable(false);
     }
@@ -118,18 +126,4 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     private String toHex(final Color color) {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
-
-    private static FocusListener makeCaretAlwaysVisible(final JTextComponent comp) {
-        FocusListener listener = new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                Caret caret = comp.getCaret();
-                caret.setVisible(true);
-                caret.setSelectionVisible(true);
-            }
-        };
-        comp.addFocusListener(listener);
-        return listener;
-    }
-
 }
