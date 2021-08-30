@@ -12,7 +12,6 @@ plugins {
 }
 
 // calculate version string from git tag, hash and commit distance
-version = "1.0.0-SNAPSHOT"
 fun getVersionDetails(): com.palantir.gradle.gitversion.VersionDetails = (extra["versionDetails"] as groovy.lang.Closure<*>)() as com.palantir.gradle.gitversion.VersionDetails
 if (getVersionDetails().isCleanTag) {
     version = getVersionDetails().lastTag.substring(1)
@@ -29,7 +28,6 @@ application {
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
