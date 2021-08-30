@@ -97,21 +97,26 @@ public class EBDict {
         List<DictionaryEntry> result = new ArrayList<>();
 
         for (SubBook sb : subBooks) {
-            if (sb.hasExactwordSearch()) {
-                try {
-                    hook = new EBDictStringHook(sb);
+            try {
+                hook = new EBDictStringHook(sb);
+                if (sb.hasWordSearch()) {
+                    sh = sb.searchWord(word);
+                } else if (sb.hasExactwordSearch()) {
                     sh = sb.searchExactword(word);
-                    while ((searchResult = sh.getNextResult()) != null) {
-                        article = searchResult.getText(hook);
-                        result.add(new DictionaryEntry(word, article));
-                    }
-                } catch (EBException e) {
-                    logEBError(e);
+                } else {
+                    continue;
                 }
+                while ((searchResult = sh.getNextResult()) != null) {
+                    article = searchResult.getText(hook);
+                    result.add(new DictionaryEntry(word, article));
+                }
+            } catch (EBException e) {
+                logEBError(e);
             }
         }
 
-        return result;
+
+            return result;
     }
 
     /**
