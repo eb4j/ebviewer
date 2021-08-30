@@ -81,11 +81,6 @@ public class EBDict {
     }
 
     /*
-     * (non-Javadoc)
-     *
-     * @see org.omegat.core.dictionaries.IDictionary#readArticle(java.lang.
-     * String, java.lang.Object)
-     *
      * Returns not the raw text, but the formatted article ready for
      * upstream use (\n replaced with <br>, etc.
      */
@@ -129,7 +124,6 @@ public class EBDict {
         private int lineNum = 0;
         private boolean narrow = false;
         private int decType;
-        // private final ExtFont extFont;
         private final Gaiji gaiji;
 
         public EBDictStringHook(final SubBook sb) {
@@ -138,9 +132,6 @@ public class EBDict {
 
         public EBDictStringHook(final SubBook sb, final int lines) {
             super();
-            // XXX: disabled getting GAIJI and showing as image.
-            // becuase of limitation on dictionary pane
-            // extFont = sb.getFont();
             maxlines = lines;
             gaiji = new Gaiji(sb);
         }
@@ -195,9 +186,9 @@ public class EBDict {
         }
 
         /**
-         * Append GAIJI text(bitmap).
+         * Append GAIJI text(Unicode).
          *
-         * @param code gaiji code referenced to bitmap griff image
+         * @param code gaiji code
          */
         @Override
         public void append(final int code) {
@@ -278,12 +269,10 @@ public class EBDict {
          */
         @Override
         public void beginNoNewLine() {
-            // FIXME: implement me.
         }
 
         @Override
         public void endNoNewLine() {
-            // FIXME
         }
 
         /**
