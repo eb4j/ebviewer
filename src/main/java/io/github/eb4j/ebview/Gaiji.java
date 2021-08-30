@@ -69,17 +69,6 @@ public class Gaiji {
                 + "\"></img>";
     }
 
-    /**
-     * convert unicode escape sequence to unicode code.
-     */
-    private static String getUnicode(final String text) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            int cp = text.codePointAt(i);
-        }
-        return sb.toString();
-    }
-
     public String getAltCode(final int code, final boolean narrow) {
         String str = null;
         // Check DDWIN style unicode map
