@@ -64,7 +64,10 @@ public class MainWindow extends JFrame {
             historyModel.add(0, word);
             new Thread(() -> {
                 List<DictionaryEntry> result = ebDict.readArticles(word);
-                SwingUtilities.invokeLater(() -> dictionaryPane.setFoundResult(result));
+                SwingUtilities.invokeLater(() -> {
+                    dictionaryPane.setFoundResult(result);
+                    dictionaryPane.setCaretPosition(0);
+                });
             }).start();
         });
         searchButton.addActionListener(e -> {
@@ -72,7 +75,10 @@ public class MainWindow extends JFrame {
             historyModel.add(0, word);
             new Thread(() -> {
                 List<DictionaryEntry> result = ebDict.readArticles(word);
-                SwingUtilities.invokeLater(() -> dictionaryPane.setFoundResult(result));
+                SwingUtilities.invokeLater(() -> {
+                    dictionaryPane.setFoundResult(result);
+                    dictionaryPane.setCaretPosition(0);
+                });
             }).start();
         });
         history.addListSelectionListener(e -> {

@@ -6,13 +6,18 @@ import org.slf4j.LoggerFactory;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +43,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
         font = font.deriveFont(attributes);
         setFont(font);
+        makeCaretAlwaysVisible(this);
         setMinimumSize(new Dimension(400, 300));
         setEditable(false);
     }
@@ -111,6 +117,19 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     private String toHex(final Color color) {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    private static FocusListener makeCaretAlwaysVisible(final JTextComponent comp) {
+        FocusListener listener = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                Caret caret = comp.getCaret();
+                caret.setVisible(true);
+                caret.setSelectionVisible(true);
+            }
+        };
+        comp.addFocusListener(listener);
+        return listener;
     }
 
 }
