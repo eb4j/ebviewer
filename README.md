@@ -1,25 +1,28 @@
 # ebviewer
-Simple GUI application for development and usage sample of EB4J
+
+Very simple dictionary search application.
+
+![](ebviewer_screen.png)
+
+## Install
+
+You can download a zip archive from [github release](https://github.com/eb4j/ebviewer/releases)
+
+## Dependency
+
+You need to install Java Runtime Version 11, 14 or 16 on your operating system.
 
 ## Build
 
 ebviewer uses Java and Gradle build system. As usual java application, it is easy to build.
-Java 11 and later is necessary to be installed already.
 
 ```console
 ./gradlew build
 ```
 
-## Run
-
-```console
-build/bin/ebviewer /epwing/dictionary/folder/path
-```
-
 ## Origin
 
 Some codes are borrowed from omegat-plugin-epwing and omegat project.
-These are GPL3 projects.
 
 
 ## License
