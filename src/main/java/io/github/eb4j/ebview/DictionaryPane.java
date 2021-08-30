@@ -80,13 +80,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             txt.append(de.getWord());
             txt.append("</span></b>");
             txt.append(" - ");
-            for (String article: de.getArticle()) {
-                if (StringUtils.isSymbol(article.codePointAt(0))) {
-                    txt.append("<span style=\"color:blue\">").append(article).append("</span>");
-                } else {
-                    txt.append(article);
-                }
-            }
+            txt.append(de.getArticle());
             displayedWords.add(de.getWord().toLowerCase());
             i++;
         }

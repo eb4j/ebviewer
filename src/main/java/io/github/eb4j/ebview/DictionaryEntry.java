@@ -1,9 +1,5 @@
 package io.github.eb4j.ebview;
 
-import java.util.List;
-
-import static io.github.eb4j.ebview.StringUtils.sliceString;
-
 /**
  * Dictionary article data class.
  */
@@ -25,11 +21,10 @@ public class DictionaryEntry {
     }
 
     /**
-     * return list of article.
-     * It returns a list of articles, that is sliced for styling change.
-     * @return List of articles.
+     * return article.
+     * @return article.
      */
-    public List<String> getArticle() {
-        return sliceString(article);
+    public String getArticle() {
+        return article;
     }
 }
