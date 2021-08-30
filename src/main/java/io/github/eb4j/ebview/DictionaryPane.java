@@ -8,6 +8,7 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
+import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
@@ -99,6 +100,27 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             i++;
         }
         appendText(txt.toString());
+    }
+
+    public void moveToWord(final String word) {
+        int index = displayedWords.indexOf(word.toLowerCase());
+        if (index == -1) {
+            return;
+        }
+        HTMLDocument doc = (HTMLDocument) getDocument();
+        Element el = doc.getElement(Integer.toString(index));
+        if (el == null) {
+            return;
+        }
+        try {
+            Rectangle rect = modelToView(el.getStartOffset());
+            if (rect != null) {
+                // show 5 lines
+                rect.height *= 5;
+                scrollRectToVisible(rect);
+            }
+        } catch (BadLocationException ignore) {
+        }
     }
 
     /** Clears up the pane. */
