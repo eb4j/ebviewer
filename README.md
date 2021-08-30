@@ -1,6 +1,6 @@
 # ebviewer
 
-Very simple dictionary search application.
+Very simple dictionary search application supporting EPWING/EB data format.
 
 ![](ebviewer_screen.png)
 
