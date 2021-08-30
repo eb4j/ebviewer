@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -89,6 +91,8 @@ public class EBDict {
         Result searchResult;
         Hook<String> hook;
         String article;
+        String heading;
+        Set<String> headings = new HashSet<>();
         List<DictionaryEntry> result = new ArrayList<>();
 
         for (SubBook sb : subBooks) {
@@ -102,8 +106,13 @@ public class EBDict {
                     continue;
                 }
                 while ((searchResult = sh.getNextResult()) != null) {
+                    heading = searchResult.getHeading(hook);
+                    if (headings.contains(heading)) {
+                        continue;
+                    }
+                    headings.add(heading);
                     article = searchResult.getText(hook);
-                    result.add(new DictionaryEntry(word, article));
+                    result.add(new DictionaryEntry(heading, article));
                 }
             } catch (EBException e) {
                 logEBError(e);
