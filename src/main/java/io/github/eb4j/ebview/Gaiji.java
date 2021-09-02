@@ -73,7 +73,11 @@ public class Gaiji {
         String str = null;
         // Check DDWIN style unicode map
         if (unicodeMap != null) {
-            str = unicodeMap.get(code);
+            if (narrow) {
+                str = unicodeMap.getNarrow(code);
+            } else {
+                str = unicodeMap.getWide(code);
+            }
             if (!StringUtils.isBlank(str)) {
                 return str;
             }
