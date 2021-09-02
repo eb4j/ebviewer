@@ -27,11 +27,17 @@ public class EBDict {
     private final SubBook[] subBooks;
 
     public EBDict(final File eBookDir) throws Exception {
-        String eBookDirectory = eBookDir.getPath();
         Book eBookDictionary;
+        String eBookDirectory = eBookDir.getPath();
+        String appendixDirectory;
+        if (new File(eBookDir, "appendix").isDirectory()) {
+            appendixDirectory = new File(eBookDir, "appendix").getPath();
+        } else {
+            appendixDirectory = eBookDirectory;
+        }
         try {
             // try dictionary and appendix first.
-            eBookDictionary = new Book(eBookDirectory, eBookDirectory);
+            eBookDictionary = new Book(eBookDirectory, appendixDirectory);
             LOG.info("Load dictionary with appendix.");
         } catch (EBException ignore) {
             // There may be no appendix, try again with dictionary only.
