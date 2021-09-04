@@ -8,10 +8,10 @@ import java.util.Set;
 public class EBViewer implements Runnable {
 
     // dictionaries to use
-    private final Set<EBDict> dictionaries = new HashSet<>();
+    private final Set<EBDictionary> dictionaries = new HashSet<>();
 
     public EBViewer(final File dict) throws Exception {
-        dictionaries.add(new EBDict(dict));
+        dictionaries.add(new EBDictionary(dict));
     }
 
     /**
@@ -48,7 +48,7 @@ public class EBViewer implements Runnable {
         new MainWindow(this);
     }
 
-    public Set<EBDict> getDictionaries() {
+    public Set<EBDictionary> getDictionaries() {
         return Collections.unmodifiableSet(dictionaries);
     }
 }

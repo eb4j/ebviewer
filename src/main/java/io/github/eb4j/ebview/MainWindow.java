@@ -75,9 +75,9 @@ public class MainWindow extends JFrame {
             String word = searchWordField.getText();
             historyModel.add(0, word);
             headingsModel.removeAllElements();
-            for (EBDict ebDict: ebViewer.getDictionaries()) {
+            for (EBDictionary ebDictionary : ebViewer.getDictionaries()) {
                 new Thread(() -> {
-                    List<DictionaryEntry> result = ebDict.readArticles(word);
+                    List<DictionaryEntry> result = ebDictionary.readArticles(word);
                     SwingUtilities.invokeLater(() -> {
                         headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
                         dictionaryPane.setFoundResult(result);
@@ -90,9 +90,9 @@ public class MainWindow extends JFrame {
             String word = searchWordField.getText();
             historyModel.add(0, word);
             headingsModel.removeAllElements();
-            for (EBDict ebDict: ebViewer.getDictionaries()) {
+            for (EBDictionary ebDictionary : ebViewer.getDictionaries()) {
                 new Thread(() -> {
-                    List<DictionaryEntry> result = ebDict.readArticles(word);
+                    List<DictionaryEntry> result = ebDictionary.readArticles(word);
                     SwingUtilities.invokeLater(() -> {
                         headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
                         dictionaryPane.setFoundResult(result);

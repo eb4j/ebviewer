@@ -20,13 +20,13 @@ import java.util.Set;
 /**
  * Main class to handle EPWING dictionary.
  */
-public class EBDict {
+public class EBDictionary {
 
-    static final Logger LOG = LoggerFactory.getLogger(EBDict.class.getName());
+    static final Logger LOG = LoggerFactory.getLogger(EBDictionary.class.getName());
 
     private final SubBook[] subBooks;
 
-    public EBDict(final File eBookDir) throws Exception {
+    public EBDictionary(final File eBookDir) throws Exception {
         Book eBookDictionary;
         String eBookDirectory = eBookDir.getPath();
         String appendixDirectory;
