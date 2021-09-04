@@ -1,19 +1,10 @@
 package io.github.eb4j.ebview;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,22 +13,17 @@ import java.util.stream.Collectors;
  * @author Hiroshi Miura
  */
 public class MainWindow extends JFrame {
-    private JPanel panel1;
     private JTextField searchWordField;
-    private JButton searchButton;
-    private JScrollPane headingsPane;
     private DefaultListModel headingsModel;
     private JList<String> headingsList;
-    private JScrollPane articlePane;
-    private TitledBorder border;
-    private JScrollPane historyPane;
-    private DefaultListModel<String> historyModel = new DefaultListModel<>();
-    private List<EBDict> dictionaries = new ArrayList<>();
+    private final DefaultListModel<String> historyModel = new DefaultListModel<>();
     private JList<String> history;
+    //
+    private final EBViewer ebViewer;
 
-    public MainWindow(final EBDict ebDict) {
+    public MainWindow(final EBViewer ebViewer) {
         super("EBViewer");
-        dictionaries.add(ebDict);
+        this.ebViewer = ebViewer;
         initializeGUI();
     }
 
@@ -45,43 +31,51 @@ public class MainWindow extends JFrame {
         setPreferredSize(new Dimension(800, 500));
         setLayout(new BorderLayout());
         //
-        panel1 = new JPanel();
+        // GUI parts
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new FlowLayout());
         searchWordField = new JTextField();
         searchWordField.setPreferredSize(new Dimension(500, 30));
-        searchButton = new JButton();
+        JButton searchButton = new JButton();
         searchButton.setText("Search");
         panel1.add(searchWordField);
         panel1.add(searchButton);
         //
         headingsModel = new DefaultListModel<String>();
         headingsList = new JList<String>(headingsModel);
-        headingsPane = new JScrollPane(headingsList);
+        JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(100, -1));
         //
         DictionaryPane dictionaryPane = new DictionaryPane();
-        articlePane = new JScrollPane(dictionaryPane);
+        JScrollPane articlePane = new JScrollPane(dictionaryPane);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
-        border = new TitledBorder("History");
-        border.setTitleJustification(TitledBorder.CENTER);
-        border.setTitlePosition(TitledBorder.TOP);
-
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
+        JTextPane dictionaryInfoPane = new JTextPane();
+        dictionaryInfoPane.setPreferredSize(new Dimension(100, 200));
+        dictionaryInfoPane.setText("Dictionary info");
+        //
+        TitledBorder historyTitleBorder = new TitledBorder("History");
+        historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
+        historyTitleBorder.setTitlePosition(TitledBorder.TOP);
         history = new JList<>(historyModel);
-        historyPane = new JScrollPane(history);
-        historyPane.setPreferredSize(new Dimension(100, -1));
-        historyPane.setBorder(border);
+        JScrollPane historyPane = new JScrollPane(history);
+        historyPane.setPreferredSize(new Dimension(100, 300));
+        historyPane.setBorder(historyTitleBorder);
+        infoPanel.add(dictionaryInfoPane);
+        infoPanel.add(historyPane);
         //
         getContentPane().add(panel1, BorderLayout.NORTH);
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
-        getContentPane().add(historyPane, BorderLayout.EAST);
+        getContentPane().add(infoPanel, BorderLayout.EAST);
         //
         searchWordField.addActionListener(e -> {
             String word = searchWordField.getText();
             historyModel.add(0, word);
             headingsModel.removeAllElements();
-            for (EBDict ebDict: dictionaries) {
+            for (EBDict ebDict: ebViewer.getDictionaries()) {
                 new Thread(() -> {
                     List<DictionaryEntry> result = ebDict.readArticles(word);
                     SwingUtilities.invokeLater(() -> {
@@ -96,7 +90,7 @@ public class MainWindow extends JFrame {
             String word = searchWordField.getText();
             historyModel.add(0, word);
             headingsModel.removeAllElements();
-            for (EBDict ebDict: dictionaries) {
+            for (EBDict ebDict: ebViewer.getDictionaries()) {
                 new Thread(() -> {
                     List<DictionaryEntry> result = ebDict.readArticles(word);
                     SwingUtilities.invokeLater(() -> {

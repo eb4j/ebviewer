@@ -22,7 +22,7 @@ if (getVersionDetails().isCleanTag) {
 group = "io.github.eb4j"
 
 application {
-    mainClassName = "io.github.eb4j.ebview.Main"
+    mainClassName = "io.github.eb4j.ebview.EBViewer"
     applicationName = "ebviewer"
 }
 
