@@ -48,6 +48,13 @@ public final class MainWindow extends JFrame {
         setVisible(true);
     }
 
+    public void setResult(final List<DictionaryEntry> result) {
+       headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
+       dictionaryPane.setFoundResult(result);
+       dictionaryPane.setCaretPosition(0);
+    }
+
+
     private void initializeGUI() {
         setPreferredSize(new Dimension(800, 500));
         setLayout(new BorderLayout());
