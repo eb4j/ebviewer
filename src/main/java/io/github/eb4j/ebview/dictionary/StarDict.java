@@ -100,13 +100,11 @@ public class StarDict implements IDictionaryFactory {
 
         try {
             if (dictFile.getName().endsWith(".dz")) {
-                DictZipInputStream dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
-                return new StarDictZipDict(dataFile, data);
+                return new StarDictZipDict(dictFile, data);
             } else {
-                RandomAccessFile dataFile = new RandomAccessFile(dictFile, "r");
-                return new StarDictFileDict(dataFile, data);
+                return new StarDictFileDict(dictFile, data);
             }
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);
         }
     }

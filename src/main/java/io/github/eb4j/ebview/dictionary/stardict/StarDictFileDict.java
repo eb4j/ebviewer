@@ -2,6 +2,8 @@ package io.github.eb4j.ebview.dictionary.stardict;
 
 import io.github.eb4j.ebview.data.DictionaryData;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -9,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 public class StarDictFileDict extends StarDictBaseDict {
     private final RandomAccessFile dataFile;
 
-    public StarDictFileDict(RandomAccessFile dataFile, DictionaryData<StarDictEntry> data) {
+    public StarDictFileDict(final File dictFile, final DictionaryData<StarDictEntry> data) throws FileNotFoundException {
         super(data);
-        this.dataFile = dataFile;
+        dataFile = new RandomAccessFile(dictFile, "r");
     }
 
     @Override

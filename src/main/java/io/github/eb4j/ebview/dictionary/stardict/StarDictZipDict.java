@@ -2,16 +2,20 @@ package io.github.eb4j.ebview.dictionary.stardict;
 
 import io.github.eb4j.ebview.data.DictionaryData;
 import org.dict.zip.DictZipInputStream;
+import org.dict.zip.RandomAccessInputStream;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
 public class StarDictZipDict extends StarDictBaseDict {
     private final DictZipInputStream dataFile;
 
-    public StarDictZipDict(DictZipInputStream dataFile, DictionaryData<StarDictEntry> data) {
+    public StarDictZipDict(final File dictFile, DictionaryData<StarDictEntry> data) throws IOException {
         super(data);
-        this.dataFile = dataFile;
+        dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
     }
 
     @Override
