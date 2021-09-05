@@ -1,8 +1,7 @@
 package io.github.eb4j.ebview.gui;
 
-import io.github.eb4j.ebview.EBViewer;
 import io.github.eb4j.ebview.data.DictionaryEntry;
-import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.dictionary.DictionariesManager;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -19,7 +18,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -31,16 +29,16 @@ public final class MainWindow extends JFrame {
     DefaultListModel<String> headingsModel;
     DictionaryPane dictionaryPane;
 
-    final Set<IDictionary> dictionaries;
+    final DictionariesManager dictionariesManager;
     final DefaultListModel<String> historyModel = new DefaultListModel<>();
     final JButton searchButton = new JButton();
 
     private JList<String> headingsList;
     private JList<String> history;
 
-    public MainWindow(final EBViewer ebViewer) {
+    public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
-        this.dictionaries = ebViewer.getDictionaries();
+        this.dictionariesManager = dictionariesManager;
         initializeGUI();
         setActions();
         pack();

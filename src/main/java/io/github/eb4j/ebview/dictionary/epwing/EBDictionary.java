@@ -28,12 +28,12 @@ public class EBDictionary implements IDictionary {
 
     private final SubBook[] subBooks;
 
-    public EBDictionary(final File eBookDir) throws Exception {
+    public EBDictionary(final File catalogFile) throws Exception {
         Book eBookDictionary;
-        String eBookDirectory = eBookDir.getPath();
+        String eBookDirectory = catalogFile.getParent();
         String appendixDirectory;
-        if (new File(eBookDir, "appendix").isDirectory()) {
-            appendixDirectory = new File(eBookDir, "appendix").getPath();
+        if (new File(eBookDirectory, "appendix").isDirectory()) {
+            appendixDirectory = new File(eBookDirectory, "appendix").getPath();
         } else {
             appendixDirectory = eBookDirectory;
         }

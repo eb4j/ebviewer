@@ -1,22 +1,29 @@
 package io.github.eb4j.ebview;
 
-import io.github.eb4j.ebview.data.IDictionary;
-import io.github.eb4j.ebview.dictionary.epwing.EBDictionary;
+import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
+import io.github.eb4j.ebview.utils.FileUtils;
 
-import javax.swing.UIManager;
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class EBViewer implements Runnable {
 
-    // dictionaries to use
-    private final Set<IDictionary> dictionaries = new HashSet<>();
+    private DictionariesManager dictionariesManager;
 
-    public EBViewer(final File dict) throws Exception {
-        dictionaries.add(new EBDictionary(dict));
+    public EBViewer(final File dictionaryDirectory) {
+        dictionariesManager = new DictionariesManager();
+        List<File> listFiles = FileUtils.findFiles(dictionaryDirectory);
+        for (File f: listFiles) {
+            try {
+                dictionariesManager.loadDictionary(f);
+            } catch (Exception ignore) {
+            }
+        }
+    }
+
+    public DictionariesManager getDictionariesManager() {
+        return dictionariesManager;
     }
 
     /**
@@ -27,10 +34,15 @@ public class EBViewer implements Runnable {
         if (args.length < 1) {
             System.exit(1);
         }
-        File dict = new File(args[0]);
+        File dictionaryDirectory = new File(args[0]);
+
+        if (!dictionaryDirectory.isDirectory()) {
+            System.err.println("Path is not a directory.");
+            System.exit(1);
+        }
 
         try {
-            EBViewer viewer = new EBViewer(dict);
+            EBViewer viewer = new EBViewer(dictionaryDirectory);
             Thread t = new Thread(viewer);
             t.start();
         } catch (Exception e) {
@@ -51,10 +63,6 @@ public class EBViewer implements Runnable {
      */
     @Override
     public void run() {
-        new MainWindow(this);
-    }
-
-    public Set<IDictionary> getDictionaries() {
-        return Collections.unmodifiableSet(dictionaries);
+        new MainWindow(dictionariesManager);
     }
 }

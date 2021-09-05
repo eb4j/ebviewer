@@ -1,11 +1,9 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
-import io.github.eb4j.ebview.data.IDictionary;
 
 import javax.swing.SwingWorker;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Searcher worker.
@@ -30,17 +28,14 @@ class Searcher extends SwingWorker<Object, Object> {
         String word = mainWindow.searchWordField.getText();
         mainWindow.historyModel.add(0, word);
         mainWindow.headingsModel.removeAllElements();
-        for (IDictionary dictionary : mainWindow.dictionaries) {
-            new Thread(() -> {
-                List<DictionaryEntry> result = null;
-                try {
-                    result = dictionary.readArticlesPredictive(word);
-                    publish(result);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
+        new Thread(() -> {
+            try {
+                List<DictionaryEntry> result = mainWindow.dictionariesManager.findWord(word);
+                publish(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
         return null;
     }
 
