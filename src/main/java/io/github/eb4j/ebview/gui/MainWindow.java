@@ -1,30 +1,51 @@
-package io.github.eb4j.ebview;
+package io.github.eb4j.ebview.gui;
 
-import javax.swing.*;
+import io.github.eb4j.ebview.EBViewer;
+import io.github.eb4j.ebview.data.DictionaryEntry;
+import io.github.eb4j.ebview.data.IDictionary;
+
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Swing main window.
  * @author Hiroshi Miura
  */
-public class MainWindow extends JFrame {
-    private JTextField searchWordField;
-    private DefaultListModel headingsModel;
+public final class MainWindow extends JFrame {
+    JTextField searchWordField;
+    DefaultListModel<String> headingsModel;
+    DictionaryPane dictionaryPane;
+
+    final Set<IDictionary> dictionaries;
+    final DefaultListModel<String> historyModel = new DefaultListModel<>();
+    final JButton searchButton = new JButton();
+
     private JList<String> headingsList;
-    private final DefaultListModel<String> historyModel = new DefaultListModel<>();
     private JList<String> history;
-    //
-    private final EBViewer ebViewer;
 
     public MainWindow(final EBViewer ebViewer) {
         super("EBViewer");
-        this.ebViewer = ebViewer;
+        this.dictionaries = ebViewer.getDictionaries();
         initializeGUI();
+        setActions();
+        pack();
+        setResizable(true);
+        setVisible(true);
     }
 
     private void initializeGUI() {
@@ -36,17 +57,16 @@ public class MainWindow extends JFrame {
         panel1.setLayout(new FlowLayout());
         searchWordField = new JTextField();
         searchWordField.setPreferredSize(new Dimension(500, 30));
-        JButton searchButton = new JButton();
         searchButton.setText("Search");
         panel1.add(searchWordField);
         panel1.add(searchButton);
         //
-        headingsModel = new DefaultListModel<String>();
-        headingsList = new JList<String>(headingsModel);
+        headingsModel = new DefaultListModel<>();
+        headingsList = new JList<>(headingsModel);
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(100, -1));
         //
-        DictionaryPane dictionaryPane = new DictionaryPane();
+        dictionaryPane = new DictionaryPane();
         JScrollPane articlePane = new JScrollPane(dictionaryPane);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
@@ -70,37 +90,20 @@ public class MainWindow extends JFrame {
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
-        //
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void setActions() {
         searchWordField.addActionListener(e -> {
-            String word = searchWordField.getText();
-            historyModel.add(0, word);
-            headingsModel.removeAllElements();
-            for (EBDictionary ebDictionary : ebViewer.getDictionaries()) {
-                new Thread(() -> {
-                    List<DictionaryEntry> result = ebDictionary.readArticles(word);
-                    SwingUtilities.invokeLater(() -> {
-                        headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
-                        dictionaryPane.setFoundResult(result);
-                        dictionaryPane.setCaretPosition(0);
-                    });
-                }).start();
-            }
+            Searcher searchSwingWorker = new Searcher(this);
+            searchSwingWorker.execute();
         });
+
         searchButton.addActionListener(e -> {
-            String word = searchWordField.getText();
-            historyModel.add(0, word);
-            headingsModel.removeAllElements();
-            for (EBDictionary ebDictionary : ebViewer.getDictionaries()) {
-                new Thread(() -> {
-                    List<DictionaryEntry> result = ebDictionary.readArticles(word);
-                    SwingUtilities.invokeLater(() -> {
-                        headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
-                        dictionaryPane.setFoundResult(result);
-                        dictionaryPane.setCaretPosition(0);
-                    });
-                }).start();
-            }
+            Searcher searchSwingWorker = new Searcher(this);
+            searchSwingWorker.execute();
         });
+
         headingsList.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 return;
@@ -110,6 +113,7 @@ public class MainWindow extends JFrame {
                 dictionaryPane.moveToWord(obj.toString());
             }
         });
+
         history.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 // The user is still manipulating the selection.
@@ -120,11 +124,5 @@ public class MainWindow extends JFrame {
                 searchWordField.setText(obj.toString());
             }
         });
-        //
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setResizable(true);
-        setVisible(true);
     }
-
 }

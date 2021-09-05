@@ -1,10 +1,12 @@
-package io.github.eb4j.ebview;
+package io.github.eb4j.ebview.dictionary.epwing;
 
 import io.github.eb4j.Book;
 import io.github.eb4j.EBException;
 import io.github.eb4j.Result;
 import io.github.eb4j.Searcher;
 import io.github.eb4j.SubBook;
+import io.github.eb4j.ebview.data.DictionaryEntry;
+import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.hook.Hook;
 import io.github.eb4j.hook.HookAdapter;
 import org.slf4j.Logger;
@@ -20,7 +22,7 @@ import java.util.Set;
 /**
  * Main class to handle EPWING dictionary.
  */
-public class EBDictionary {
+public class EBDictionary implements IDictionary {
 
     static final Logger LOG = LoggerFactory.getLogger(EBDictionary.class.getName());
 
@@ -88,11 +90,30 @@ public class EBDictionary {
         }
     }
 
+    private enum Mode {
+        PREDICTIVE,
+        EXACT,
+    }
+
+    /**
+     * Predictive search.
+     * @param word
+     *            The word to look up in the dictionary
+     *
+     */
+    public List<DictionaryEntry> readArticlesPredictive(final String word) {
+        return readArticles(word, Mode.PREDICTIVE);
+    }
+
     /*
      * Returns not the raw text, but the formatted article ready for
      * upstream use (\n replaced with <br>, etc.
      */
     public List<DictionaryEntry> readArticles(final String word) {
+        return readArticles(word, Mode.EXACT);
+    }
+
+    private List<DictionaryEntry> readArticles(final String word, final Mode mode) {
         Searcher sh;
         Result searchResult;
         Hook<String> hook;
@@ -104,9 +125,9 @@ public class EBDictionary {
         for (SubBook sb : subBooks) {
             try {
                 hook = new EBDictStringHook(sb);
-                if (sb.hasWordSearch()) {
+                if (mode.equals(Mode.PREDICTIVE) && sb.hasWordSearch()) {
                     sh = sb.searchWord(word);
-                } else if (sb.hasExactwordSearch()) {
+                } else if (mode.equals(Mode.EXACT) && sb.hasExactwordSearch()) {
                     sh = sb.searchExactword(word);
                 } else {
                     continue;
@@ -124,8 +145,6 @@ public class EBDictionary {
                 logEBError(e);
             }
         }
-
-
             return result;
     }
 

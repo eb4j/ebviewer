@@ -33,7 +33,14 @@ repositories {
 dependencies {
     implementation("io.github.eb4j:eb4j:2.2.1")
     implementation("org.slf4j:slf4j-simple:1.7.32")
+
+    implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.11")
+
+    implementation("io.github.dictzip:dictzip:0.9.5")
+    implementation("com.github.takawitter:trie4j:0.9.8")
+
+    implementation("com.formdev:flatlaf:1.2")
     testImplementation("org.codehaus.groovy:groovy-all:3.0.5")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

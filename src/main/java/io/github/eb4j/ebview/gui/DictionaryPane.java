@@ -1,5 +1,6 @@
-package io.github.eb4j.ebview;
+package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.data.DictionaryEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import java.awt.Color;
@@ -46,7 +46,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         setFont(font);
         FocusListener listener = new FocusAdapter() {
             @Override
-            public void focusGained(FocusEvent e) {
+            public void focusGained(final FocusEvent e) {
                 Caret caret = getCaret();
                 caret.setVisible(true);
                 caret.setSelectionVisible(true);

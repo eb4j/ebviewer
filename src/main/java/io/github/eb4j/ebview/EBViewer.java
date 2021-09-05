@@ -1,5 +1,10 @@
 package io.github.eb4j.ebview;
 
+import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.dictionary.epwing.EBDictionary;
+import io.github.eb4j.ebview.gui.MainWindow;
+
+import javax.swing.UIManager;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,7 +13,7 @@ import java.util.Set;
 public class EBViewer implements Runnable {
 
     // dictionaries to use
-    private final Set<EBDictionary> dictionaries = new HashSet<>();
+    private final Set<IDictionary> dictionaries = new HashSet<>();
 
     public EBViewer(final File dict) throws Exception {
         dictionaries.add(new EBDictionary(dict));
@@ -23,6 +28,7 @@ public class EBViewer implements Runnable {
             System.exit(1);
         }
         File dict = new File(args[0]);
+
         try {
             EBViewer viewer = new EBViewer(dict);
             Thread t = new Thread(viewer);
@@ -48,7 +54,7 @@ public class EBViewer implements Runnable {
         new MainWindow(this);
     }
 
-    public Set<EBDictionary> getDictionaries() {
+    public Set<IDictionary> getDictionaries() {
         return Collections.unmodifiableSet(dictionaries);
     }
 }

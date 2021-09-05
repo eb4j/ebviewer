@@ -1,4 +1,4 @@
-package io.github.eb4j.ebview;
+package io.github.eb4j.ebview.data;
 
 /**
  * Dictionary article data class.

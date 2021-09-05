@@ -1,4 +1,4 @@
-package io.github.eb4j.ebview;
+package io.github.eb4j.ebview.dictionary.epwing;
 
 import io.github.eb4j.EBException;
 import io.github.eb4j.SubAppendix;
