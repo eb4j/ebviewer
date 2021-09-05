@@ -1,6 +1,13 @@
 # ebviewer
 
-Very simple dictionary search application supporting EPWING/EB data format.
+Very simple dictionary search application supporting;
+
+- EPWING
+- EPWING ebz compression (.ebz) 
+- LingvoDSL (.dsl)
+- LingvoDSL dz compression (.dsl.dz)
+- StarDict (.ifo .dict)
+- StarDict (.dict.dz)
 
 ![](ebviewer_screen.png)
 
