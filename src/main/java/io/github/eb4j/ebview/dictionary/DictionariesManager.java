@@ -11,6 +11,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+
+/**
+ * Class for load dictionaries.
+ *
+ * @author Alex Buloichik (alex73mail@gmail.com)
+ * @author Didier Briel
+ * @author Aaron Madlon-Kay
+ */
 public class DictionariesManager {
 
     protected final List<IDictionaryFactory> factories = new ArrayList<>();

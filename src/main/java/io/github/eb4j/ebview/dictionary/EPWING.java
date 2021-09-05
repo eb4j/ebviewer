@@ -5,6 +5,10 @@ import io.github.eb4j.ebview.dictionary.epwing.EBDictionary;
 
 import java.io.File;
 
+/**
+ * Driver for EPWING.
+ * @author Hiroshi Miura
+ */
 public class EPWING implements IDictionaryFactory {
 
     /**

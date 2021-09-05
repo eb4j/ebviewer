@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
@@ -27,7 +26,7 @@ import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Dictionary implementation for StarDict format.
+ * Dictionary driver for StarDict format.
  * <p>
  * StarDict format described on http://code.google.com/p/babiloo/wiki/StarDict_format
  * <p>
