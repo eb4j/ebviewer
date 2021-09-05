@@ -29,6 +29,7 @@ public final class MainWindow extends JFrame {
     JTextField searchWordField;
     DefaultListModel<String> headingsModel;
     DictionaryPane dictionaryPane;
+    MainWindowMenu mainWindowMenu;
 
     final DictionariesManager dictionariesManager;
     final DefaultListModel<String> historyModel = new DefaultListModel<>();
@@ -44,6 +45,7 @@ public final class MainWindow extends JFrame {
         super("EBViewer");
         this.dictionariesManager = dictionariesManager;
         initializeGUI();
+        initializeMenu();
         setActions();
         pack();
         setResizable(true);
@@ -110,6 +112,11 @@ public final class MainWindow extends JFrame {
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void initializeMenu() {
+        mainWindowMenu = new MainWindowMenu(this);
+        setJMenuBar(mainWindowMenu.initMenuComponents());
     }
 
     private void setActions() {
