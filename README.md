@@ -36,7 +36,14 @@ Some codes are borrowed from omegat-plugin-epwing and omegat project.
 
 Copyright (C) 2016-2021 Hiroshi Miura
 
-Copyright (C) 2015 Aaron Madlon-Kay (from OmegaT)
+Copyright (C) 2020 Suguru Ono
+
+Copyright (C) 2015-2020 Aaron Madlon-Kay
+
+Copyright (C) 2011 Didier Briel
+
+Copyright (C) 2009-2010 Alex Buloichik
+
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
