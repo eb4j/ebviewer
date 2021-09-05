@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
@@ -20,6 +21,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -132,16 +136,21 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     private void appendText(final String txt) {
         Document doc = getDocument();
-        if (doc.getLength() == 0) {
-            // Appending to an empty document results in treating HTML tags as
-            // plain text for some reason
-            setText(txt);
-        } else {
-            try {
-                doc.insertString(doc.getLength(), txt, null);
-            } catch (BadLocationException e) {
-                LOG.warn(e.getMessage());
+        EditorKit kit = getEditorKit();
+        try {
+            Reader r;
+            if (doc.getLength() == 0) {
+                r = new StringReader(txt);
+            } else {
+                StringBuilder sb = new StringBuilder(doc.getText(0, doc.getLength())).append(txt);
+                r = new StringReader(sb.toString());
             }
+            doc = kit.createDefaultDocument();
+            ((HTMLDocument) doc).setPreservesUnknownTags(false);
+            kit.read(r, doc, 0);
+            setDocument(doc);
+        } catch (IOException | BadLocationException  e) {
+            LOG.warn("error");
         }
     }
 
