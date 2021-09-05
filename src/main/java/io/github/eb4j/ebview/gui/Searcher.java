@@ -28,6 +28,7 @@ class Searcher extends SwingWorker<Object, Object> {
         String word = mainWindow.searchWordField.getText();
         mainWindow.historyModel.add(0, word);
         mainWindow.headingsModel.removeAllElements();
+        mainWindow.dictionaryInfoModel.removeAllElements();
         new Thread(() -> {
             try {
                 List<DictionaryEntry> result = mainWindow.dictionariesManager.findWord(word);

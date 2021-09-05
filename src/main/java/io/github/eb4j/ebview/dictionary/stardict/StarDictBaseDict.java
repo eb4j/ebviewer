@@ -24,14 +24,16 @@ abstract class StarDictBaseDict implements IDictionary {
 
     @Override
     public List<DictionaryEntry> readArticles(String word) throws Exception {
-        return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue())))
+        return data.lookUp(word).stream()
+                .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()), getDictionaryName()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<DictionaryEntry> readArticlesPredictive(String word) {
         return data.lookUpPredictive(word).stream()
-                .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()))).collect(Collectors.toList());
+                .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()), getDictionaryName()))
+                .collect(Collectors.toList());
     }
 
     private synchronized String getArticle(StarDictEntry starDictEntry) {
@@ -39,6 +41,8 @@ abstract class StarDictBaseDict implements IDictionary {
             return readArticle(e.getStart(), e.getLen()).replace("\n", "<br>");
         });
     }
+
+    protected abstract String getDictionaryName();
 
     /**
      * Read data from the underlying file.

@@ -53,6 +53,7 @@ public class StarDict implements IDictionaryFactory {
     @Override
     public IDictionary loadDict(File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
+        String bookName = header.get("bookname");
         String version = header.get("version");
         if (!"2.4.2".equals(version) && !"3.0.0".equals(version)) {
             throw new Exception("Invalid version of dictionary: " + version);
@@ -99,9 +100,9 @@ public class StarDict implements IDictionaryFactory {
 
         try {
             if (dictFile.getName().endsWith(".dz")) {
-                return new StarDictZipDict(dictFile, data);
+                return new StarDictZipDict(bookName, dictFile, data);
             } else {
-                return new StarDictFileDict(dictFile, data);
+                return new StarDictFileDict(bookName, dictFile, data);
             }
         } catch (IOException ex) {
             throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);

@@ -33,6 +33,8 @@ public class LingvoDSLDictionary implements IDictionary {
 
     protected final DictionaryData<String> data;
 
+    private final String bookName;
+
     static class Re {
         public String regex;
         public String replacement;
@@ -47,6 +49,12 @@ public class LingvoDSLDictionary implements IDictionary {
 
     public LingvoDSLDictionary(File file) throws Exception {
         data = new DictionaryData<>();
+        String fileName = file.getName();
+        if (fileName.endsWith(".dz")) {
+            bookName = fileName.substring(0, fileName.length() - 7);
+        } else {
+            bookName = fileName.substring(0, fileName.length() - 4);
+        }
         RE_MAP.add(new Re("\\[b\\](.+?)\\[/b\\]", "<strong>$1</strong>"));
         RE_MAP.add(new Re("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
         RE_MAP.add(new Re("\\[trn\\](.+?)\\[/trn\\]", "<br>&nbsp;-&nbsp;$1"));
@@ -102,13 +110,20 @@ public class LingvoDSLDictionary implements IDictionary {
 
     @Override
     public List<DictionaryEntry> readArticles(String word) {
-        return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue()))
+        return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<DictionaryEntry> readArticlesPredictive(String word) {
-        return data.lookUpPredictive(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue()))
+        return data.lookUpPredictive(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Dispose IDictionary. Default is no action.
+     */
+    @Override
+    public void close() throws IOException {
     }
 }

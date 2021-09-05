@@ -11,14 +11,15 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Swing main window.
@@ -33,8 +34,11 @@ public final class MainWindow extends JFrame {
     final DefaultListModel<String> historyModel = new DefaultListModel<>();
     final JButton searchButton = new JButton();
 
+    final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
+
     private JList<String> headingsList;
     private JList<String> history;
+    private JList<String> dictionaryInfoList;
 
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
@@ -47,9 +51,18 @@ public final class MainWindow extends JFrame {
     }
 
     public void setResult(final List<DictionaryEntry> result) {
-       headingsModel.addAll(result.stream().map(DictionaryEntry::getWord).collect(Collectors.toList()));
-       dictionaryPane.setFoundResult(result);
-       dictionaryPane.setCaretPosition(0);
+        Set<String> dictList = new HashSet<>();
+        List<String> list = new ArrayList<>();
+        for (DictionaryEntry dictionaryEntry : result) {
+            String name = dictionaryEntry.getDictName();
+            dictList.add(name);
+            String word = dictionaryEntry.getWord();
+            list.add(name.substring(0, 2) + word);
+        }
+        headingsModel.addAll(list);
+        dictionaryPane.setFoundResult(result);
+        dictionaryPane.setCaretPosition(0);
+        dictionaryInfoModel.addAll(dictList);
     }
 
 
@@ -69,7 +82,7 @@ public final class MainWindow extends JFrame {
         headingsModel = new DefaultListModel<>();
         headingsList = new JList<>(headingsModel);
         JScrollPane headingsPane = new JScrollPane(headingsList);
-        headingsPane.setPreferredSize(new Dimension(100, -1));
+        headingsPane.setPreferredSize(new Dimension(140, -1));
         //
         dictionaryPane = new DictionaryPane();
         JScrollPane articlePane = new JScrollPane(dictionaryPane);
@@ -77,16 +90,17 @@ public final class MainWindow extends JFrame {
         //
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
-        JTextPane dictionaryInfoPane = new JTextPane();
-        dictionaryInfoPane.setPreferredSize(new Dimension(100, 200));
-        dictionaryInfoPane.setText("Dictionary info");
+        //
+        dictionaryInfoList = new JList<>(dictionaryInfoModel);
+        JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
+        dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
         //
         TitledBorder historyTitleBorder = new TitledBorder("History");
         historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
         historyTitleBorder.setTitlePosition(TitledBorder.TOP);
         history = new JList<>(historyModel);
         JScrollPane historyPane = new JScrollPane(history);
-        historyPane.setPreferredSize(new Dimension(100, 300));
+        historyPane.setPreferredSize(new Dimension(180, 300));
         historyPane.setBorder(historyTitleBorder);
         infoPanel.add(dictionaryInfoPane);
         infoPanel.add(historyPane);

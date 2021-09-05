@@ -11,11 +11,19 @@ import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
 public class StarDictZipDict extends StarDictBaseDict {
-    private final DictZipInputStream dataFile;
 
-    public StarDictZipDict(final File dictFile, DictionaryData<StarDictEntry> data) throws IOException {
+    private final DictZipInputStream dataFile;
+    private final String bookName;
+
+    public StarDictZipDict(final String bookName, final File dictFile, DictionaryData<StarDictEntry> data) throws IOException {
         super(data);
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
+        this.bookName = bookName;
+    }
+
+    @Override
+    public String getDictionaryName() {
+        return bookName;
     }
 
     @Override

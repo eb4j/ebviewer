@@ -6,10 +6,16 @@ package io.github.eb4j.ebview.data;
 public class DictionaryEntry {
     private final String word;
     private String article;
+    private String dictName;
 
-    public DictionaryEntry(final String word, final String article) {
+    public DictionaryEntry(final String word, final String article, final String dictionary) {
         this.word = word;
         this.article = article;
+        dictName = dictionary;
+    }
+
+    public String getDictName() {
+        return dictName;
     }
 
     /**

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -105,6 +106,13 @@ public class EBDictionary implements IDictionary {
         return readArticles(word, Mode.PREDICTIVE);
     }
 
+    /**
+     * Dispose IDictionary. Default is no action.
+     */
+    @Override
+    public void close() throws IOException {
+    }
+
     /*
      * Returns not the raw text, but the formatted article ready for
      * upstream use (\n replaced with <br>, etc.
@@ -123,6 +131,7 @@ public class EBDictionary implements IDictionary {
         List<DictionaryEntry> result = new ArrayList<>();
 
         for (SubBook sb : subBooks) {
+            String subBookName = sb.getTitle();
             try {
                 hook = new EBDictStringHook(sb);
                 if (mode.equals(Mode.PREDICTIVE) && sb.hasWordSearch()) {
@@ -139,7 +148,7 @@ public class EBDictionary implements IDictionary {
                     }
                     headings.add(heading);
                     article = searchResult.getText(hook);
-                    result.add(new DictionaryEntry(heading, article));
+                    result.add(new DictionaryEntry(heading, article, subBookName));
                 }
             } catch (EBException e) {
                 logEBError(e);

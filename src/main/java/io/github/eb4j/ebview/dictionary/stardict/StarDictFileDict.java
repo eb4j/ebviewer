@@ -10,10 +10,17 @@ import java.nio.charset.StandardCharsets;
 
 public class StarDictFileDict extends StarDictBaseDict {
     private final RandomAccessFile dataFile;
+    private final String bookName;
 
-    public StarDictFileDict(final File dictFile, final DictionaryData<StarDictEntry> data) throws FileNotFoundException {
+    public StarDictFileDict(final String bookName, final File dictFile, final DictionaryData<StarDictEntry> data) throws FileNotFoundException {
         super(data);
         dataFile = new RandomAccessFile(dictFile, "r");
+        this.bookName = bookName;
+    }
+
+    @Override
+    public String getDictionaryName() {
+        return bookName;
     }
 
     @Override

@@ -90,6 +90,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         boolean wasPrev = false;
         int i = 0;
         for (DictionaryEntry de : data) {
+            String dictNamePrefix = de.getDictName().substring(0, 2).toLowerCase();
             if (wasPrev) {
                 txt.append("<br><hr>");
             } else {
@@ -100,7 +101,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             txt.append("</span></b>");
             txt.append(" - ");
             txt.append(de.getArticle());
-            displayedWords.add(de.getWord().toLowerCase());
+            displayedWords.add(dictNamePrefix + de.getWord().toLowerCase());
             i++;
         }
         appendText(txt.toString());
