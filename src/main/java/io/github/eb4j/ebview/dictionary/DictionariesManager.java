@@ -46,8 +46,9 @@ public class DictionariesManager {
             if (factory.isSupportedFile(file)) {
                 IDictionary dict = factory.loadDict(file);
                 dictionaries.put(file.getPath(), dict);
+                System.err.println("-- add " + file.getPath());
+                return true;
             }
-            return true;
         }
         return false;
     }
