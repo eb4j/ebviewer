@@ -1,6 +1,11 @@
 package io.github.eb4j.ebview.gui;
 
-import javax.swing.*;
+import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
@@ -32,6 +37,10 @@ public class MainWindowMenu implements ActionListener, MenuListener {
 
     public void quitActionPerformed() {
         System.exit(0);
+    }
+
+    public void aboutActionPerformed() {
+        new AboutDialog(mainWindow).setVisible(true);
     }
 
     public void invokeAction(String action, int modifiers) {
@@ -88,28 +97,34 @@ public class MainWindowMenu implements ActionListener, MenuListener {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         fileMenu.addMenuListener(this);
         //
-        fileQuitMenu = new JMenuItem("Quit");
-        fileQuitMenu.setMnemonic(KeyEvent.VK_Q);
-        fileQuitMenu.setActionCommand("quit");
-        fileQuitMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
-        fileQuitMenu.addActionListener(this);
+        fileQuitMenuItem = new JMenuItem("Quit");
+        fileQuitMenuItem.setMnemonic(KeyEvent.VK_Q);
+        fileQuitMenuItem.setActionCommand("quit");
+        fileQuitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+        fileQuitMenuItem.addActionListener(this);
         //
-        fileMenu.add(fileQuitMenu);
+        fileMenu.add(fileQuitMenuItem);
         //
         helpMenu = new JMenu("Help");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+        helpMenu.addMenuListener(this);
         //
-        optionsMenu = new JMenu("Options");
+        helpAboutMenuItem = new JMenuItem("About");
+        helpAboutMenuItem.setMnemonic(KeyEvent.VK_A);
+        helpAboutMenuItem.setActionCommand("about");
+        helpAboutMenuItem.addActionListener(this);
+        //
+        helpMenu.add(helpAboutMenuItem);
         //
         mainMenu = new JMenuBar();
         mainMenu.add(fileMenu);
-        // mainMenu.add(optionsMenu);
-        // mainMenu.add(helpMenu);
+        mainMenu.add(helpMenu);
         return mainMenu;
     }
 
     JMenuBar mainMenu;
     JMenu fileMenu;
-    JMenuItem fileQuitMenu;
+    JMenuItem fileQuitMenuItem;
     JMenu helpMenu;
-    JMenu optionsMenu;
+    JMenuItem helpAboutMenuItem;
 }
