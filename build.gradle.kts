@@ -71,20 +71,24 @@ coveralls {
 
 nativeImage {
     graalVmHome = System.getProperty("java.home")
-    buildType { it.executable {
-        main = "io.github.eb4j.ebview.Main"
-    }}
+    buildType {
+        it.executable {
+            main = "io.github.eb4j.ebview.EBViewer"
+        }
+    }
     executableName = "ebviewer"
     outputDirectory = file("$buildDir/bin")
     arguments {
         add("--verbose")
         add("--native-image-info")
         add("--no-fallback")
+        add("-Djava.awt.headless=false")
+        add("-H:JNIConfigurationFiles=config/native-image/jni-config.json")
+        add("-H:ResourceConfigurationFiles=config/native-image/resource-config.json")
         add("-H:ReflectionConfigurationFiles=config/native-image/reflect-config.json")
         add("--initialize-at-build-time=org.slf4j")
         add("--enable-all-security-services")
         add("--initialize-at-run-time=sun.awt.dnd.SunDropTargetContextPeer\$EventDispatcher")
         add("--report-unsupported-elements-at-runtime")
     }
-
 }
