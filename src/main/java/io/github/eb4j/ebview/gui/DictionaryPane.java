@@ -9,9 +9,9 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,7 +24,6 @@ import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,13 +35,16 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     static final Logger LOG = LoggerFactory.getLogger(DictionaryPane.class.getName());
 
-    protected final List<String> displayedWords = new ArrayList<>();
+    private StyleSheet baseStyleSheet = new StyleSheet();
+    private HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 
     public DictionaryPane() {
         super();
 
         setContentType("text/html");
         ((HTMLDocument) getDocument()).setPreservesUnknownTags(false);
+        htmlEditorKit.setStyleSheet(baseStyleSheet);
+        setEditorKit(htmlEditorKit);
         Font font = getFont();
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
@@ -68,14 +70,15 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         if (!(doc instanceof HTMLDocument)) {
             return;
         }
-        StyleSheet styleSheet = ((HTMLDocument) doc).getStyleSheet();
-        styleSheet.addRule("body { font-family: " + font.getName() + "; "
+        baseStyleSheet.addRule("body { font-family: " + font.getName() + "; "
                 + " font-size: " + font.getSize() + "; "
                 + " font-style: " + (font.getStyle() == Font.BOLD ? "bold"
                 : font.getStyle() == Font.ITALIC ? "italic" : "normal") + "; "
                 + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
                 + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; "
-                + " }");  // noqa
+                + " } "
+                + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; };"
+        );
     }
 
     @Override
@@ -96,22 +99,18 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             } else {
                 wasPrev = true;
             }
-            txt.append("<b><span id=\"" + i + "\">");
+            txt.append("<div id =\"" + i + "\"><b><span class=\"word\">");
             txt.append(de.getWord());
             txt.append("</span></b>");
             txt.append(" - ");
             txt.append(de.getArticle());
-            displayedWords.add(dictNamePrefix + de.getWord().toLowerCase());
+            txt.append("</div>");
             i++;
         }
         appendText(txt.toString());
     }
 
-    public void moveToWord(final String word) {
-        int index = displayedWords.indexOf(word.toLowerCase());
-        if (index == -1) {
-            return;
-        }
+    public void moveTo(final int index) {
         HTMLDocument doc = (HTMLDocument) getDocument();
         Element el = doc.getElement(Integer.toString(index));
         if (el == null) {
@@ -132,12 +131,10 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     private void clear() {
         setText(null);
         scrollRectToVisible(new Rectangle());
-        displayedWords.clear();
     }
 
     private void appendText(final String txt) {
         Document doc = getDocument();
-        EditorKit kit = getEditorKit();
         try {
             Reader r;
             if (doc.getLength() == 0) {
@@ -146,9 +143,9 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                 StringBuilder sb = new StringBuilder(doc.getText(0, doc.getLength())).append(txt);
                 r = new StringReader(sb.toString());
             }
-            doc = kit.createDefaultDocument();
+            doc = htmlEditorKit.createDefaultDocument();
             ((HTMLDocument) doc).setPreservesUnknownTags(false);
-            kit.read(r, doc, 0);
+            htmlEditorKit.read(r, doc, 0);
             setDocument(doc);
         } catch (IOException | BadLocationException  e) {
             LOG.warn("error");
