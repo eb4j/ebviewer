@@ -1,14 +1,9 @@
 package io.github.eb4j.ebview.gui.dialogs;
 
 import io.github.eb4j.ebview.utils.LStrings;
+import io.github.eb4j.ebview.utils.VersionString;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -19,19 +14,30 @@ public class AboutDialog extends JDialog {
     private final JPanel buttonPanel = new JPanel();
     private final JButton buttonOK = new JButton("OK");
     JTextArea aboutTextArea = new JTextArea();
+    JTextArea copyrightTextArea = new JTextArea();
 
     public AboutDialog(Frame parent) {
         setModal(true);
+        setTitle(LStrings.getString("ABOUT_TITLE"));
         //
-        versionLabel.setText("EBView Version 1.0.0");
+        versionLabel.setText(String.format(LStrings.getString("ABOUT_VERSION_LABEL"), VersionString.VERSION));
         //
         buttonPanel.add(buttonOK);
-        aboutTextArea.setPreferredSize(new Dimension(200, 100));
+        aboutTextArea.setPreferredSize(new Dimension(300, 100));
         aboutTextArea.setEditable(false);
         aboutTextArea.setText(LStrings.getString("ABOUT_APP"));
+        copyrightTextArea.setEditable(false);
+        copyrightTextArea.setText(LStrings.getString("ABOUT_COPYRIGHT"));
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new BoxLayout(panel1, BoxLayout.PAGE_AXIS));
+        panel1.add(aboutTextArea);
+        JScrollPane copyrightPane = new JScrollPane(copyrightTextArea);
+        copyrightPane.setPreferredSize(new Dimension(420, 200));
+        panel1.add(copyrightPane);
+        //
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(versionLabel, BorderLayout.NORTH);
-        getContentPane().add(aboutTextArea, BorderLayout.CENTER);
+        getContentPane().add(panel1, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         buttonOK.addActionListener(e -> onOK());
