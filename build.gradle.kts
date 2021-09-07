@@ -11,12 +11,28 @@ plugins {
     id("com.palantir.git-version") version "0.12.3"
 }
 
-// calculate version string from git tag, hash and commit distance
-fun getVersionDetails(): com.palantir.gradle.gitversion.VersionDetails = (extra["versionDetails"] as groovy.lang.Closure<*>)() as com.palantir.gradle.gitversion.VersionDetails
-if (getVersionDetails().isCleanTag) {
-    version = getVersionDetails().lastTag.substring(1)
+val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+val details = versionDetails()
+if (details.isCleanTag) {
+    version = details.lastTag.substring(1)
 } else {
-    version = getVersionDetails().lastTag.substring(1) + "-" + getVersionDetails().commitDistance + "-" + getVersionDetails().gitHash + "-SNAPSHOT"
+    version = details.lastTag.substring(1) + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+}
+
+tasks.register("writeVersionFile") {
+    val folder = project.file("src/main/resources");
+    if (!folder.exists()) {
+        folder.mkdirs()
+    }
+    val props = project.file("src/main/resources/version.properties")
+    props.delete()
+    props.appendText("version=" + project.version + "\n")
+    props.appendText("commit=" + details.gitHashFull + "\n")
+    props.appendText("branch=" + details.branchName)
+}
+
+tasks.getByName("jar") {
+    dependsOn("writeVersionFile")
 }
 
 group = "io.github.eb4j"
