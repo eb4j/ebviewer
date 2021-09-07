@@ -35,8 +35,8 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     static final Logger LOG = LoggerFactory.getLogger(DictionaryPane.class.getName());
 
-    private StyleSheet baseStyleSheet = new StyleSheet();
-    private HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+    private final StyleSheet baseStyleSheet = new StyleSheet();
+    private final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 
     public DictionaryPane() {
         super();
@@ -75,9 +75,8 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                 + " font-style: " + (font.getStyle() == Font.BOLD ? "bold"
                 : font.getStyle() == Font.ITALIC ? "italic" : "normal") + "; "
                 + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
-                + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; "
-                + " } "
-                + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; };"
+                + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; } "
+                + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; }"
         );
     }
 

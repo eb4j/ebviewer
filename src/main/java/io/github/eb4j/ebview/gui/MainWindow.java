@@ -59,7 +59,8 @@ public final class MainWindow extends JFrame {
             String name = dictionaryEntry.getDictName();
             dictList.add(name);
             String word = dictionaryEntry.getWord();
-            list.add(name.substring(0, 2) + word);
+            list.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
+                    name.substring(0, 2), word));
         }
         headingsModel.addAll(list);
         dictionaryPane.setFoundResult(result);
@@ -134,10 +135,11 @@ public final class MainWindow extends JFrame {
             if (e.getValueIsAdjusting()) {
                 return;
             }
-            Object obj = headingsList.getSelectedValue();
-            if (obj != null) {
-                dictionaryPane.moveToWord(obj.toString());
+            int index = headingsList.getSelectedIndex();
+            if (index == -1) {
+                return;
             }
+            dictionaryPane.moveTo(index);
         });
 
         history.addListSelectionListener(e -> {
