@@ -44,10 +44,11 @@ application {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    implementation("io.github.eb4j:eb4j:2.2.1")
+    implementation("io.github.eb4j:eb4j:2.2.1-3-daf1af5f9e-SNAPSHOT")
     implementation("org.slf4j:slf4j-simple:1.7.32")
 
     implementation("commons-io:commons-io:2.11.0")
