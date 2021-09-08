@@ -94,7 +94,6 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         int i = 0;
         txt.append("<html>");
         for (DictionaryEntry de : data) {
-            String dictNamePrefix = de.getDictName().substring(0, 2).toLowerCase();
             if (wasPrev) {
                 txt.append("<br><hr>");
             } else {

@@ -1,6 +1,7 @@
 package io.github.eb4j.ebview.dictionary.epwing;
 
 import io.github.eb4j.EBException;
+import io.github.eb4j.ExtFont;
 import io.github.eb4j.SubAppendix;
 import io.github.eb4j.SubBook;
 import io.github.eb4j.ext.UnicodeMap;
@@ -23,6 +24,7 @@ import java.util.Base64;
 public class Gaiji {
 
     private final SubAppendix subAppendix;
+    private ExtFont extFont;
     private UnicodeMap unicodeMap;
 
     public Gaiji(final SubBook subBook) {
@@ -33,6 +35,7 @@ public class Gaiji {
             unicodeMap = null;
         }
         subAppendix = subBook.getSubAppendix();
+        extFont = subBook.getFont(ExtFont.FONT_16);
     }
 
     /**
@@ -44,7 +47,7 @@ public class Gaiji {
      * @return String Base64 encoded BMP data.
      * @throws IOException when the image is broken or caused error.
      */
-    private static String convert2Image(final byte[] data, final int height, final int width) throws IOException {
+    private static String convertImage(final byte[] data, final int height, final int width) throws IOException {
         final BufferedImage res = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -57,14 +60,15 @@ public class Gaiji {
                 }
             }
         }
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(res, "bmp", baos);
+        ImageIO.write(res, "png", baos);
         baos.flush();
         byte[] bytes = baos.toByteArray();
         baos.close();
 
         Base64.Encoder base64Encoder = Base64.getEncoder();
-        return "<img src=\"data:image/bmp;base64,"
+        return "<img src=\"data:image/png;base64,"
                 + base64Encoder.encodeToString(bytes)
                 + "\"></img>";
     }
@@ -96,12 +100,33 @@ public class Gaiji {
                 return str;
             }
         }
-        // no alternation, insert code hex instead.
+        // no alternation, use image.
         if (narrow) {
-            return "[GAIJI=n" + HexUtil.toHexString(code) + "]";
+            try {
+                int height = extFont.getFontHeight();
+                int width = extFont.getNarrowFontWidth();
+                byte[] data = extFont.getNarrowFont(code);
+                str = convertImage(data, height, width);
+            } catch (EBException | IOException ignore) {
+            }
         } else {
-            return "[GAIJI=w" + HexUtil.toHexString(code) + "]";
+            try {
+                int height = extFont.getFontHeight();
+                int width = extFont.getWideFontWidth();
+                str = convertImage(extFont.getWideFont(code), height, width);
+            } catch (EBException | IOException ignore) {
+            }
         }
+        if (!StringUtils.isBlank(str)) {
+            return str;
+        }
+        // last fallback
+        if (narrow) {
+            str = "[GAIJI=n" + HexUtil.toHexString(code) + "]";
+        } else {
+            str = "[GAIJI=w" + HexUtil.toHexString(code) + "]";
+        }
+        return str;
     }
 }
 
