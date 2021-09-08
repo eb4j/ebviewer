@@ -2,12 +2,10 @@ package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -15,12 +13,12 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class MainWindowMenu implements ActionListener, MenuListener {
+public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
 
     /** MainWindow instance. */
-    protected final MainWindow mainWindow;
+    protected final IMainWindow mainWindow;
 
-    public MainWindowMenu(final MainWindow mainWindow) {
+    public MainWindowMenu(final IMainWindow mainWindow) {
         this.mainWindow = mainWindow;
     }
 
@@ -36,11 +34,13 @@ public class MainWindowMenu implements ActionListener, MenuListener {
     }
 
     public void quitActionPerformed() {
-        System.exit(0);
+        JFrame app = mainWindow.getApplicationFrame();
+        app.setVisible(false);
+        app.dispose();
     }
 
     public void aboutActionPerformed() {
-        new AboutDialog(mainWindow).setVisible(true);
+        new AboutDialog(mainWindow.getApplicationFrame()).setVisible(true);
     }
 
     public void invokeAction(String action, int modifiers) {
