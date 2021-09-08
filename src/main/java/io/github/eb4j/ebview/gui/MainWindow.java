@@ -25,7 +25,7 @@ import java.util.Set;
  * Swing main window.
  * @author Hiroshi Miura
  */
-public final class MainWindow extends JFrame {
+public final class MainWindow extends JFrame implements IMainWindow {
     JTextField searchWordField;
     DefaultListModel<String> headingsModel;
     DictionaryPane dictionaryPane;
@@ -152,5 +152,10 @@ public final class MainWindow extends JFrame {
                 searchWordField.setText(obj.toString());
             }
         });
+    }
+
+    @Override
+    public JFrame getApplicationFrame() {
+        return (JFrame) this;
     }
 }
