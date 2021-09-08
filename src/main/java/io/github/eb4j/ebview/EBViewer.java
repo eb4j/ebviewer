@@ -2,6 +2,7 @@ package io.github.eb4j.ebview;
 
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
+import io.github.eb4j.ebview.protocol.data.Handler;
 import io.github.eb4j.ebview.utils.FileUtils;
 
 import java.io.File;
@@ -40,6 +41,8 @@ public class EBViewer implements Runnable {
             System.err.println("Path is not a directory.");
             System.exit(1);
         }
+
+        Handler.install();
 
         try {
             EBViewer viewer = new EBViewer(dictionaryDirectory);
