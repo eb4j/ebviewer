@@ -5,8 +5,6 @@ import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.dictionary.stardict.StarDictEntry;
 import io.github.eb4j.ebview.dictionary.stardict.StarDictFileDict;
 import io.github.eb4j.ebview.dictionary.stardict.StarDictZipDict;
-import org.dict.zip.DictZipInputStream;
-import org.dict.zip.RandomAccessInputStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -46,12 +44,12 @@ import java.util.zip.GZIPInputStream;
 public class StarDict implements IDictionaryFactory {
 
     @Override
-    public boolean isSupportedFile(File file) {
+    public boolean isSupportedFile(final File file) {
         return file.getPath().endsWith(".ifo");
     }
 
     @Override
-    public IDictionary loadDict(File ifoFile) throws Exception {
+    public IDictionary loadDict(final File ifoFile) throws Exception {
         Map<String, String> header = readIFO(ifoFile);
         String bookName = header.get("bookname");
         String version = header.get("version");
@@ -112,7 +110,7 @@ public class StarDict implements IDictionaryFactory {
     /**
      * Read header.
      */
-    private Map<String, String> readIFO(File ifoFile) throws Exception {
+    private Map<String, String> readIFO(final File ifoFile) throws Exception {
         Map<String, String> result = new TreeMap<>();
         try (BufferedReader rd = Files.newBufferedReader(ifoFile.toPath(), StandardCharsets.UTF_8)) {
             String line;
@@ -134,12 +132,12 @@ public class StarDict implements IDictionaryFactory {
         return result;
     }
 
-    private Optional<File> getFile(String basename, String... suffixes) {
+    private Optional<File> getFile(final String basename, final String... suffixes) {
         return Stream.of(suffixes).map(suff -> new File(basename + suff)).filter(f -> f.isFile())
                 .findFirst();
     }
 
-    private DictionaryData<StarDictEntry> loadData(File idxFile) throws IOException {
+    private DictionaryData<StarDictEntry> loadData(final File idxFile) throws IOException {
         InputStream is = new FileInputStream(idxFile);
         if (idxFile.getName().endsWith(".gz")) {
             // BufferedInputStream.DEFAULT_BUFFER_SIZE = 8192

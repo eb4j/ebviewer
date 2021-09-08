@@ -31,8 +31,7 @@ public class DictionaryData<T> {
     private MapTrie<Object> temp;
 
     /**
-     * @param language
-     *            The dictionary's index language
+     * POJO class to hold dictionary data.
      */
     public DictionaryData() {
         this.temp = new MapPatriciaTrie<>();
@@ -48,7 +47,7 @@ public class DictionaryData<T> {
      * @param value
      *            The value
      */
-    public void add(String key, T value) {
+    public void add(final String key, final T value) {
         // key = normalizeUnicode(key);
         doAdd(key, value);
         String lowerKey = key.toLowerCase();
@@ -66,7 +65,7 @@ public class DictionaryData<T> {
      * @param key
      * @param value
      */
-    private void doAdd(String key, T value) {
+    private void doAdd(final String key, final T value) {
         Object stored = temp.get(key);
         if (stored == null) {
             temp.insert(key, value);
@@ -74,7 +73,7 @@ public class DictionaryData<T> {
             if (stored instanceof Object[]) {
                 stored = extendArray((Object[]) stored, value);
             } else {
-                stored = new Object[] { stored, value };
+                stored = new Object[] {stored, value};
             }
             temp.put(key, stored);
         }
@@ -87,7 +86,7 @@ public class DictionaryData<T> {
      * @param value
      * @return
      */
-    Object[] extendArray(Object[] array, Object value) {
+    Object[] extendArray(final Object[] array, final Object value) {
         Object[] newArray = new Object[array.length + 1];
         System.arraycopy(array, 0, newArray, 0, array.length);
         newArray[newArray.length - 1] = value;
@@ -112,7 +111,7 @@ public class DictionaryData<T> {
      * @throws IllegalStateException
      *             If {@link #done()} has not yet been called
      */
-    public List<Entry<String, T>> lookUp(String word) throws IllegalStateException {
+    public List<Entry<String, T>> lookUp(final String word) throws IllegalStateException {
         return doLookUpWithLowerCase(word, false);
     }
 
@@ -126,11 +125,11 @@ public class DictionaryData<T> {
      * @throws IllegalStateException
      *             If {@link #done()} has not yet been called
      */
-    public List<Entry<String, T>> lookUpPredictive(String word) throws IllegalStateException {
+    public List<Entry<String, T>> lookUpPredictive(final String word) throws IllegalStateException {
         return doLookUpWithLowerCase(word, true);
     }
 
-    private List<Entry<String, T>> doLookUpWithLowerCase(String word, boolean predictive) {
+    private List<Entry<String, T>> doLookUpWithLowerCase(final String word, final boolean predictive) {
         List<Entry<String, T>> result = doLookUp(word, predictive);
         if (result.isEmpty()) {
             String lowerWord = word.toLowerCase();
@@ -140,7 +139,7 @@ public class DictionaryData<T> {
         return result;
     }
 
-    private List<Entry<String, T>> doLookUp(String word, boolean predictive) throws IllegalStateException {
+    private List<Entry<String, T>> doLookUp(final String word, final boolean predictive) throws IllegalStateException {
         if (data == null) {
             throw new IllegalStateException(
                     "Object has not been finalized! You must call done() before doing any lookups.");
@@ -164,7 +163,7 @@ public class DictionaryData<T> {
      * @param into
      */
     @SuppressWarnings("unchecked")
-    private <U> void get(U key, Object value, Collection<Entry<U, T>> into) {
+    private <U> void get(final U key, final Object value, final Collection<Entry<U, T>> into) {
         if (value == null) {
             return;
         }
@@ -184,6 +183,9 @@ public class DictionaryData<T> {
      * @return The number of stored keys
      */
     public int size() {
-        return data == null ? -1 : data.size();
+        if (data == null) {
+            return -1;
+        }
+        return data.size();
     }
 }

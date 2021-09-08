@@ -64,6 +64,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     }
 
     @Override
+    @SuppressWarnings("avoidinlineconditionals")
     public void setFont(final Font font) {
         super.setFont(font);
         Document doc = getDocument();

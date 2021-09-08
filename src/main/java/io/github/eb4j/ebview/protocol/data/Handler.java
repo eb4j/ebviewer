@@ -6,7 +6,7 @@ import java.net.URLStreamHandler;
 
 public class Handler extends URLStreamHandler {
     @Override
-    protected URLConnection openConnection(URL u) {
+    protected URLConnection openConnection(final URL u) {
         return new DataConnection(u);
     }
 

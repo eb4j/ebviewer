@@ -18,25 +18,25 @@ abstract class StarDictBaseDict implements IDictionary {
     /**
      * @param data collection of <code>Entry</code>s loaded from file
      */
-    StarDictBaseDict(DictionaryData<StarDictEntry> data) {
+    StarDictBaseDict(final DictionaryData<StarDictEntry> data) {
         this.data = data;
     }
 
     @Override
-    public List<DictionaryEntry> readArticles(String word) throws Exception {
+    public List<DictionaryEntry> readArticles(final String word) throws Exception {
         return data.lookUp(word).stream()
                 .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()), getDictionaryName()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<DictionaryEntry> readArticlesPredictive(String word) {
+    public List<DictionaryEntry> readArticlesPredictive(final String word) {
         return data.lookUpPredictive(word).stream()
                 .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()), getDictionaryName()))
                 .collect(Collectors.toList());
     }
 
-    private synchronized String getArticle(StarDictEntry starDictEntry) {
+    private synchronized String getArticle(final StarDictEntry starDictEntry) {
         return cache.computeIfAbsent(starDictEntry, (e) -> {
             return readArticle(e.getStart(), e.getLen()).replace("\n", "<br>");
         });

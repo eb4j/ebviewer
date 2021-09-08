@@ -2,10 +2,13 @@ package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -28,7 +31,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
      * @param e the event to be processed
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
         String action = e.getActionCommand();
         invokeAction(action, e.getModifiers());
     }
@@ -43,7 +46,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         new AboutDialog(mainWindow.getApplicationFrame()).setVisible(true);
     }
 
-    public void invokeAction(String action, int modifiers) {
+    public void invokeAction(final String action, final int modifiers) {
         String methodName = action + "ActionPerformed";
         // find method
         Method method;
@@ -57,7 +60,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
             }
         }
         // call
-        Object[] args = method.getParameterTypes().length == 0 ? null : new Object[] { modifiers };
+        Object[] args = method.getParameterTypes().length == 0 ? null : new Object[] {modifiers};
         try {
             method.invoke(this, args);
         } catch (IllegalAccessException | InvocationTargetException ex) {
@@ -71,7 +74,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
      * @param e a MenuEvent object
      */
     @Override
-    public void menuSelected(MenuEvent e) {
+    public void menuSelected(final MenuEvent e) {
     }
 
     /**
@@ -80,7 +83,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
      * @param e a MenuEvent object
      */
     @Override
-    public void menuDeselected(MenuEvent e) {
+    public void menuDeselected(final MenuEvent e) {
     }
 
     /**
@@ -89,7 +92,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
      * @param e a MenuEvent object
      */
     @Override
-    public void menuCanceled(MenuEvent e) {
+    public void menuCanceled(final MenuEvent e) {
     }
 
     JMenuBar initMenuComponents() {

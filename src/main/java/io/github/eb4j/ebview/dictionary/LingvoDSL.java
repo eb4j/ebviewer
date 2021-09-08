@@ -18,12 +18,12 @@ import java.io.File;
 public class LingvoDSL implements IDictionaryFactory {
 
     @Override
-    public boolean isSupportedFile(File file) {
+    public boolean isSupportedFile(final File file) {
         return file.getPath().endsWith(".dsl") || file.getPath().endsWith(".dsl.dz");
     }
 
     @Override
-    public IDictionary loadDict(File file) throws Exception {
+    public IDictionary loadDict(final File file) throws Exception {
         return new LingvoDSLDictionary(file);
     }
 

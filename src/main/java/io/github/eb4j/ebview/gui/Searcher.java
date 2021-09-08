@@ -13,7 +13,7 @@ import java.util.List;
 class Searcher extends SwingWorker<Object, Object> {
     private final MainWindow mainWindow;
 
-    public Searcher(MainWindow mainWindow) {
+    Searcher(final MainWindow mainWindow) {
         super();
         this.mainWindow = mainWindow;
     }
@@ -31,7 +31,7 @@ class Searcher extends SwingWorker<Object, Object> {
         mainWindow.dictionaryInfoModel.removeAllElements();
         new Thread(() -> {
             try {
-                List<DictionaryEntry> result = mainWindow.dictionariesManager.findWord(word);
+                List<DictionaryEntry> result = mainWindow.getDictionariesManager().findWord(word);
                 publish(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -41,7 +41,7 @@ class Searcher extends SwingWorker<Object, Object> {
     }
 
     @Override
-    protected void process(List<Object> chunks) {
+    protected void process(final List<Object> chunks) {
         super.process(chunks);
         for (Object obj : chunks) {
             mainWindow.setResult((List<DictionaryEntry>) obj);

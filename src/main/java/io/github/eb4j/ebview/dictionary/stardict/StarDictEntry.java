@@ -11,7 +11,7 @@ public class StarDictEntry {
     private final int start;
     private final int len;
 
-    public StarDictEntry(int start, int len) {
+    public StarDictEntry(final int start, final int len) {
         this.start = start;
         this.len = len;
     }
@@ -30,7 +30,7 @@ public class StarDictEntry {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

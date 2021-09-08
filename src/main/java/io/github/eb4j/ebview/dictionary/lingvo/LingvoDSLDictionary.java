@@ -35,19 +35,20 @@ public class LingvoDSLDictionary implements IDictionary {
 
     private final String bookName;
 
+    @SuppressWarnings("visibilitymodifier")
     static class Re {
         public String regex;
         public String replacement;
 
-        public Re(String regex, String replacement) {
+        Re(final String regex, final String replacement) {
             this.regex = regex;
             this.replacement = replacement;
         }
     }
 
-    final List<Re> RE_MAP = new ArrayList<>();
+    protected final List<Re> reList = new ArrayList<>();
 
-    public LingvoDSLDictionary(File file) throws Exception {
+    public LingvoDSLDictionary(final File file) throws Exception {
         data = new DictionaryData<>();
         String fileName = file.getName();
         if (fileName.endsWith(".dz")) {
@@ -55,14 +56,15 @@ public class LingvoDSLDictionary implements IDictionary {
         } else {
             bookName = fileName.substring(0, fileName.length() - 4);
         }
-        RE_MAP.add(new Re("\\[b\\](.+?)\\[/b\\]", "<strong>$1</strong>"));
-        RE_MAP.add(new Re("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
-        RE_MAP.add(new Re("\\[trn\\](.+?)\\[/trn\\]", "<br>&nbsp;-&nbsp;$1"));
-        RE_MAP.add(new Re("\\[t\\](.+?)\\[/t\\]", "$1&nbsp;"));
+        reList.add(new Re("\\[b\\](.+?)\\[/b\\]", "<strong>$1</strong>"));
+        reList.add(new Re("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
+        reList.add(new Re("\\[trn\\](.+?)\\[/trn\\]", "<br>&nbsp;-&nbsp;$1"));
+        reList.add(new Re("\\[t\\](.+?)\\[/t\\]", "$1&nbsp;"));
         readDslFile(file);
     }
 
-    private void readDslFile(File file) throws IOException {
+    @SuppressWarnings("avoidinlineconditionals")
+    private void readDslFile(final File file) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
             // Un-gzip if necessary
             InputStream is = file.getName().endsWith(".dz") ? new GZIPInputStream(fis, 8192) : fis;
@@ -79,13 +81,13 @@ public class LingvoDSLDictionary implements IDictionary {
 
     private String replaceTag(final String line) {
         String result = line;
-        for (Re re : RE_MAP) {
+        for (Re re : reList) {
             result = result.replaceAll(re.regex, re.replacement);
         }
         return result.replaceAll("\\[\\[(.+?)\\]\\]", "[$1]");
     }
 
-    private void loadData(Stream<String> stream) {
+    private void loadData(final Stream<String> stream) {
         StringBuilder word = new StringBuilder();
         StringBuilder trans = new StringBuilder();
         stream.filter(line -> !line.isEmpty() && !line.startsWith("#"))
@@ -109,13 +111,13 @@ public class LingvoDSLDictionary implements IDictionary {
     }
 
     @Override
-    public List<DictionaryEntry> readArticles(String word) {
+    public List<DictionaryEntry> readArticles(final String word) {
         return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<DictionaryEntry> readArticlesPredictive(String word) {
+    public List<DictionaryEntry> readArticlesPredictive(final String word) {
         return data.lookUpPredictive(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
                 .collect(Collectors.toList());
     }

@@ -5,7 +5,6 @@ import org.dict.zip.DictZipInputStream;
 import org.dict.zip.RandomAccessInputStream;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +14,8 @@ public class StarDictZipDict extends StarDictBaseDict {
     private final DictZipInputStream dataFile;
     private final String bookName;
 
-    public StarDictZipDict(final String bookName, final File dictFile, DictionaryData<StarDictEntry> data) throws IOException {
+    public StarDictZipDict(final String bookName, final File dictFile, final DictionaryData<StarDictEntry> data)
+            throws IOException {
         super(data);
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
         this.bookName = bookName;
@@ -27,7 +27,7 @@ public class StarDictZipDict extends StarDictBaseDict {
     }
 
     @Override
-    protected String readArticle(int start, int len) {
+    protected String readArticle(final int start, final int len) {
         String result = null;
         try {
             dataFile.seek(start);

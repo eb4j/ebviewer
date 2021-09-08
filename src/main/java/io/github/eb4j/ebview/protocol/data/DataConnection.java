@@ -8,7 +8,7 @@ import java.util.Base64;
 
 public class DataConnection extends URLConnection {
 
-    public DataConnection(URL u) {
+    public DataConnection(final URL u) {
         super(u);
     }
 
@@ -46,5 +46,4 @@ public class DataConnection extends URLConnection {
         String[] header = urlString.substring(endOfProtocol + 1, endOfHeader).split(":");
         return header;
     }
-
 }

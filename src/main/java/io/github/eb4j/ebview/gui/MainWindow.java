@@ -155,6 +155,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     @Override
+    public DictionariesManager getDictionariesManager() {
+        return dictionariesManager;
+    }
+
+    @Override
     public JFrame getApplicationFrame() {
         return (JFrame) this;
     }

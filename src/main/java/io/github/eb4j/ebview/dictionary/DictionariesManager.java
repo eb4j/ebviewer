@@ -30,7 +30,7 @@ public class DictionariesManager {
         factories.add(new StarDict());
     }
 
-    public void closeDict(IDictionary dict) {
+    public void closeDict(final IDictionary dict) {
         try {
             dict.close();
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class DictionariesManager {
         }
     }
 
-    public boolean loadDictionary(File file) throws Exception {
+    public boolean loadDictionary(final File file) throws Exception {
         if (!file.isFile()) {
             return false;
         }
@@ -53,13 +53,13 @@ public class DictionariesManager {
         return false;
     }
 
-    public List<DictionaryEntry> findWord(String word) {
+    public List<DictionaryEntry> findWord(final String word) {
         List<IDictionary> dicts;
         dicts = new ArrayList<>(dictionaries.values());
         return dicts.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
     }
 
-    private List<DictionaryEntry> doLookUp(IDictionary dict, String word) {
+    private List<DictionaryEntry> doLookUp(final IDictionary dict, final String word) {
         try {
             List<DictionaryEntry> result = dict.readArticles(word);
             if (!result.isEmpty()) {

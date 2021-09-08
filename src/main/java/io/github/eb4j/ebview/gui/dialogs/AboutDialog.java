@@ -3,8 +3,18 @@ package io.github.eb4j.ebview.gui.dialogs;
 import io.github.eb4j.ebview.utils.LStrings;
 import io.github.eb4j.ebview.utils.VersionString;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,8 +23,8 @@ public class AboutDialog extends JDialog {
     private final JLabel versionLabel = new JLabel();
     private final JPanel buttonPanel = new JPanel();
     private final JButton buttonOK = new JButton("OK");
-    JTextArea aboutTextArea = new JTextArea();
-    JTextArea copyrightTextArea = new JTextArea();
+    private final JTextArea aboutTextArea = new JTextArea();
+    private final JTextArea copyrightTextArea = new JTextArea();
 
     public AboutDialog(Frame parent) {
         setModal(true);
@@ -49,7 +59,8 @@ public class AboutDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        buttonPanel.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        buttonPanel.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         invalidate();
         pack();

@@ -100,7 +100,7 @@ public class EBDictionary implements IDictionary {
      * Predictive search.
      * @param word
      *            The word to look up in the dictionary
-     *
+     * @return article string.
      */
     public List<DictionaryEntry> readArticlesPredictive(final String word) {
         return readArticles(word, Mode.PREDICTIVE);

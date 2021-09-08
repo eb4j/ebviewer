@@ -2,15 +2,18 @@ package io.github.eb4j.ebview.utils;
 
 import java.util.ResourceBundle;
 
-public class VersionString {
+public final class VersionString {
+
+    private VersionString() {
+    }
 
     /** Full version, e.g. "1.0.0-0-123456-SNAPSHOT" */
     public static final String VERSION;
 
-    /** commit id */
+    /** commit id. */
     public static final String COMMIT;
 
-    /** branch name */
+    /** branch name. */
     public static final String BRANCH;
 
     static {
