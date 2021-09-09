@@ -130,12 +130,12 @@ public class Gaiji {
     }
 
     /**
-     * Convert XBM image to lossless WebP and convert to Base64 String.
+     * Convert eb_bitmap font to PNG, and convert to Base64 String.
      *
-     * @param data   XBM data
+     * @param data  eb_bitmap font data
      * @param width  image width
      * @param height image height
-     * @return String Base64 encoded BMP data.
+     * @return String Base64 encoded PNG data.
      * @throws IOException when the image is broken or caused error.
      */
     protected static String convertImage(final byte[] data, final int width, final int height) throws IOException {
