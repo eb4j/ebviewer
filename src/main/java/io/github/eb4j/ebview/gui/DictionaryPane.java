@@ -108,8 +108,8 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             txt.append("</div>");
             i++;
         }
-        appendText(txt.toString());
         txt.append("</html>");
+        appendText(txt.toString());
     }
 
     public void moveTo(final int index) {
