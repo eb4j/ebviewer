@@ -139,18 +139,15 @@ public class Gaiji {
      * @throws IOException when the image is broken or caused error.
      */
     protected static String convertImage(final byte[] data, final int width, final int height) throws IOException {
-        byte[] bmp = bitmap2BMP(data, width, height);
-        final BufferedImage res = ImageIO.read(new ByteArrayInputStream(bmp));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(res, "png", baos);
-        baos.flush();
-        byte[] bytes = baos.toByteArray();
-        baos.close();
-
+        byte[] bytes;
         Base64.Encoder base64Encoder = Base64.getEncoder();
-        return "<img src=\"data:image/png;base64,"
-                + base64Encoder.encodeToString(bytes)
-                + "\"/>";
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            final BufferedImage res = ImageIO.read(new ByteArrayInputStream(bitmap2BMP(data, width, height)));
+            ImageIO.write(res, "png", baos);
+            baos.flush();
+            bytes = baos.toByteArray();
+        }
+        return "<img src=\"data:image/png;base64," + base64Encoder.encodeToString(bytes) + "\"/>";
     }
 
     public String getAltCode(final int code, final boolean narrow) {
