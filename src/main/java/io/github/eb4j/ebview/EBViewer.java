@@ -1,6 +1,5 @@
 package io.github.eb4j.ebview;
 
-import io.github.eb4j.ebview.protocol.data.Handler;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.protocol.data.Handler;
