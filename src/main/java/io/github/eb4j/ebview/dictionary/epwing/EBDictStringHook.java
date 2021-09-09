@@ -6,10 +6,13 @@ import io.github.eb4j.SoundData;
 import io.github.eb4j.SubBook;
 import io.github.eb4j.hook.Hook;
 import io.github.eb4j.hook.HookAdapter;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Base64;
 
 /**
@@ -301,6 +304,29 @@ public final class EBDictStringHook extends HookAdapter<String> {
         } catch (EBException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void beginMovie(final int format, final int width, final int height, final String filename) {
+        if (format == Hook.MPEG) {
+            File movie = subbook.getMovieFile(filename);
+            try {
+                File tmpFile = File.createTempFile("ebviewer", ".mpg");
+                tmpFile.deleteOnExit();
+                try (FileOutputStream outputStream = new FileOutputStream(tmpFile);
+                     FileInputStream inputStream = new FileInputStream(movie)) {
+                    IOUtils.copy(inputStream, outputStream);
+                }
+                output.append("<a href=\"file:").append(tmpFile.getAbsolutePath()).append("\">\uD83C\uDFA6");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void endMovie() {
+        output.append("\uD83C\uDFA6</a>");
     }
 
 }

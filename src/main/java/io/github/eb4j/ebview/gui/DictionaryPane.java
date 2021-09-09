@@ -1,18 +1,18 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
+import io.github.eb4j.ebview.gui.dialogs.MoviePlay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.TargetDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.DefaultHighlighter;
@@ -21,7 +21,6 @@ import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
-import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,14 +29,12 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -196,6 +193,9 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                         String path = url.toURI().getPath();
                         if (path.endsWith(".wav")) {
                             playSound(new File(path));
+                        } else if (path.endsWith(".mpg")) {
+                            MoviePlay player = new MoviePlay(300, 300);
+                            player.play(path);
                         }
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
