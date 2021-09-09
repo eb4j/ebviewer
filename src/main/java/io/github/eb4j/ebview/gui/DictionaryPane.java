@@ -8,6 +8,7 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
@@ -117,13 +118,23 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         if (el == null) {
             return;
         }
+        int pos1 = el.getStartOffset();
+        int pos2 = el.getEndOffset();
         try {
-            Rectangle rect = modelToView(el.getStartOffset());
-            if (rect != null) {
-                // show 5 lines
-                rect.height *= 5;
-                scrollRectToVisible(rect);
+            Rectangle rect1 = modelToView(pos1);
+            Rectangle rect2 = modelToView(pos2);
+            // show last of article
+            if (rect2 != null) {
+                scrollRectToVisible(rect2);
             }
+            // show first of article
+            if (rect1 != null) {
+                scrollRectToVisible(rect1);
+            }
+            // highlight selected
+            getHighlighter().removeAllHighlights();
+            getHighlighter().addHighlight(pos1, pos2, ((DefaultHighlighter)getHighlighter()).DefaultPainter);
+
         } catch (BadLocationException ignore) {
         }
     }
