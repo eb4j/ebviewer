@@ -4,8 +4,15 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.DefaultHighlighter;
@@ -14,6 +21,7 @@ import javax.swing.text.Element;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,14 +30,20 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Dictionary article display that accept threading update.
+ *
  * @author Hiroshi Miura
  */
 public class DictionaryPane extends JTextPane implements IThreadPane {
@@ -62,6 +76,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         addFocusListener(listener);
         setMinimumSize(new Dimension(400, 300));
         setEditable(false);
+        addHyperlinkListener(new LinkActionListener());
     }
 
     @Override
@@ -133,13 +148,15 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             }
             // highlight selected
             getHighlighter().removeAllHighlights();
-            getHighlighter().addHighlight(pos1, pos2, ((DefaultHighlighter)getHighlighter()).DefaultPainter);
+            getHighlighter().addHighlight(pos1, pos2, DefaultHighlighter.DefaultPainter);
 
         } catch (BadLocationException ignore) {
         }
     }
 
-    /** Clears up the pane. */
+    /**
+     * Clears up the pane.
+     */
     private void clear() {
         setText(null);
         scrollRectToVisible(new Rectangle());
@@ -159,12 +176,45 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             ((HTMLDocument) doc).setPreservesUnknownTags(false);
             htmlEditorKit.read(r, doc, 0);
             setDocument(doc);
-        } catch (IOException | BadLocationException  e) {
+        } catch (IOException | BadLocationException e) {
             LOG.warn("error");
         }
     }
 
     private String toHex(final Color color) {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public class LinkActionListener implements HyperlinkListener {
+
+        @Override
+        public void hyperlinkUpdate(HyperlinkEvent hyperlinkEvent) {
+            if (hyperlinkEvent.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                URL url = hyperlinkEvent.getURL();
+                if (url.getProtocol().equals("file")) {
+                    try {
+                        String path = url.toURI().getPath();
+                        if (path.endsWith(".wav")) {
+                            playSound(new File(path));
+                        }
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    public static synchronized void playSound(final File file) {
+        new Thread(() -> {
+            try {
+                Clip clip = AudioSystem.getClip();
+                AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+                clip.open(inputStream);
+                clip.start();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }).start();
     }
 }
