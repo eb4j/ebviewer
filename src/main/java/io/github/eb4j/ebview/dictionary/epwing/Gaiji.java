@@ -186,14 +186,14 @@ public class Gaiji {
                 int height = extFont.getFontHeight();
                 int width = extFont.getNarrowFontWidth();
                 byte[] data = extFont.getNarrowFont(code);
-                str = convertImage(data, height, width);
+                str = convertImage(data, width, height);
             } catch (EBException | IOException ignore) {
             }
         } else {
             try {
                 int height = extFont.getFontHeight();
                 int width = extFont.getWideFontWidth();
-                str = convertImage(extFont.getWideFont(code), height, width);
+                str = convertImage(extFont.getWideFont(code), width, height);
             } catch (EBException | IOException ignore) {
             }
         }

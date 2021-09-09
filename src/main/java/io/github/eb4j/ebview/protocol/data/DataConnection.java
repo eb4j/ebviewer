@@ -34,7 +34,6 @@ public class DataConnection extends URLConnection {
     private byte[] getData() {
         String data = url.toString();
         data = data.replaceFirst("^.*;base64,", "");
-        System.out.println("Data: " + data);
         Base64.Decoder decoder = Base64.getDecoder();
         return decoder.decode(data);
     }
