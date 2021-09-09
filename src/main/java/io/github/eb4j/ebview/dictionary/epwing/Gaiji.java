@@ -1,6 +1,7 @@
 package io.github.eb4j.ebview.dictionary.epwing;
 
 import io.github.eb4j.EBException;
+import io.github.eb4j.ExtFont;
 import io.github.eb4j.SubAppendix;
 import io.github.eb4j.SubBook;
 import io.github.eb4j.ext.UnicodeMap;
@@ -8,8 +9,6 @@ import io.github.eb4j.util.HexUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,6 +24,7 @@ import java.util.Base64;
 public class Gaiji {
 
     private final SubAppendix subAppendix;
+    private ExtFont extFont;
     private UnicodeMap unicodeMap;
 
     public Gaiji(final SubBook subBook) {
@@ -35,6 +35,7 @@ public class Gaiji {
             unicodeMap = null;
         }
         subAppendix = subBook.getSubAppendix();
+        extFont = subBook.getFont(ExtFont.FONT_16);
     }
 
     protected static byte[] bitmap2BMP(final byte[] data, final int width, final int height) {
@@ -179,12 +180,33 @@ public class Gaiji {
                 return str;
             }
         }
-        // no alternation, insert code hex instead.
+        // no alternation, use image.
         if (narrow) {
-            return "[GAIJI=n" + HexUtil.toHexString(code) + "]";
+            try {
+                int height = extFont.getFontHeight();
+                int width = extFont.getNarrowFontWidth();
+                byte[] data = extFont.getNarrowFont(code);
+                str = convertImage(data, height, width);
+            } catch (EBException | IOException ignore) {
+            }
         } else {
-            return "[GAIJI=w" + HexUtil.toHexString(code) + "]";
+            try {
+                int height = extFont.getFontHeight();
+                int width = extFont.getWideFontWidth();
+                str = convertImage(extFont.getWideFont(code), height, width);
+            } catch (EBException | IOException ignore) {
+            }
         }
+        if (!StringUtils.isBlank(str)) {
+            return str;
+        }
+        // last fallback
+        if (narrow) {
+            str = "[GAIJI=n" + HexUtil.toHexString(code) + "]";
+        } else {
+            str = "[GAIJI=w" + HexUtil.toHexString(code) + "]";
+        }
+        return str;
     }
 }
 
