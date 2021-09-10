@@ -9,7 +9,7 @@ Very simple dictionary search application supporting;
 - StarDict (.ifo .dict)
 - StarDict (.dict.dz)
 
-![](ebviewer_screen.png)
+![Application image](https://raw.githubusercontent.com/eb4j/ebviewer/main/docs/img/screen_image.png)
 
 ## Install
 
