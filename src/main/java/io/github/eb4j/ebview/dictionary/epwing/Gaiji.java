@@ -91,7 +91,7 @@ public class Gaiji {
 
     private String convertImage(final byte[] data, final int width, final int height) throws IOException {
         StringBuilder sb = new StringBuilder("<img src=\"data:image/png;base64,");
-        sb.append(Utils.convertImage2Base64(data, width, height));
+        sb.append(Utils.convertMonoGraphic2Base64(data, width, height));
         sb.append("\"/>");
         return sb.toString();
     }

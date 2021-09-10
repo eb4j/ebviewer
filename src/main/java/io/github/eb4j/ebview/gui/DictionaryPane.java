@@ -194,7 +194,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                         if (path.endsWith(".wav")) {
                             playSound(new File(path));
                         } else if (path.endsWith(".mpg")) {
-                            MoviePlay player = new MoviePlay(300, 300);
+                            MoviePlay player = new MoviePlay(354, 280);
                             player.play(path);
                         }
                     } catch (URISyntaxException e) {

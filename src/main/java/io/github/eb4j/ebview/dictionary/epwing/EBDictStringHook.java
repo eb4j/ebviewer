@@ -292,6 +292,8 @@ public final class EBDictStringHook extends HookAdapter<String> {
     public void beginMonoGraphic(final int width, final int height) {
         lastHeight = height;
         lastWidth = width;
+        output.append("<img height=\"").append(height).append("\" width=\"").append(width).append("\" ");
+        output.append("alt=\"");
     }
 
     @Override
@@ -299,11 +301,29 @@ public final class EBDictStringHook extends HookAdapter<String> {
         GraphicData graphicData = subbook.getGraphicData();
         try {
             byte[] bytes = graphicData.getMonoGraphic(pos, lastWidth, lastHeight);
-            output.append("<img src=\"data:image/png;base64,");
-            output.append(Utils.convertImage2Base64(bytes, lastWidth, lastHeight)).append("\"/>");
+            output.append("\" src=\"data:image/png;base64,");
+            output.append(Utils.convertMonoGraphic2Base64(bytes, lastWidth, lastHeight)).append("\"/>");
         } catch (EBException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void beginInlineColorGraphic(final int format, final long pos) {
+        GraphicData graphicData = subbook.getGraphicData();
+        try {
+            byte[] bytes = graphicData.getColorGraphic(pos);
+            output.append("<img src=\"data:image/jpeg;base64,");
+            output.append(Utils.convertImage2Base64("jpeg", bytes));
+            output.append("\" alt=\"");
+        } catch (EBException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void endInlineColorGraphic() {
+        output.append("\"/>");
     }
 
     @Override

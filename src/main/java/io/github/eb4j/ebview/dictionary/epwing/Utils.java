@@ -103,6 +103,24 @@ public final class Utils {
     }
 
     /**
+     * convert image data to base64.
+     * @param format image format.
+     * @param data image data
+     * @return base64 string
+     * @throws IOException when conversion failed
+     */
+    protected static String convertImage2Base64(final String format, final byte[] data) throws IOException {
+        byte[] bytes;
+        Base64.Encoder base64Encoder = Base64.getEncoder();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            final BufferedImage res = ImageIO.read(new ByteArrayInputStream(data));
+            ImageIO.write(res, format, baos);
+            baos.flush();
+            bytes = baos.toByteArray();
+        }
+        return base64Encoder.encodeToString(bytes);
+    }
+    /**
      * Convert eb_bitmap to PNG, and convert to Base64 String.
      *
      * @param data  eb_bitmap font data
@@ -111,15 +129,7 @@ public final class Utils {
      * @return String Base64 encoded PNG data.
      * @throws IOException when the image is broken or caused error.
      */
-    protected static String convertImage2Base64(final byte[] data, final int width, final int height) throws IOException {
-        byte[] bytes;
-        Base64.Encoder base64Encoder = Base64.getEncoder();
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            final BufferedImage res = ImageIO.read(new ByteArrayInputStream(bitmap2BMP(data, width, height)));
-            ImageIO.write(res, "png", baos);
-            baos.flush();
-            bytes = baos.toByteArray();
-        }
-        return base64Encoder.encodeToString(bytes);
+    protected static String convertMonoGraphic2Base64(final byte[] data, final int width, final int height) throws IOException {
+        return convertImage2Base64("png", bitmap2BMP(data, width, height));
     }
 }
