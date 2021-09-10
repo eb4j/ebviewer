@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.util.Base64;
 
 public final class Utils {
+    static final int BMP_PREAMBLE_LENGTH = 62;
+
     private Utils() {
     }
 
     protected static byte[] bitmap2BMP(final byte[] data, final int width, final int height) {
-        final int BMP_PREAMBLE_LENGTH = 62;
         final byte[] bmpPreamble = new byte[] {
                 // Type
                 'B', 'M',
@@ -45,7 +46,7 @@ public final class Utils {
                 // Important colors
                 0x02, 0x00, 0x00, 0x00,
                 // RGB quad of color 0   RGB quad of color 1
-                (byte)0xff, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00, 0x00, 0x00
+                (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
         };
 
         int linePad;
@@ -68,28 +69,28 @@ public final class Utils {
         System.arraycopy(bmpPreamble, 0, bmp, 0, BMP_PREAMBLE_LENGTH);
         //
         bmp[2] = (byte) (fileSize & 0xff);
-        bmp[3] = (byte) ((byte) (fileSize >> 8) & 0xff);
-        bmp[4] = (byte) ((byte) (fileSize >> 16) & 0xff);
-        bmp[5] = (byte) ((byte) (fileSize >> 24) & 0xff);
+        bmp[3] = (byte) ((fileSize >> 8) & 0xff);
+        bmp[4] = (byte) ((fileSize >> 16) & 0xff);
+        bmp[5] = (byte) ((fileSize >> 24) & 0xff);
 
         bmp[18] = (byte) (width & 0xff);
-        bmp[19] = (byte) ((byte) (width >> 8) & 0xff);
-        bmp[20] = (byte) ((byte) (width >> 16) & 0xff);
-        bmp[21] = (byte) ((byte) (width >> 24) & 0xff);
+        bmp[19] = (byte) ((width >> 8) & 0xff);
+        bmp[20] = (byte) ((width >> 16) & 0xff);
+        bmp[21] = (byte) ((width >> 24) & 0xff);
 
         bmp[22] = (byte) (height & 0xff);
         bmp[23] = (byte) ((height >> 8) & 0xff);
         bmp[24] = (byte) ((height >> 16) & 0xff);
         bmp[25] = (byte) ((height >> 24) & 0xff);
 
-        bmp[34] = (byte)(dataSize & 0xff);
-        bmp[35] = (byte)((dataSize >> 8) & 0xff);
-        bmp[36] = (byte)((dataSize >> 16) & 0xff);
-        bmp[37] = (byte)((dataSize >> 24) & 0xff);
+        bmp[34] = (byte) (dataSize & 0xff);
+        bmp[35] = (byte) ((dataSize >> 8) & 0xff);
+        bmp[36] = (byte) ((dataSize >> 16) & 0xff);
+        bmp[37] = (byte) ((dataSize >> 24) & 0xff);
 
         int bitmapLineLength = (width + 7) / 8;
 
-        int i = height -1;
+        int i = height - 1;
         int k = BMP_PREAMBLE_LENGTH;
         while (i >= 0) {
             System.arraycopy(data, bitmapLineLength * i, bmp, k, bitmapLineLength);
@@ -129,7 +130,8 @@ public final class Utils {
      * @return String Base64 encoded PNG data.
      * @throws IOException when the image is broken or caused error.
      */
-    protected static String convertMonoGraphic2Base64(final byte[] data, final int width, final int height) throws IOException {
+    protected static String convertMonoGraphic2Base64(final byte[] data, final int width, final int height)
+            throws IOException {
         return convertImage2Base64("png", bitmap2BMP(data, width, height));
     }
 }

@@ -46,6 +46,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         new AboutDialog(mainWindow.getApplicationFrame()).setVisible(true);
     }
 
+    @SuppressWarnings("avoidinlineconditionals")
     public void invokeAction(final String action, final int modifiers) {
         String methodName = action + "ActionPerformed";
         // find method
@@ -125,9 +126,9 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         return mainMenu;
     }
 
-    JMenuBar mainMenu;
-    JMenu fileMenu;
-    JMenuItem fileQuitMenuItem;
-    JMenu helpMenu;
-    JMenuItem helpAboutMenuItem;
+    private JMenuBar mainMenu;
+    private JMenu fileMenu;
+    private JMenuItem fileQuitMenuItem;
+    private JMenu helpMenu;
+    private JMenuItem helpAboutMenuItem;
 }

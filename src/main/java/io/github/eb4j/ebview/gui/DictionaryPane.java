@@ -12,7 +12,6 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.DefaultHighlighter;
@@ -185,7 +184,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     public static class LinkActionListener implements HyperlinkListener {
 
         @Override
-        public void hyperlinkUpdate(HyperlinkEvent hyperlinkEvent) {
+        public void hyperlinkUpdate(final HyperlinkEvent hyperlinkEvent) {
             if (hyperlinkEvent.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
                 URL url = hyperlinkEvent.getURL();
                 if (url.getProtocol().equals("file")) {

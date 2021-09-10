@@ -37,9 +37,9 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
     final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
 
-    private JList<String> headingsList;
-    private JList<String> history;
-    private JList<String> dictionaryInfoList;
+    private JList headingsList;
+    private JList history;
+    private JList dictionaryInfoList;
 
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
@@ -83,7 +83,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         panel1.add(searchButton);
         //
         headingsModel = new DefaultListModel<>();
-        headingsList = new JList<>(headingsModel);
+        headingsList = new JList(headingsModel);
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
@@ -94,14 +94,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
         //
-        dictionaryInfoList = new JList<>(dictionaryInfoModel);
+        dictionaryInfoList = new JList(dictionaryInfoModel);
         JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
         dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
         //
         TitledBorder historyTitleBorder = new TitledBorder("History");
         historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
         historyTitleBorder.setTitlePosition(TitledBorder.TOP);
-        history = new JList<>(historyModel);
+        history = new JList(historyModel);
         JScrollPane historyPane = new JScrollPane(history);
         historyPane.setPreferredSize(new Dimension(180, 300));
         historyPane.setBorder(historyTitleBorder);

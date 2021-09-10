@@ -26,7 +26,7 @@ public class AboutDialog extends JDialog {
     private final JTextArea aboutTextArea = new JTextArea();
     private final JTextArea copyrightTextArea = new JTextArea();
 
-    public AboutDialog(Frame parent) {
+    public AboutDialog(final Frame parent) {
         setModal(true);
         setTitle(LStrings.getString("ABOUT_TITLE"));
         //
@@ -53,7 +53,7 @@ public class AboutDialog extends JDialog {
         buttonOK.addActionListener(e -> onOK());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 onCancel();
             }
         });

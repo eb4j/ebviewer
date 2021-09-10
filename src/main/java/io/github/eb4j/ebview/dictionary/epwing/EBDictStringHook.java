@@ -268,6 +268,7 @@ public final class EBDictStringHook extends HookAdapter<String> {
     }
 
     @Override
+    @SuppressWarnings("emptyblock")
     public void beginSound(final int format, final long start, final long end) {
         if (format == Hook.WAVE) {
             try {

@@ -31,7 +31,7 @@ public class MoviePlay extends JDialog {
         setContentPane(contentPane);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 onClose();
             }
         });
