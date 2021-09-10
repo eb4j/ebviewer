@@ -182,7 +182,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
-    public class LinkActionListener implements HyperlinkListener {
+    public static class LinkActionListener implements HyperlinkListener {
 
         @Override
         public void hyperlinkUpdate(HyperlinkEvent hyperlinkEvent) {

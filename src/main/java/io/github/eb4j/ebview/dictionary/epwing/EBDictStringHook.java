@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * EB/EPWING sequence Hook handler.
@@ -25,20 +26,24 @@ public final class EBDictStringHook extends HookAdapter<String> {
     private boolean narrow = false;
     private int decType;
     private final Gaiji gaiji;
-    private final SubBook subbook;
+    private final SoundData soundData;
+    private final GraphicData graphicData;
+    private final File[] movieFileList;
 
     private int lastWidth;
     private int lastHeight;
 
-    public EBDictStringHook(final SubBook sb) {
-        this(sb, 500);
+    public EBDictStringHook(final SubBook subbok) {
+        this(subbok, 500);
     }
 
-    public EBDictStringHook(final SubBook sb, final int lines) {
+    public EBDictStringHook(final SubBook subbook, final int lines) {
         super();
         maxlines = lines;
-        gaiji = new Gaiji(sb);
-        subbook = sb;
+        gaiji = new Gaiji(subbook);
+        soundData = subbook.getSoundData();
+        graphicData = subbook.getGraphicData();
+        movieFileList = subbook.getMovieFileList();
         lastWidth = -1;
         lastHeight = -1;
     }
@@ -264,7 +269,6 @@ public final class EBDictStringHook extends HookAdapter<String> {
 
     @Override
     public void beginSound(final int format, final long start, final long end) {
-        SoundData soundData = subbook.getSoundData();
         if (format == Hook.WAVE) {
             try {
                 byte[] bytes = soundData.getWaveSound(start, end);
@@ -297,7 +301,6 @@ public final class EBDictStringHook extends HookAdapter<String> {
 
     @Override
     public void endMonoGraphic(final long pos) {
-        GraphicData graphicData = subbook.getGraphicData();
         try {
             byte[] bytes = graphicData.getMonoGraphic(pos, lastWidth, lastHeight);
             output.append("\" src=\"data:image/png;base64,");
@@ -309,7 +312,6 @@ public final class EBDictStringHook extends HookAdapter<String> {
 
     @Override
     public void beginInlineColorGraphic(final int format, final long pos) {
-        GraphicData graphicData = subbook.getGraphicData();
         try {
             byte[] bytes = graphicData.getColorGraphic(pos);
             if (format == Hook.JPEG) {
@@ -335,7 +337,14 @@ public final class EBDictStringHook extends HookAdapter<String> {
     @Override
     public void beginMovie(final int format, final int width, final int height, final String filename) {
         if (format == Hook.MPEG) {
-            File movie = subbook.getMovieFile(filename);
+            File movie = Arrays.stream(movieFileList)
+                    .filter(file -> file.getName().equals(filename))
+                    .findFirst()
+                    .orElseGet(null);
+            if (movie == null) {
+                // should not come here
+                output.append("<a>");
+            }
             try {
                 File tmpFile = File.createTempFile("ebviewer", ".mpg");
                 tmpFile.deleteOnExit();
