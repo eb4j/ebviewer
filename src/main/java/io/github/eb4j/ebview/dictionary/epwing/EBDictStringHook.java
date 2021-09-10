@@ -6,6 +6,7 @@ import io.github.eb4j.SoundData;
 import io.github.eb4j.SubBook;
 import io.github.eb4j.hook.Hook;
 import io.github.eb4j.hook.HookAdapter;
+import io.github.eb4j.util.ImageUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -313,9 +314,16 @@ public final class EBDictStringHook extends HookAdapter<String> {
         GraphicData graphicData = subbook.getGraphicData();
         try {
             byte[] bytes = graphicData.getColorGraphic(pos);
-            output.append("<img src=\"data:image/jpeg;base64,");
-            output.append(Utils.convertImage2Base64("jpeg", bytes));
-            output.append("\" alt=\"");
+            if (format == Hook.JPEG) {
+                output.append("<img src=\"data:image/jpeg;base64,");
+                output.append(Utils.convertImage2Base64("jpeg", bytes));
+                output.append("\" alt=\"");
+            } else {
+                bytes = ImageUtil.dibToPNG(bytes);
+                output.append("<img src=\"data:image/png;base64,");
+                output.append(Utils.convertImage2Base64("png", bytes));
+                output.append("\" alt=\"");
+            }
         } catch (EBException | IOException e) {
             e.printStackTrace();
         }
