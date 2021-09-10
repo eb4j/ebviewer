@@ -1,12 +1,9 @@
 package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
@@ -34,6 +31,17 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
     public void actionPerformed(final ActionEvent e) {
         String action = e.getActionCommand();
         invokeAction(action, e.getModifiers());
+    }
+
+    public void openActionPerformed() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setDialogTitle("Open dictionary folder");
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(mainWindow.getApplicationFrame())) {
+            // do open dictionary
+            DictionariesManager manager = mainWindow.getDictionariesManager();
+            manager.loadDictionaries(chooser.getSelectedFile());
+        }
     }
 
     public void quitActionPerformed() {
@@ -101,12 +109,19 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         fileMenu.addMenuListener(this);
         //
+        fileOpenMenuItem = new JMenuItem("Open");
+        fileOpenMenuItem.setMnemonic(KeyEvent.VK_O);
+        fileOpenMenuItem.setActionCommand("open");
+        fileOpenMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+        fileOpenMenuItem.addActionListener(this);
+        //
         fileQuitMenuItem = new JMenuItem("Quit");
         fileQuitMenuItem.setMnemonic(KeyEvent.VK_Q);
         fileQuitMenuItem.setActionCommand("quit");
         fileQuitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
         fileQuitMenuItem.addActionListener(this);
         //
+        fileMenu.add(fileOpenMenuItem);
         fileMenu.add(fileQuitMenuItem);
         //
         helpMenu = new JMenu("Help");
@@ -128,6 +143,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
 
     private JMenuBar mainMenu;
     private JMenu fileMenu;
+    private JMenuItem fileOpenMenuItem;
     private JMenuItem fileQuitMenuItem;
     private JMenu helpMenu;
     private JMenuItem helpAboutMenuItem;

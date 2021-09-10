@@ -3,10 +3,8 @@ package io.github.eb4j.ebview;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.protocol.data.Handler;
-import io.github.eb4j.ebview.utils.FileUtils;
 
 import java.io.File;
-import java.util.List;
 
 public class EBViewer implements Runnable {
 
@@ -14,12 +12,8 @@ public class EBViewer implements Runnable {
 
     public EBViewer(final File dictionaryDirectory) {
         dictionariesManager = new DictionariesManager();
-        List<File> listFiles = FileUtils.findFiles(dictionaryDirectory);
-        for (File f: listFiles) {
-            try {
-                dictionariesManager.loadDictionary(f);
-            } catch (Exception ignore) {
-            }
+        if (dictionaryDirectory != null) {
+            dictionariesManager.loadDictionaries(dictionaryDirectory);
         }
     }
 
@@ -32,18 +26,11 @@ public class EBViewer implements Runnable {
      * @param args command line arguments.
      */
     public static void main(final String... args) {
-        if (args.length < 1) {
-            System.exit(1);
-        }
-        File dictionaryDirectory = new File(args[0]);
-
-        if (!dictionaryDirectory.isDirectory()) {
-            System.err.println("Path is not a directory.");
-            System.exit(1);
-        }
-
         Handler.install();
-
+        File dictionaryDirectory = null;
+        if (args.length == 1) {
+            dictionaryDirectory = new File(args[0]);
+        }
         try {
             EBViewer viewer = new EBViewer(dictionaryDirectory);
             Thread t = new Thread(viewer);

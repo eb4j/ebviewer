@@ -2,6 +2,7 @@ package io.github.eb4j.ebview.dictionary;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,19 +39,32 @@ public class DictionariesManager {
         }
     }
 
-    public boolean loadDictionary(final File file) throws Exception {
+    /**
+     * load dictionaries.
+     * @param dictionaryDirectory directory where dictinary stored.
+     */
+    public void loadDictionaries(final File dictionaryDirectory) {
+        List<File> listFiles = FileUtils.findFiles(dictionaryDirectory);
+        for (File f : listFiles) {
+            try {
+                loadDictionary(f);
+            } catch (Exception ignore) {
+            }
+        }
+    }
+
+    private void loadDictionary(final File file) throws Exception {
         if (!file.isFile()) {
-            return false;
+            return;
         }
         for (IDictionaryFactory factory: factories) {
             if (factory.isSupportedFile(file)) {
                 IDictionary dict = factory.loadDict(file);
                 dictionaries.put(file.getPath(), dict);
                 System.err.println("-- add " + file.getPath());
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public List<DictionaryEntry> findWord(final String word) {
@@ -71,5 +85,4 @@ public class DictionariesManager {
         }
         return Collections.emptyList();
     }
-
 }
