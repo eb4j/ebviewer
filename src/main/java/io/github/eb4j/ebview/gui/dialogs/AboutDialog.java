@@ -10,8 +10,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -23,8 +24,8 @@ public class AboutDialog extends JDialog {
     private final JLabel versionLabel = new JLabel();
     private final JPanel buttonPanel = new JPanel();
     private final JButton buttonOK = new JButton("OK");
-    private final JTextArea aboutTextArea = new JTextArea();
-    private final JTextArea copyrightTextArea = new JTextArea();
+    private final JTextPane aboutTextArea = new JTextPane();
+    private final JTextPane copyrightTextArea = new JTextPane();
 
     public AboutDialog(final Frame parent) {
         setModal(true);
@@ -37,11 +38,13 @@ public class AboutDialog extends JDialog {
         aboutTextArea.setEditable(false);
         aboutTextArea.setText(LStrings.getString("ABOUT_APP"));
         copyrightTextArea.setEditable(false);
-        copyrightTextArea.setText(LStrings.getString("ABOUT_COPYRIGHT"));
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.PAGE_AXIS));
         panel1.add(aboutTextArea);
         JScrollPane copyrightPane = new JScrollPane(copyrightTextArea);
+        copyrightPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        copyrightTextArea.setText(LStrings.getString("ABOUT_COPYRIGHT"));
+        copyrightPane.getVerticalScrollBar().setValue(0);
         copyrightPane.setPreferredSize(new Dimension(420, 200));
         panel1.add(copyrightPane);
         //
