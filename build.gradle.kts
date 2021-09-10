@@ -57,6 +57,8 @@ dependencies {
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
+    implementation("uk.co.caprica:vlcj:4.7.1")
+
     implementation("com.formdev:flatlaf:1.2")
     testImplementation("org.codehaus.groovy:groovy-all:3.0.5")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
