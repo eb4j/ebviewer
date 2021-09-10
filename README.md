@@ -2,7 +2,7 @@
 
 Very simple dictionary search application supporting;
 
-- EPWING
+- EPWING(w/ Graphics, Sounds and Movies)
 - EPWING ebz compression (.ebz) 
 - LingvoDSL (.dsl)
 - LingvoDSL dz compression (.dsl.dz)
@@ -18,6 +18,7 @@ You can download a zip archive from [github release](https://github.com/eb4j/ebv
 ## Dependency
 
 You need to install Java Runtime Version 11, 14 or 16 on your operating system.
+When you want to watch movie in your dictionary, VLC is required.
 
 ## Build
 
