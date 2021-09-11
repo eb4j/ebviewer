@@ -33,6 +33,7 @@ public class LingvoDSLDictionary implements IDictionary {
 
     protected final DictionaryData<String> data;
 
+    private String fileName;
     private final String bookName;
 
     @SuppressWarnings("visibilitymodifier")
@@ -50,7 +51,7 @@ public class LingvoDSLDictionary implements IDictionary {
 
     public LingvoDSLDictionary(final File file) throws Exception {
         data = new DictionaryData<>();
-        String fileName = file.getName();
+        fileName = file.getName();
         if (fileName.endsWith(".dz")) {
             bookName = fileName.substring(0, fileName.length() - 7);
         } else {
@@ -108,6 +109,11 @@ public class LingvoDSLDictionary implements IDictionary {
             data.add(word.toString(), trans.toString());
         }
         data.done();
+    }
+
+    @Override
+    public String getDictionaryName() {
+        return bookName;
     }
 
     @Override

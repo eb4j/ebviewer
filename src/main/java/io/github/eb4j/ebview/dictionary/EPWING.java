@@ -4,6 +4,7 @@ import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.dictionary.epwing.EBDictionary;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * Driver for EPWING.
@@ -33,7 +34,8 @@ public class EPWING implements IDictionaryFactory {
      *                   determined by {@link #isSupportedFile(File)}
      */
     @Override
-    public IDictionary loadDict(final File file) throws Exception {
-        return new EBDictionary(file);
+    public Set<IDictionary> loadDict(final File file) throws Exception {
+        EBDictionary ebDictionary = new EBDictionary(file);
+        return ebDictionary.getEBDictionarySubBooks();
     }
 }

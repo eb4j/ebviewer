@@ -17,8 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
@@ -49,7 +51,8 @@ public class StarDict implements IDictionaryFactory {
     }
 
     @Override
-    public IDictionary loadDict(final File ifoFile) throws Exception {
+    public Set<IDictionary> loadDict(final File ifoFile) throws Exception {
+        Set<IDictionary> result = new HashSet<>();
         Map<String, String> header = readIFO(ifoFile);
         String bookName = header.get("bookname");
         String version = header.get("version");
@@ -98,10 +101,11 @@ public class StarDict implements IDictionaryFactory {
 
         try {
             if (dictFile.getName().endsWith(".dz")) {
-                return new StarDictZipDict(bookName, dictFile, data);
+                result.add(new StarDictZipDict(bookName, dictFile, data));
             } else {
-                return new StarDictFileDict(bookName, dictFile, data);
+                result.add(new StarDictFileDict(bookName, dictFile, data));
             }
+            return result;
         } catch (IOException ex) {
             throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);
         }

@@ -3,6 +3,7 @@ package io.github.eb4j.ebview.dictionary;
 import io.github.eb4j.ebview.data.IDictionary;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * An interface that defines support for a particular dictionary format.
@@ -32,6 +33,6 @@ public interface IDictionaryFactory {
      *             If the file could not be loaded for reasons that were not
      *             determined by {@link #isSupportedFile(File)}
      */
-    IDictionary loadDict(File file) throws Exception;
+    Set<IDictionary> loadDict(File file) throws Exception;
 
 }

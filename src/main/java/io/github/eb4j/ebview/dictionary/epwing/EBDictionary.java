@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * Main class to handle EPWING dictionary.
  */
-public class EBDictionary implements IDictionary {
+public class EBDictionary {
 
     static final Logger LOG = LoggerFactory.getLogger(EBDictionary.class.getName());
 
@@ -46,91 +46,17 @@ public class EBDictionary implements IDictionary {
             try {
                 eBookDictionary = new Book(eBookDirectory);
             } catch (EBException e) {
-                logEBError(e);
                 throw new Exception("EPWING: There is no supported dictionary");
             }
         }
         subBooks = eBookDictionary.getSubBooks();
-
     }
 
-    private static void logEBError(final EBException e) {
-        switch (e.getErrorCode()) {
-            case EBException.CANT_READ_DIR:
-                LOG.warn("EPWING error: cannot read directory:" + e.getMessage());
-                break;
-            case EBException.DIR_NOT_FOUND:
-                LOG.warn("EPWING error: cannot found directory:" + e.getMessage());
-            default:
-                LOG.warn("EPWING error: " + e.getMessage());
-                break;
+    public Set<IDictionary> getEBDictionarySubBooks() {
+        Set<IDictionary> result = new HashSet<>();
+        for (SubBook subBook : subBooks) {
+            result.add(new EBDictionarySubbook(subBook));
         }
+        return result;
     }
-
-    private enum Mode {
-        PREDICTIVE,
-        EXACT,
-    }
-
-    /**
-     * Predictive search.
-     * @param word
-     *            The word to look up in the dictionary
-     * @return article string.
-     */
-    public List<DictionaryEntry> readArticlesPredictive(final String word) {
-        return readArticles(word, Mode.PREDICTIVE);
-    }
-
-    /**
-     * Dispose IDictionary. Default is no action.
-     */
-    @Override
-    public void close() throws IOException {
-    }
-
-    /*
-     * Returns not the raw text, but the formatted article ready for
-     * upstream use (\n replaced with <br>, etc.
-     */
-    public List<DictionaryEntry> readArticles(final String word) {
-        return readArticles(word, Mode.EXACT);
-    }
-
-    private List<DictionaryEntry> readArticles(final String word, final Mode mode) {
-        Searcher sh;
-        Result searchResult;
-        Hook<String> hook;
-        String article;
-        String heading;
-        Set<String> headings = new HashSet<>();
-        List<DictionaryEntry> result = new ArrayList<>();
-
-        for (SubBook sb : subBooks) {
-            String subBookName = sb.getTitle();
-            try {
-                hook = new EBDictStringHook(sb);
-                if (mode.equals(Mode.PREDICTIVE) && sb.hasWordSearch()) {
-                    sh = sb.searchWord(word);
-                } else if (mode.equals(Mode.EXACT) && sb.hasExactwordSearch()) {
-                    sh = sb.searchExactword(word);
-                } else {
-                    continue;
-                }
-                while ((searchResult = sh.getNextResult()) != null) {
-                    heading = searchResult.getHeading(hook);
-                    if (headings.contains(heading)) {
-                        continue;
-                    }
-                    headings.add(heading);
-                    article = searchResult.getText(hook);
-                    result.add(new DictionaryEntry(heading, article, subBookName));
-                }
-            } catch (EBException e) {
-                logEBError(e);
-            }
-        }
-            return result;
-    }
-
 }

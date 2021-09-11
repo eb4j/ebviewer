@@ -17,9 +17,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Swing main window.
@@ -35,7 +33,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     final DefaultListModel<String> historyModel = new DefaultListModel<>();
     final JButton searchButton = new JButton();
 
-    final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
+    DefaultListModel<String> dictionaryInfoModel = new DefaultListModel();
 
     private JList headingsList;
     private JList history;
@@ -53,12 +51,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     public void setResult(final List<DictionaryEntry> result) {
-        Set<String> dictList = new HashSet<>();
+        List<String> dictList = new ArrayList<>();
         List<String> list = new ArrayList<>();
         for (DictionaryEntry dictionaryEntry : result) {
             String name = dictionaryEntry.getDictName();
-            dictList.add(name);
             String word = dictionaryEntry.getWord();
+            if (!dictList.contains(dictionaryEntry.getDictName())) {
+                dictList.add(dictionaryEntry.getDictName());
+            }
             list.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
                     name.substring(0, 2), word));
         }
@@ -150,6 +150,17 @@ public final class MainWindow extends JFrame implements IMainWindow {
             Object obj = history.getSelectedValue();
             if (obj != null) {
                 searchWordField.setText(obj.toString());
+            }
+        });
+
+        dictionaryInfoList.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                // The user is still manipulating the selection.
+                return;
+            }
+            int index = dictionaryInfoList.getSelectedIndex();
+            if (index == -1) {
+                return;
             }
         });
     }

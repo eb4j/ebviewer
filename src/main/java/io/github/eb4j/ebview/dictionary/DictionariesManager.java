@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -59,9 +60,11 @@ public class DictionariesManager {
         }
         for (IDictionaryFactory factory: factories) {
             if (factory.isSupportedFile(file)) {
-                IDictionary dict = factory.loadDict(file);
-                dictionaries.put(file.getPath(), dict);
-                System.err.println("-- add " + file.getPath());
+                Set<IDictionary> dicts = factory.loadDict(file);
+                for (IDictionary dict: dicts) {
+                    dictionaries.put(file.getPath(), dict);
+                    System.err.println("-- add " + file.getPath());
+                }
                 return;
             }
         }
