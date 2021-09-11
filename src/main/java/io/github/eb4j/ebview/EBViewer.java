@@ -1,5 +1,6 @@
 package io.github.eb4j.ebview;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.protocol.data.Handler;
@@ -27,6 +28,7 @@ public class EBViewer implements Runnable {
      */
     public static void main(final String... args) {
         Handler.install();
+        FlatLightLaf.setup();
         File dictionaryDirectory = null;
         if (args.length == 1) {
             dictionaryDirectory = new File(args[0]);
