@@ -15,6 +15,11 @@ Very simple dictionary search application supporting;
 
 You can download a zip archive from [github release](https://github.com/eb4j/ebviewer/releases)
 
+* [Download v0.4.0](https://github.com/eb4j/ebviewer/releases/download/v0.4.0/ebviewer-0.4.0.zip)
+
+After downloading the archive, please extract zip archive to arbitary folder.
+The applicaiton is written by Java, you can run the application on any PC platforms, such as macOS, Windows and Linux.
+
 ## Dependency
 
 You need to install Java Runtime Version 11, 14 or 16 on your operating system.
