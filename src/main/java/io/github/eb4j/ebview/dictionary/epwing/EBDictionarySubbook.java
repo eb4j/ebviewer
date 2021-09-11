@@ -3,7 +3,6 @@ package io.github.eb4j.ebview.dictionary.epwing;
 import io.github.eb4j.EBException;
 import io.github.eb4j.Result;
 import io.github.eb4j.Searcher;
-import io.github.eb4j.SubBook;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.hook.Hook;
@@ -15,10 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 public class EBDictionarySubbook implements IDictionary {
 
-    private final SubBook subBook;
+    private final EBDictionary dict;
+    private final int index;
+    private final String dictionaryName;
 
     static final Logger LOG = LoggerFactory.getLogger(EBDictionarySubbook.class.getName());
 
@@ -27,8 +27,10 @@ public class EBDictionarySubbook implements IDictionary {
         EXACT,
     }
 
-    public EBDictionarySubbook(SubBook subBook) {
-        this.subBook = subBook;
+    public EBDictionarySubbook(final EBDictionary dict, final int index) {
+        this.dict = dict;
+        this.index = index;
+        dictionaryName = dict.getSubBook(index).getTitle();
     }
 
     private static void logEBError(final EBException e) {
@@ -56,7 +58,7 @@ public class EBDictionarySubbook implements IDictionary {
 
     @Override
     public String getDictionaryName() {
-        return subBook.getTitle();
+        return dictionaryName;
     }
 
     /*
@@ -75,13 +77,12 @@ public class EBDictionarySubbook implements IDictionary {
         String heading;
         Set<String> headings = new HashSet<>();
         List<DictionaryEntry> result = new ArrayList<>();
-        String path = subBook.getName();
         try {
-            hook = new EBDictStringHook(subBook);
-            if (mode.equals(Mode.PREDICTIVE) && subBook.hasWordSearch()) {
-                sh = subBook.searchWord(word);
+            hook = new EBDictStringHook(dict.getSubBook(index));
+            if (mode.equals(Mode.PREDICTIVE) && dict.getSubBook(index).hasWordSearch()) {
+                sh = dict.getSubBook(index).searchWord(word);
             } else {
-                sh = subBook.searchExactword(word);
+                sh = dict.getSubBook(index).searchExactword(word);
             }
             while ((searchResult = sh.getNextResult()) != null) {
                 heading = searchResult.getHeading(hook);
