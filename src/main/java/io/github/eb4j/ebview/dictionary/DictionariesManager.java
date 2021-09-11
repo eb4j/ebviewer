@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class DictionariesManager {
 
     protected final List<IDictionaryFactory> factories = new ArrayList<>();
-    protected final Map<String, IDictionary> dictionaries = new TreeMap<>();
+    protected final List<IDictionary> dictionaries = new ArrayList<>();
 
     public DictionariesManager() {
         factories.add(new EPWING());
@@ -61,10 +61,8 @@ public class DictionariesManager {
         for (IDictionaryFactory factory: factories) {
             if (factory.isSupportedFile(file)) {
                 Set<IDictionary> dicts = factory.loadDict(file);
-                for (IDictionary dict: dicts) {
-                    dictionaries.put(file.getPath(), dict);
-                    System.err.println("-- add " + file.getPath());
-                }
+                dictionaries.addAll(dicts);
+                System.err.println("-- add " + file.getPath());
                 return;
             }
         }
@@ -72,8 +70,7 @@ public class DictionariesManager {
 
     public List<DictionaryEntry> findWord(final String word) {
         List<IDictionary> dicts;
-        dicts = new ArrayList<>(dictionaries.values());
-        return dicts.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
+        return dictionaries.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
     }
 
     private List<DictionaryEntry> doLookUp(final IDictionary dict, final String word) {
