@@ -26,16 +26,18 @@ import java.util.Set;
  * @author Hiroshi Miura
  */
 public final class MainWindow extends JFrame implements IMainWindow {
-    JTextField searchWordField;
-    DefaultListModel<String> headingsModel;
-    DictionaryPane dictionaryPane;
-    MainWindowMenu mainWindowMenu;
+    private final Set<String> selectedDicts = new HashSet<>();
+    private final List<DictionaryEntry> ourResult = new ArrayList<>();
+    private final DefaultListModel<String> historyModel = new DefaultListModel<>();
+    private final JButton searchButton = new JButton();
+    private final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
 
-    final DictionariesManager dictionariesManager;
-    final DefaultListModel<String> historyModel = new DefaultListModel<>();
-    final JButton searchButton = new JButton();
+    private final DictionariesManager dictionariesManager;
 
-    final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
+    private JTextField searchWordField;
+    private DefaultListModel<String> headingsModel;
+    private DictionaryPane dictionaryPane;
+    private MainWindowMenu mainWindowMenu;
 
     private JList headingsList;
     private JList history;
@@ -52,22 +54,52 @@ public final class MainWindow extends JFrame implements IMainWindow {
         setVisible(true);
     }
 
-    public void setResult(final List<DictionaryEntry> result) {
-        Set<String> dictList = new HashSet<>();
-        List<String> list = new ArrayList<>();
-        for (DictionaryEntry dictionaryEntry : result) {
-            String name = dictionaryEntry.getDictName();
-            dictList.add(name);
-            String word = dictionaryEntry.getWord();
-            list.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
-                    name.substring(0, 2), word));
-        }
-        headingsModel.addAll(list);
-        dictionaryPane.setFoundResult(result);
-        dictionaryPane.setCaretPosition(0);
+    public void setDictionaryList(final List<String> dictList) {
+        dictionaryInfoModel.removeAllElements();
         dictionaryInfoModel.addAll(dictList);
+        selectedDicts.addAll(dictList);
     }
 
+    public void addToHistory(final String word) {
+        historyModel.add(0, word);
+    }
+
+    public String getSearchWord() {
+        return searchWordField.getText();
+    }
+
+    public void updateResult(final List<DictionaryEntry> result) {
+        ourResult.clear();
+        ourResult.addAll(result);
+        updateResult();
+    }
+
+    @Override
+    public DictionariesManager getDictionariesManager() {
+        return dictionariesManager;
+    }
+
+    @Override
+    public JFrame getApplicationFrame() {
+        return this;
+    }
+
+    private void updateResult() {
+        List<String> wordList = new ArrayList<>();
+        List<DictionaryEntry> entries = new ArrayList<>();
+        for (DictionaryEntry dictionaryEntry : ourResult) {
+            String name = dictionaryEntry.getDictName();
+            if (selectedDicts.contains(name)) {
+                entries.add(dictionaryEntry);
+                wordList.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
+                        name.substring(0, 2), dictionaryEntry.getWord()));
+            }
+        }
+        headingsModel.removeAllElements();
+        headingsModel.addAll(wordList);
+        dictionaryPane.setFoundResult(entries);
+        dictionaryPane.setCaretPosition(0);
+    }
 
     private void initializeGUI() {
         setPreferredSize(new Dimension(800, 500));
@@ -152,15 +184,19 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 searchWordField.setText(obj.toString());
             }
         });
-    }
 
-    @Override
-    public DictionariesManager getDictionariesManager() {
-        return dictionariesManager;
-    }
-
-    @Override
-    public JFrame getApplicationFrame() {
-        return (JFrame) this;
+        dictionaryInfoList.addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                // The user is still manipulating the selection.
+                return;
+            }
+            int[] indecs = dictionaryInfoList.getSelectedIndices();
+            selectedDicts.clear();
+            for (int idx: indecs) {
+                String dictName = dictionaryInfoModel.get(idx);
+                selectedDicts.add(dictName);
+            }
+            updateResult();
+        });
     }
 }

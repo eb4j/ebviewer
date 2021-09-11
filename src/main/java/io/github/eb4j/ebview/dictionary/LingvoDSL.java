@@ -4,6 +4,8 @@ import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.dictionary.lingvo.LingvoDSLDictionary;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Dictionary driver for Lingvo DSL format.
@@ -23,8 +25,10 @@ public class LingvoDSL implements IDictionaryFactory {
     }
 
     @Override
-    public IDictionary loadDict(final File file) throws Exception {
-        return new LingvoDSLDictionary(file);
+    public Set<IDictionary> loadDict(final File file) throws Exception {
+        Set<IDictionary> result = new HashSet<>();
+        result.add(new LingvoDSLDictionary(file));
+        return result;
     }
 
 }

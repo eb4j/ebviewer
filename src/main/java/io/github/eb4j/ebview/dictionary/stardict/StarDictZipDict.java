@@ -12,11 +12,13 @@ import java.nio.charset.StandardCharsets;
 public class StarDictZipDict extends StarDictBaseDict {
 
     private final DictZipInputStream dataFile;
+    private final String dictFilePath;
     private final String bookName;
 
     public StarDictZipDict(final String bookName, final File dictFile, final DictionaryData<StarDictEntry> data)
             throws IOException {
         super(data);
+        dictFilePath = dictFile.getPath();
         dataFile = new DictZipInputStream(new RandomAccessInputStream(new RandomAccessFile(dictFile, "r")));
         this.bookName = bookName;
     }

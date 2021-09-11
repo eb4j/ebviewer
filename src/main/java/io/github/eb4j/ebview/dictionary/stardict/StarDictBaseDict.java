@@ -23,7 +23,7 @@ abstract class StarDictBaseDict implements IDictionary {
     }
 
     @Override
-    public List<DictionaryEntry> readArticles(final String word) throws Exception {
+    public List<DictionaryEntry> readArticles(final String word) {
         return data.lookUp(word).stream()
                 .map(e -> new DictionaryEntry(e.getKey(), getArticle(e.getValue()), getDictionaryName()))
                 .collect(Collectors.toList());
@@ -41,8 +41,6 @@ abstract class StarDictBaseDict implements IDictionary {
             return readArticle(e.getStart(), e.getLen()).replace("\n", "<br>");
         });
     }
-
-    protected abstract String getDictionaryName();
 
     /**
      * Read data from the underlying file.

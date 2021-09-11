@@ -4,6 +4,7 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 
 import javax.swing.SwingWorker;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Searcher worker.
@@ -25,13 +26,11 @@ class Searcher extends SwingWorker<Object, Object> {
      */
     @Override
     protected Object doInBackground() {
-        String word = mainWindow.searchWordField.getText();
-        mainWindow.historyModel.add(0, word);
-        mainWindow.headingsModel.removeAllElements();
-        mainWindow.dictionaryInfoModel.removeAllElements();
+        String word = mainWindow.getSearchWord();
         new Thread(() -> {
             try {
                 List<DictionaryEntry> result = mainWindow.getDictionariesManager().findWord(word);
+                mainWindow.addToHistory(word);
                 publish(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -44,7 +43,10 @@ class Searcher extends SwingWorker<Object, Object> {
     protected void process(final List<Object> chunks) {
         super.process(chunks);
         for (Object obj : chunks) {
-            mainWindow.setResult((List<DictionaryEntry>) obj);
+            List<DictionaryEntry> entries = (List<DictionaryEntry>) obj;
+            List<String> dictList = entries.stream().map(e -> e.getDictName()).distinct().collect(Collectors.toList());
+            mainWindow.setDictionaryList(dictList);
+            mainWindow.updateResult(entries);
         }
     }
 

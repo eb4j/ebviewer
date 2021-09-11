@@ -7,6 +7,9 @@ import java.util.List;
  * Interface for dictionary drivers.
  */
 public interface IDictionary extends AutoCloseable {
+
+    String getDictionaryName();
+
     /**
      * Read article's text.
      *
