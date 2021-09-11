@@ -143,8 +143,8 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                 scrollRectToVisible(rect1);
             }
             // highlight selected
-            getHighlighter().removeAllHighlights();
-            getHighlighter().addHighlight(pos1, pos2, DefaultHighlighter.DefaultPainter);
+            // getHighlighter().removeAllHighlights();
+            // getHighlighter().addHighlight(pos1, pos2, DefaultHighlighter.DefaultPainter);
 
         } catch (BadLocationException ignore) {
         }
