@@ -172,6 +172,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 return;
             }
             dictionaryPane.moveTo(index);
+            headingsList.clearSelection();
         });
 
         history.addListSelectionListener(e -> {
