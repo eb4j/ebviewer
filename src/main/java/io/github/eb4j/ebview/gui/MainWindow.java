@@ -17,7 +17,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Swing main window.
@@ -28,6 +30,9 @@ public final class MainWindow extends JFrame implements IMainWindow {
     DefaultListModel<String> headingsModel;
     DictionaryPane dictionaryPane;
     MainWindowMenu mainWindowMenu;
+
+    private Set<String> selectedDicts = new HashSet<>();
+    private List<DictionaryEntry> ourResult = new ArrayList<>();
 
     final DictionariesManager dictionariesManager;
     final DefaultListModel<String> historyModel = new DefaultListModel<>();
@@ -50,24 +55,33 @@ public final class MainWindow extends JFrame implements IMainWindow {
         setVisible(true);
     }
 
-    public void setResult(final List<DictionaryEntry> result) {
-        List<String> dictList = new ArrayList<>();
-        List<String> list = new ArrayList<>();
-        for (DictionaryEntry dictionaryEntry : result) {
-            String name = dictionaryEntry.getDictName();
-            String word = dictionaryEntry.getWord();
-            if (!dictList.contains(dictionaryEntry.getDictName())) {
-                dictList.add(dictionaryEntry.getDictName());
-            }
-            list.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
-                    name.substring(0, 2), word));
-        }
-        headingsModel.addAll(list);
-        dictionaryPane.setFoundResult(result);
-        dictionaryPane.setCaretPosition(0);
+    public void setDictionaryList(final List<String> dictList) {
+        dictionaryInfoModel.removeAllElements();
         dictionaryInfoModel.addAll(dictList);
+        selectedDicts.addAll(dictList);
     }
 
+    public void setResult(final List<DictionaryEntry> result) {
+        ourResult.clear();
+        ourResult.addAll(result);
+        _SetResult();
+    }
+    private void _SetResult() {
+        List<String> wordList = new ArrayList<>();
+        List<DictionaryEntry> entries = new ArrayList<>();
+        for (DictionaryEntry dictionaryEntry : ourResult) {
+            String name = dictionaryEntry.getDictName();
+            if (selectedDicts.contains(name)) {
+                entries.add(dictionaryEntry);
+                wordList.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
+                        name.substring(0, 2), dictionaryEntry.getWord()));
+            }
+        }
+        headingsModel.removeAllElements();
+        headingsModel.addAll(wordList);
+        dictionaryPane.setFoundResult(entries);
+        dictionaryPane.setCaretPosition(0);
+    }
 
     private void initializeGUI() {
         setPreferredSize(new Dimension(800, 500));
@@ -158,10 +172,13 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 // The user is still manipulating the selection.
                 return;
             }
-            int index = dictionaryInfoList.getSelectedIndex();
-            if (index == -1) {
-                return;
+            int[] indecs = dictionaryInfoList.getSelectedIndices();
+            selectedDicts.clear();
+            for (int idx: indecs) {
+                String dictName = dictionaryInfoModel.get(idx);
+                selectedDicts.add(dictName);
             }
+            _SetResult();
         });
     }
 
