@@ -26,19 +26,18 @@ import java.util.Set;
  * @author Hiroshi Miura
  */
 public final class MainWindow extends JFrame implements IMainWindow {
-    JTextField searchWordField;
-    DefaultListModel<String> headingsModel;
-    DictionaryPane dictionaryPane;
-    MainWindowMenu mainWindowMenu;
+    private final Set<String> selectedDicts = new HashSet<>();
+    private final List<DictionaryEntry> ourResult = new ArrayList<>();
+    private final DefaultListModel<String> historyModel = new DefaultListModel<>();
+    private final JButton searchButton = new JButton();
+    private final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
 
-    private Set<String> selectedDicts = new HashSet<>();
-    private List<DictionaryEntry> ourResult = new ArrayList<>();
+    private final DictionariesManager dictionariesManager;
 
-    final DictionariesManager dictionariesManager;
-    final DefaultListModel<String> historyModel = new DefaultListModel<>();
-    final JButton searchButton = new JButton();
-
-    DefaultListModel<String> dictionaryInfoModel = new DefaultListModel();
+    private JTextField searchWordField;
+    private DefaultListModel<String> headingsModel;
+    private DictionaryPane dictionaryPane;
+    private MainWindowMenu mainWindowMenu;
 
     private JList headingsList;
     private JList history;
@@ -61,12 +60,31 @@ public final class MainWindow extends JFrame implements IMainWindow {
         selectedDicts.addAll(dictList);
     }
 
-    public void setResult(final List<DictionaryEntry> result) {
+    public void addToHistory(final String word) {
+        historyModel.add(0, word);
+    }
+
+    public String getSearchWord() {
+        return searchWordField.getText();
+    }
+
+    public void updateResult(final List<DictionaryEntry> result) {
         ourResult.clear();
         ourResult.addAll(result);
-        _SetResult();
+        updateResult();
     }
-    private void _SetResult() {
+
+    @Override
+    public DictionariesManager getDictionariesManager() {
+        return dictionariesManager;
+    }
+
+    @Override
+    public JFrame getApplicationFrame() {
+        return this;
+    }
+
+    private void updateResult() {
         List<String> wordList = new ArrayList<>();
         List<DictionaryEntry> entries = new ArrayList<>();
         for (DictionaryEntry dictionaryEntry : ourResult) {
@@ -178,17 +196,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 String dictName = dictionaryInfoModel.get(idx);
                 selectedDicts.add(dictName);
             }
-            _SetResult();
+            updateResult();
         });
-    }
-
-    @Override
-    public DictionariesManager getDictionariesManager() {
-        return dictionariesManager;
-    }
-
-    @Override
-    public JFrame getApplicationFrame() {
-        return (JFrame) this;
     }
 }

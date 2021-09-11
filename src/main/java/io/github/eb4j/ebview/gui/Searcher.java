@@ -26,11 +26,11 @@ class Searcher extends SwingWorker<Object, Object> {
      */
     @Override
     protected Object doInBackground() {
-        String word = mainWindow.searchWordField.getText();
+        String word = mainWindow.getSearchWord();
         new Thread(() -> {
             try {
                 List<DictionaryEntry> result = mainWindow.getDictionariesManager().findWord(word);
-                mainWindow.historyModel.add(0, word);
+                mainWindow.addToHistory(word);
                 publish(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -46,7 +46,7 @@ class Searcher extends SwingWorker<Object, Object> {
             List<DictionaryEntry> entries = (List<DictionaryEntry>) obj;
             List<String> dictList = entries.stream().map(e -> e.getDictName()).distinct().collect(Collectors.toList());
             mainWindow.setDictionaryList(dictList);
-            mainWindow.setResult(entries);
+            mainWindow.updateResult(entries);
         }
     }
 
