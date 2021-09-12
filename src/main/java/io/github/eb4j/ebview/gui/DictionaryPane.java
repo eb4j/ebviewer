@@ -28,6 +28,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -49,6 +50,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     private final StyleSheet baseStyleSheet = new StyleSheet();
     private final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 
+    @SuppressWarnings("unchecked")
     public DictionaryPane() {
         super();
 
@@ -132,15 +134,15 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         int pos1 = el.getStartOffset();
         int pos2 = el.getEndOffset();
         try {
-            Rectangle rect1 = modelToView(pos1);
-            Rectangle rect2 = modelToView(pos2);
+            Rectangle2D rect1 = modelToView2D(pos1);
+            Rectangle2D rect2 = modelToView2D(pos2);
             // show last of article
             if (rect2 != null) {
-                scrollRectToVisible(rect2);
+                scrollRectToVisible(rect2.getBounds());
             }
             // show first of article
             if (rect1 != null) {
-                scrollRectToVisible(rect1);
+                scrollRectToVisible(rect1.getBounds());
             }
             // highlight selected
             // getHighlighter().removeAllHighlights();

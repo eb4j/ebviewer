@@ -12,8 +12,7 @@ public class ResourceUtil {
     private static final String RESOURCES = "/";
 
     /**
-     * @see <a href="http://iconhandbook.co.uk/reference/chart/">Icon Reference
-     *      Chart</a>
+     * @see <a href="http://iconhandbook.co.uk/reference/chart/">Icon Reference Chart</a>
      */
     public static final Image APP_ICON_32X32 = getBundledImage("EBViewer.png");
     public static final Image APP_ICON_16X16 = getBundledImage("EBViewer_small.png");
@@ -22,8 +21,8 @@ public class ResourceUtil {
     /**
      * Load icon.
      *
-     * @param resourceName
-     *            resource name
+     * @param resourceName resource name
+     * @return Image got from resource.
      */
     public static Image getImage(final String resourceName) {
         URL resourceURL = ResourceUtil.class.getResource(resourceName);
@@ -37,7 +36,7 @@ public class ResourceUtil {
      *            icon file name
      * @return icon instance
      */
-    public static Image getBundledImage(String imageName) {
+    public static Image getBundledImage(final String imageName) {
         return getImage(RESOURCES + imageName);
     }
 

@@ -13,7 +13,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +45,10 @@ public final class MainWindow extends JFrame implements IMainWindow {
     private JTextField searchWordField;
     private DefaultListModel<String> headingsModel;
     private DictionaryPane dictionaryPane;
-    private MainWindowMenu mainWindowMenu;
 
-    private JList headingsList;
-    private JList history;
-    private JList dictionaryInfoList;
+    private JList<String> headingsList;
+    private JList<String> history;
+    private JList<String> dictionaryInfoList;
 
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
@@ -138,7 +142,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         panel1.add(searchButton);
         //
         headingsModel = new DefaultListModel<>();
-        headingsList = new JList(headingsModel);
+        headingsList = new JList<>(headingsModel);
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
@@ -149,14 +153,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
         //
-        dictionaryInfoList = new JList(dictionaryInfoModel);
+        dictionaryInfoList = new JList<>(dictionaryInfoModel);
         JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
         dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
         //
         TitledBorder historyTitleBorder = new TitledBorder("History");
         historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
         historyTitleBorder.setTitlePosition(TitledBorder.TOP);
-        history = new JList(historyModel);
+        history = new JList<>(historyModel);
         JScrollPane historyPane = new JScrollPane(history);
         historyPane.setPreferredSize(new Dimension(180, 300));
         historyPane.setBorder(historyTitleBorder);
@@ -171,7 +175,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     private void initializeMenu() {
-        mainWindowMenu = new MainWindowMenu(this);
+        MainWindowMenu mainWindowMenu = new MainWindowMenu(this);
         setJMenuBar(mainWindowMenu.initMenuComponents());
     }
 
