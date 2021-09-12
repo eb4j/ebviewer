@@ -67,6 +67,11 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+
+    // Test in headless mode with ./gradlew test -Pheadless
+    if (project.hasProperty("headless")) {
+        systemProperty("java.awt.headless", "true")
+    }
 }
 
 jacoco {
