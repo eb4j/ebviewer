@@ -50,17 +50,16 @@ public final class MainWindow extends JFrame implements IMainWindow {
         super("EBViewer");
         this.dictionariesManager = dictionariesManager;
         // Set X11 application class name to make some desktop user interfaces
-        // (like Gnome Shell) recognizeT
+        // (like Gnome Shell) recognize
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Class<?> cls = toolkit.getClass();
-        try {
-            if (cls.getName().equals("sun.awt.X11.XToolkit")) {
+        if (cls.getName().equals("sun.awt.X11.XToolkit")) {
+            try {
                 Field field = cls.getDeclaredField("awtAppClassName");
                 field.setAccessible(true);
                 field.set(toolkit, "EBViewer");
+            } catch (NoSuchFieldException | IllegalAccessException ignored) {
             }
-        } catch (Exception e) {
-            // do nothing
         }
         setWindowIcon(this);
 
