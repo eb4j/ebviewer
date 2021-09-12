@@ -38,8 +38,11 @@ tasks.getByName("jar") {
 group = "io.github.eb4j"
 
 application {
-    mainClassName = "io.github.eb4j.ebview.EBViewer"
-    applicationName = "ebviewer"
+    mainClass.set("io.github.eb4j.ebview.EBViewer")
+}
+
+application.applicationDistribution.into("") {
+    from("README.md", "COPYING")
 }
 
 repositories {
