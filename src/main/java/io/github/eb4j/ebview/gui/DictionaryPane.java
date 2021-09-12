@@ -50,19 +50,13 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     private final StyleSheet baseStyleSheet = new StyleSheet();
     private final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 
-    @SuppressWarnings("unchecked")
     public DictionaryPane() {
         super();
-
         setContentType("text/html");
         ((HTMLDocument) getDocument()).setPreservesUnknownTags(false);
         htmlEditorKit.setStyleSheet(baseStyleSheet);
         setEditorKit(htmlEditorKit);
-        Font font = getFont();
-        Map attributes = font.getAttributes();
-        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
-        font = font.deriveFont(attributes);
-        setFont(font);
+        setFont(getFont());
         FocusListener listener = new FocusAdapter() {
             @Override
             public void focusGained(final FocusEvent e) {
@@ -78,9 +72,11 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     }
 
     @Override
-    @SuppressWarnings("avoidinlineconditionals")
+    @SuppressWarnings({"avoidinlineconditionals", "unchecked"})
     public void setFont(final Font font) {
-        super.setFont(font);
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
+        super.setFont(font.deriveFont(attributes));
         Document doc = getDocument();
         if (!(doc instanceof HTMLDocument)) {
             return;
