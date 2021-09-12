@@ -13,13 +13,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_16X16;
+import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_32X32;
 
 /**
  * Swing main window.
@@ -46,12 +49,33 @@ public final class MainWindow extends JFrame implements IMainWindow {
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
         this.dictionariesManager = dictionariesManager;
+        // Set X11 application class name to make some desktop user interfaces
+        // (like Gnome Shell) recognizeT
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Class<?> cls = toolkit.getClass();
+        try {
+            if (cls.getName().equals("sun.awt.X11.XToolkit")) {
+                Field field = cls.getDeclaredField("awtAppClassName");
+                field.setAccessible(true);
+                field.set(toolkit, "EBViewer");
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+        setWindowIcon(this);
+
         initializeGUI();
         initializeMenu();
         setActions();
         pack();
         setResizable(true);
         setVisible(true);
+    }
+
+    public static void setWindowIcon(Window window) {
+        List<Image> icons;
+        icons = Arrays.asList(APP_ICON_16X16, APP_ICON_32X32);
+        window.setIconImages(icons);
     }
 
     public void setDictionaryList(final List<String> dictList) {

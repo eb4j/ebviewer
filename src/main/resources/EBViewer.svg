@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <rect
+       x="204.50147"
+       y="236.9779"
+       width="168.95074"
+       height="166.7333"
+       id="rect16504" />
+    <rect
+       x="122.57982"
+       y="125.78818"
+       width="236.77288"
+       height="123.28742"
+       id="rect3628" />
+  </defs>
+  <g
+     id="layer2">
+    <ellipse
+       style="fill:#000080;stroke-width:0.264583"
+       id="path71716"
+       cx="56.928501"
+       cy="59.218269"
+       rx="49.994305"
+       ry="47.616196" />
+  </g>
+  <g
+     id="layer1">
+    <ellipse
+       id="path38"
+       cx="56.640347"
+       cy="58.829536"
+       rx="45.690258"
+       ry="44.668083"
+       style="fill:#00ffff;stroke-width:0.277063" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458334,0,0,0.26458334,20.344377,35.74704)"
+       id="text3626"
+       style="font-style:normal;font-weight:normal;font-size:85.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect3628);fill:#b3b3b3;fill-opacity:1;stroke:none"><tspan
+         x="122.58008"
+         y="201.53482"
+         id="tspan76661"><tspan
+           style="font-family:'Comic Sans MS';-inkscape-font-specification:'Comic Sans MS'"
+           id="tspan76659">Dic</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.43165275,0,0,0.43247259,-65.213541,-85.479659)"
+       id="text16502"
+       style="font-style:normal;font-weight:normal;font-size:128px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect16504);fill:#333333;fill-opacity:1;stroke:none"><tspan
+         x="204.50195"
+         y="350.59719"
+         id="tspan76665"><tspan
+           style="font-family:Chilanka;-inkscape-font-specification:Chilanka"
+           id="tspan76663">Eb</tspan></tspan></text>
+    <path
+       id="rect76445"
+       style="fill:#000080;stroke-width:0.264583"
+       d="m 85.504412,94.876727 5.477522,-4.829825 16.952286,21.803568 -5.02229,5.36106 z" />
+  </g>
+</svg>

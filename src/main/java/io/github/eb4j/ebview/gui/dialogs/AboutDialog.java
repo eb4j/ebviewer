@@ -1,9 +1,11 @@
 package io.github.eb4j.ebview.gui.dialogs;
 
 import io.github.eb4j.ebview.utils.LStrings;
+import io.github.eb4j.ebview.utils.ResourceUtil;
 import io.github.eb4j.ebview.utils.VersionString;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -24,6 +26,7 @@ public class AboutDialog extends JDialog {
     private final JLabel versionLabel = new JLabel();
     private final JPanel buttonPanel = new JPanel();
     private final JButton buttonOK = new JButton("OK");
+    private final JLabel iconLabel = new JLabel();
     private final JTextPane aboutTextArea = new JTextPane();
     private final JTextPane copyrightTextArea = new JTextPane();
 
@@ -38,8 +41,10 @@ public class AboutDialog extends JDialog {
         aboutTextArea.setEditable(false);
         aboutTextArea.setText(LStrings.getString("ABOUT_APP"));
         copyrightTextArea.setEditable(false);
+        iconLabel.setIcon(new ImageIcon(ResourceUtil.APP_ICON_32X32));
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.PAGE_AXIS));
+        panel1.add(iconLabel);
         panel1.add(aboutTextArea);
         JScrollPane copyrightPane = new JScrollPane(copyrightTextArea);
         copyrightPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
