@@ -93,6 +93,9 @@ coveralls {
     jacocoReportPath = "build/reports/jacoco/test/jacocoTestReport.xml"
 }
 
+// Disable .tar distributions
+tasks.getByName("distTar").enabled = false
+
 nativeImage {
     graalVmHome = System.getProperty("java.home")
     buildType {
