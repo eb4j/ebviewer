@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +30,8 @@ import java.util.regex.Pattern;
  */
 public class DataConnection extends URLConnection {
 
-    static final private String DATA_PROTO_RE =  "data:((.*?/.*?)?(?:;(.*?)=(.*?))?)(?:;(base64)?)?,(.*)";
-    static final private String DEFAULT_MIME_TYPE = "text/plain;charset=US-ASCII";
+    private static final String DATA_PROTO_RE =  "data:((.*?/.*?)?(?:;(.*?)=(.*?))?)(?:;(base64)?)?,(.*)";
+    private static final String DEFAULT_MIME_TYPE = "text/plain;charset=US-ASCII";
 
     private final Matcher m;
 
@@ -71,39 +70,36 @@ public class DataConnection extends URLConnection {
             return null;
         }
         String contentType = m.group(1);
-        if (contentType != null && !contentType.isBlank()) {
-            return contentType;
+        if (contentType == null || contentType.isBlank()) {
+            return DEFAULT_MIME_TYPE;
         }
-        return DEFAULT_MIME_TYPE;
+        return contentType;
     }
 
     private byte[] getData() {
-        String contentType = m.group(1);
         String type = m.group(2);
         String attribute = m.group(3);
-        String value = m.group(4);
+        String charset = m.group(4);
         String b64 = m.group(5);
         String data = m.group(6);
-        if ((contentType == null || contentType.isBlank() || type.startsWith("text/"))
-                && !("base64".equals(b64))) {
-            try {
-                if ("charset".equals(attribute)) {
-                    URLCodec codec = new URLCodec(value);
-                    Charset cs = Charsets.toCharset(value);
-                    return codec.decode(data).getBytes(cs);
-                } else {
-                    URLCodec codec = new URLCodec("US-ASCII");
-                    return codec.decode(data).getBytes(StandardCharsets.US_ASCII);
-                }
-            } catch (DecoderException e) {
-                return new byte[0];
+        if ("base64".equals(b64)) {
+            return Base64.decodeBase64(data);
+        }
+        try {
+            if (!"charset".equals(attribute)) {
+                return getText(data, "US-ASCII");
             }
-        } else {
-            if ("base64".equals(b64)) {
-                byte[] result = Base64.decodeBase64(data);
-                return result;
+            if (type.startsWith("text/")) {
+                return getText(data, charset);
             }
+        } catch (DecoderException ignore) {
         }
         return new byte[0];
+    }
+
+    private byte[] getText(final String data, final String charset) throws DecoderException {
+        URLCodec codec = new URLCodec(charset);
+        Charset cs = Charsets.toCharset(charset);
+        return codec.decode(data).getBytes(cs);
     }
 }
