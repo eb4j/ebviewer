@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
 
-public class ResourceUtil {
+public final class ResourceUtil {
 
     private ResourceUtil() {
     }
@@ -12,10 +12,17 @@ public class ResourceUtil {
     private static final String RESOURCES = "/";
 
     /**
+     * Application icon 32x32 size.
      * @see <a href="http://iconhandbook.co.uk/reference/chart/">Icon Reference Chart</a>
      */
     public static final Image APP_ICON_32X32 = getBundledImage("EBViewer.png");
+    /**
+     * Application icon 16x16 size.
+     */
     public static final Image APP_ICON_16X16 = getBundledImage("EBViewer_small.png");
+    /**
+     * Application icon scalable.
+     */
     public static final Image APP_ICON_SCALABLE = getBundledImage("EBViewer.svg");
 
     /**

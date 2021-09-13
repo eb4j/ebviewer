@@ -23,7 +23,9 @@ public class EBDictionarySubbook implements IDictionary {
     static final Logger LOG = LoggerFactory.getLogger(EBDictionarySubbook.class.getName());
 
     public enum Mode {
+        /** Predictive search mode. */
         PREDICTIVE,
+        /** Exact search mode. */
         EXACT,
     }
 

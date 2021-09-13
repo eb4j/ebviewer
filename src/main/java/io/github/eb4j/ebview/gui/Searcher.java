@@ -45,7 +45,10 @@ class Searcher extends SwingWorker<Object, Object> {
         super.process(chunks);
         for (Object obj : chunks) {
             List<DictionaryEntry> entries = (List<DictionaryEntry>) obj;
-            List<String> dictList = entries.stream().map(DictionaryEntry::getDictName).distinct().collect(Collectors.toList());
+            List<String> dictList = entries.stream()
+                    .map(DictionaryEntry::getDictName)
+                    .distinct()
+                    .collect(Collectors.toList());
             mainWindow.setDictionaryList(dictList);
             mainWindow.updateResult(entries);
         }

@@ -75,7 +75,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         setVisible(true);
     }
 
-    public static void setWindowIcon(Window window) {
+    public static void setWindowIcon(final Window window) {
         List<Image> icons;
         icons = Arrays.asList(APP_ICON_16X16, APP_ICON_32X32);
         window.setIconImages(icons);
