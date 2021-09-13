@@ -56,6 +56,7 @@ dependencies {
 
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.11")
+    implementation("commons-codec:commons-codec:1.15")
 
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
