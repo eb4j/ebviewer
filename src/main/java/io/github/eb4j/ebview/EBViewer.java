@@ -3,13 +3,13 @@ package io.github.eb4j.ebview;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
-import io.github.eb4j.ebview.protocol.data.Handler;
+import io.github.eb4j.ebview.protocol.URLProtocolHandler;
 
 import java.io.File;
 
 public class EBViewer implements Runnable {
 
-    private DictionariesManager dictionariesManager;
+    private final DictionariesManager dictionariesManager;
 
     public EBViewer(final File dictionaryDirectory) {
         dictionariesManager = new DictionariesManager();
@@ -27,7 +27,7 @@ public class EBViewer implements Runnable {
      * @param args command line arguments.
      */
     public static void main(final String... args) {
-        Handler.install();
+        URLProtocolHandler.install();
         FlatLightLaf.setup();
         File dictionaryDirectory = null;
         if (args.length == 1) {

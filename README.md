@@ -35,8 +35,7 @@ ebviewer uses Java and Gradle build system. As usual java application, it is eas
 
 ## Origin
 
-Some codes are borrowed from omegat-plugin-epwing and omegat project.
-
+Some codes are borrowed from omegat-plugin-epwing and OmegaT project.
 
 ## License
 
@@ -45,6 +44,8 @@ Copyright (C) 2016-2021 Hiroshi Miura
 Copyright (C) 2020 Suguru Ono
 
 Copyright (C) 2015-2020 Aaron Madlon-Kay
+
+Copyright (C) 2012 Joop Eggen
 
 Copyright (C) 2011 Didier Briel
 
