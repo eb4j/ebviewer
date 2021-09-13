@@ -66,9 +66,9 @@ class DataConnectionTest {
     }
 
     private String getContent(final DataConnection conn) throws IOException {
-        return new BufferedReader(
-                new InputStreamReader((InputStream) conn.getContent(), StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                (InputStream) conn.getContent(), StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        }
     }
 }
