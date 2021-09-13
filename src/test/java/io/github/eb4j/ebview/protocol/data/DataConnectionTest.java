@@ -1,5 +1,6 @@
 package io.github.eb4j.ebview.protocol.data;
 
+import io.github.eb4j.ebview.protocol.URLProtocolHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ class DataConnectionTest {
 
     @BeforeEach
     public void init() {
-        Handler.install();
+        URLProtocolHandler.install();
     }
 
     @Test
