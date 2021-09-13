@@ -6,7 +6,9 @@ import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.io.Charsets;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -29,26 +31,30 @@ import java.util.regex.Pattern;
  */
 public class DataConnection extends URLConnection {
 
-    private final static String DATA_PROTO_RE =  "data:((.*?/.*?)?(?:;(.*?)=(.*?))?)(?:;(base64)?)?,(.*)";
-    private final static String DEFAULT_MIME_TYPE = "text/plain;charset=US-ASCII";
+    static final private String DATA_PROTO_RE =  "data:((.*?/.*?)?(?:;(.*?)=(.*?))?)(?:;(base64)?)?,(.*)";
+    static final private String DEFAULT_MIME_TYPE = "text/plain;charset=US-ASCII";
 
-    private final Pattern re;
-    private Matcher m;
+    private final Matcher m;
 
-    public DataConnection(final URL u) {
+    public DataConnection(final URL u) throws MalformedURLException {
         super(u);
-        re = Pattern.compile(DATA_PROTO_RE);
+        Pattern re = Pattern.compile(DATA_PROTO_RE);
+        m = re.matcher(url.toString());
+        connected = m.matches();
+        if (!connected) {
+            throw new MalformedURLException("Wrong data protocol URL");
+        }
     }
 
     @Override
     public void connect() {
-        String data = url.toString();
-        m = re.matcher(data);
-        connected = m.matches();
     }
 
     @Override
-    public InputStream getInputStream() {
+    public InputStream getInputStream() throws IOException {
+        if (!connected) {
+            throw new IOException();
+        }
         return new ByteArrayInputStream(getData());
     }
 
@@ -94,7 +100,8 @@ public class DataConnection extends URLConnection {
             }
         } else {
             if ("base64".equals(b64)) {
-                return Base64.decodeBase64(data);
+                byte[] result = Base64.decodeBase64(data);
+                return result;
             }
         }
         return new byte[0];
