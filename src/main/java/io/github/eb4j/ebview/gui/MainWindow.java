@@ -21,6 +21,10 @@ import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -178,15 +182,18 @@ public final class MainWindow extends JFrame implements IMainWindow {
         }
     }
 
+    private void startSearch() {
+        Searcher searchSwingWorker = new Searcher(this);
+        searchSwingWorker.execute();
+    }
+
     private void setActions() {
         searchWordField.addActionListener(e -> {
-            Searcher searchSwingWorker = new Searcher(this);
-            searchSwingWorker.execute();
+            startSearch();
         });
 
         searchButton.addActionListener(e -> {
-            Searcher searchSwingWorker = new Searcher(this);
-            searchSwingWorker.execute();
+            startSearch();
         });
 
         headingsList.addListSelectionListener(e -> {
@@ -211,6 +218,33 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 searchWordField.setText(obj.toString());
             }
         });
+
+        // catch double-click events
+        history.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 2) {
+                    Object obj = history.getSelectedValue();
+                    if (obj != null) {
+                        searchWordField.setText(obj.toString());
+                        startSearch();
+                    }
+                }
+            }
+        });
+
+        // catch enter-key events
+        history.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Object obj = history.getSelectedValue();
+                    if (obj != null) {
+                        searchWordField.setText(obj.toString());
+                        startSearch();
+                    }
+                }
+            }
+        });
+
         dictionaryInfoList.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 // The user is still manipulating the selection.
