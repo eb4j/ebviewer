@@ -1,5 +1,6 @@
 package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.EBViewer;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
 
@@ -11,6 +12,9 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import java.awt.AWTException;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -18,13 +22,31 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_32X32;
+
 public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
 
-    /** MainWindow instance. */
-    protected final IMainWindow mainWindow;
+    private final JFrame app;
+    private final DictionariesManager manager;
+    private final TrayIcon trayIcon;
 
-    public MainWindowMenu(final IMainWindow mainWindow) {
-        this.mainWindow = mainWindow;
+    public MainWindowMenu(final EBViewer ebViewer) {
+        app = ebViewer.getApplicationFrame();
+        manager = ebViewer.getDictionariesManager();
+        trayIcon = new TrayIcon(APP_ICON_32X32, "EBViewer", null);
+        initMenuComponents();
+        initTray();
+    }
+
+    private void initTray() {
+        trayIcon.setImageAutoSize(true);
+        try {
+            SystemTray.getSystemTray().add(trayIcon);
+        } catch (AWTException ignore) {
+        }
+        if (SystemTray.isSupported()) {
+            trayIcon.addActionListener(actionEvent -> app.setVisible(true));
+        }
     }
 
     /**
@@ -42,21 +64,23 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Open dictionary folder");
-        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(mainWindow.getApplicationFrame())) {
-            // do open dictionary
-            DictionariesManager manager = mainWindow.getDictionariesManager();
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(app)) {
             manager.loadDictionaries(chooser.getSelectedFile());
         }
     }
 
+    public void closeActionPerformed() {
+        app.setVisible(false);
+    }
+
     public void quitActionPerformed() {
-        JFrame app = mainWindow.getApplicationFrame();
+        SystemTray.getSystemTray().remove(trayIcon);
         app.setVisible(false);
         app.dispose();
     }
 
     public void aboutActionPerformed() {
-        new AboutDialog(mainWindow.getApplicationFrame()).setVisible(true);
+        new AboutDialog(app).setVisible(true);
     }
 
     @SuppressWarnings("avoidinlineconditionals")
@@ -109,16 +133,22 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
     public void menuCanceled(final MenuEvent e) {
     }
 
-    JMenuBar initMenuComponents() {
+    public void initMenuComponents() {
         fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
         fileMenu.addMenuListener(this);
         //
-        fileOpenMenuItem = new JMenuItem("Open");
-        fileOpenMenuItem.setMnemonic(KeyEvent.VK_O);
+        fileOpenMenuItem = new JMenuItem("Add Dictionary");
+        fileOpenMenuItem.setMnemonic(KeyEvent.VK_A);
         fileOpenMenuItem.setActionCommand("open");
-        fileOpenMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+        fileOpenMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
         fileOpenMenuItem.addActionListener(this);
+        //
+        fileCloseMenuItem = new JMenuItem("Close to tray");
+        fileCloseMenuItem.setMnemonic(KeyEvent.VK_C);
+        fileCloseMenuItem.setActionCommand("close");
+        fileCloseMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+        fileCloseMenuItem.addActionListener(this);
         //
         fileQuitMenuItem = new JMenuItem("Quit");
         fileQuitMenuItem.setMnemonic(KeyEvent.VK_Q);
@@ -127,6 +157,8 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         fileQuitMenuItem.addActionListener(this);
         //
         fileMenu.add(fileOpenMenuItem);
+        fileMenu.add(fileCloseMenuItem);
+        fileMenu.add(new JMenuBar());
         fileMenu.add(fileQuitMenuItem);
         //
         helpMenu = new JMenu("Help");
@@ -143,12 +175,13 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         mainMenu = new JMenuBar();
         mainMenu.add(fileMenu);
         mainMenu.add(helpMenu);
-        return mainMenu;
+        app.setJMenuBar(mainMenu);
     }
 
     private JMenuBar mainMenu;
     private JMenu fileMenu;
     private JMenuItem fileOpenMenuItem;
+    private JMenuItem fileCloseMenuItem;
     private JMenuItem fileQuitMenuItem;
     private JMenu helpMenu;
     private JMenuItem helpAboutMenuItem;

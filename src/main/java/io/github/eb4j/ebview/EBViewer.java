@@ -3,23 +3,32 @@ package io.github.eb4j.ebview;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
+import io.github.eb4j.ebview.gui.MainWindowMenu;
 import io.github.eb4j.ebview.protocol.URLProtocolHandler;
 
+import javax.swing.JFrame;
 import java.io.File;
 
 public class EBViewer implements Runnable {
 
     private final DictionariesManager dictionariesManager;
+    private final MainWindow mw;
 
     public EBViewer(final File dictionaryDirectory) {
         dictionariesManager = new DictionariesManager();
         if (dictionaryDirectory != null) {
             dictionariesManager.loadDictionaries(dictionaryDirectory);
         }
+        mw = new MainWindow(dictionariesManager);
+        new MainWindowMenu(this);
     }
 
     public DictionariesManager getDictionariesManager() {
         return dictionariesManager;
+    }
+
+    public JFrame getApplicationFrame() {
+        return mw.getApplicationFrame();
     }
 
     /**
@@ -55,6 +64,6 @@ public class EBViewer implements Runnable {
      */
     @Override
     public void run() {
-        new MainWindow(dictionariesManager);
+        mw.setVisible(true);
     }
 }

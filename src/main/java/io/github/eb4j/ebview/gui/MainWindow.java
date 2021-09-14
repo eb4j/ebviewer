@@ -12,11 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.lang.reflect.Field;
@@ -68,11 +70,9 @@ public final class MainWindow extends JFrame implements IMainWindow {
         setWindowIcon(this);
 
         initializeGUI();
-        initializeMenu();
         setActions();
         pack();
         setResizable(true);
-        setVisible(true);
     }
 
     public static void setWindowIcon(final Window window) {
@@ -171,12 +171,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    private void initializeMenu() {
-        MainWindowMenu mainWindowMenu = new MainWindowMenu(this);
-        setJMenuBar(mainWindowMenu.initMenuComponents());
+        if (SystemTray.isSupported()) {
+            setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        } else {
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
     }
 
     private void setActions() {
@@ -212,7 +211,6 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 searchWordField.setText(obj.toString());
             }
         });
-
         dictionaryInfoList.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 // The user is still manipulating the selection.
