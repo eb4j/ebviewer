@@ -371,7 +371,7 @@ public final class EBDictStringHook extends HookAdapter<String> {
     }
 
     @Override
-    public void endReference(long pos) {
+    public void endReference(final long pos) {
         output.append("</span>");
     }
 

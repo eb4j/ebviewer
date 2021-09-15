@@ -221,7 +221,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
         // catch double-click events
         history.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent me) {
+            public void mouseClicked(final MouseEvent me) {
                 if (me.getClickCount() == 2) {
                     Object obj = history.getSelectedValue();
                     if (obj != null) {
@@ -234,7 +234,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
         // catch enter-key events
         history.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent ke) {
+            public void keyReleased(final KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                     Object obj = history.getSelectedValue();
                     if (obj != null) {
