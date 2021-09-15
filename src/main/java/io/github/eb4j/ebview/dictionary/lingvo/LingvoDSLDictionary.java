@@ -35,25 +35,12 @@ public class LingvoDSLDictionary implements IDictionary {
 
     protected final DictionaryData<String> data;
 
-    private String fileName;
     private final String bookName;
 
-    @SuppressWarnings("visibilitymodifier")
-    static class RE {
-        public Pattern pattern;
-        public String replacement;
-
-        RE(final String regex, final String replacement) {
-            pattern = Pattern.compile(regex);
-            this.replacement = replacement;
-        }
-    }
-
-    protected static final List<RE> RELIST;
 
     public LingvoDSLDictionary(final File file) throws Exception {
         data = new DictionaryData<>();
-        fileName = file.getName();
+        String fileName = file.getName();
         if (fileName.endsWith(".dz")) {
             bookName = fileName.substring(0, fileName.length() - 7);
         } else {
@@ -82,8 +69,8 @@ public class LingvoDSLDictionary implements IDictionary {
         StringBuilder word = new StringBuilder();
         StringBuilder trans = new StringBuilder();
         stream.filter(line -> !line.isEmpty() && !line.startsWith("#"))
+                .map(LingvoDSLTag::replaceTag)
                 .forEach(line -> {
-                    line = replaceTag(line);
                     if (Character.isWhitespace(line.codePointAt(0))) {
                         trans.append(line.trim()).append('\n');
                     } else {
@@ -125,75 +112,90 @@ public class LingvoDSLDictionary implements IDictionary {
     public void close() {
     }
 
-    private String replaceTag(final String line) {
-        String result = line;
-        for (RE re : RELIST) {
-            result = re.pattern.matcher(result).replaceAll(re.replacement);
+    @SuppressWarnings("visibilitymodifier")
+    static class RE {
+        public Pattern pattern;
+        public String replacement;
+
+        RE(final String regex, final String replacement) {
+            pattern = Pattern.compile(regex);
+            this.replacement = replacement;
         }
-        return result.replaceAll("\\[\\[(.+?)\\]\\]", "[$1]");
     }
 
-    /**
-     * Initialize regex patterns as an immutable list.
-     */
-    static {
-        List<RE> reList = new ArrayList<>();
-        reList.add(new RE("\\[b\\](.+?)\\[/b\\]", "<span style='font-style: bold'>$1</span>"));
-        reList.add(new RE("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
-        reList.add(new RE("\\[trn\\](.+?)\\[/trn\\]", "$1"));
-        reList.add(new RE("\\[t\\](.+?)\\[/t\\]", "$1&nbsp;"));
-        reList.add(new RE("\\[br\\]", "<br/>"));
-        // Green is default color in Lingvo
-        reList.add(new RE("\\[c\\](.+?)\\[/c\\]", "<span style='color:green'>$1</span>"));
-        // The following line tries to replace [c value]text[/c] with text colored as per the value.
-        // Since the color names are plain words like 'red', or 'blue', or 'steelgray' etc.,
-        // FIXME: I use the ([a-z]+?) regular expression, but am not sure if it is correct.
-        reList.add(new RE("\\[c\\s([a-z]+?)\\](.+?)\\[/c\\]", "<span style='color:$1'>$2</span>"));
-        reList.add(new RE("\\[com\\]", ""));
-        reList.add(new RE("\\[/com\\]", ""));
-        reList.add(new RE("\\[ex\\]", ""));
-        reList.add(new RE("\\[/ex\\]", ""));
-        reList.add(new RE("\\[lang\\]", ""));
-        reList.add(new RE("\\[/lang\\]", ""));
-        reList.add(new RE("\\[m\\]", "&nbsp;"));
-        reList.add(new RE("\\[/m\\]", ""));
-        reList.add(new RE("\\[m1\\]", "&nbsp;"));
-        reList.add(new RE("\\[m2\\]", "&nbsp;"));
-        reList.add(new RE("\\[m3\\]", "&nbsp;"));
-        reList.add(new RE("\\[m4\\]", "&nbsp;"));
-        reList.add(new RE("\\[m5\\]", "&nbsp;"));
-        reList.add(new RE("\\[m6\\]", "&nbsp;"));
-        reList.add(new RE("\\[m7\\]", "&nbsp;"));
-        reList.add(new RE("\\[m8\\]", "&nbsp;"));
-        reList.add(new RE("\\[m9\\]", "&nbsp;"));
-        reList.add(new RE("\\[p\\]", ""));
-        reList.add(new RE("\\[/p\\]", ""));
-        reList.add(new RE("\\[preview\\]", ""));
-        reList.add(new RE("\\[/preview\\]", ""));
-        reList.add(new RE("\\[ref\\]", ""));
-        reList.add(new RE("\\[/ref\\]", ""));
-        reList.add(new RE("\\[s\\]", ""));
-        reList.add(new RE("\\[/s\\]", ""));
-        reList.add(new RE("\\[sub\\](.+?)\\[/sub\\]", "<sub>$1</sub>"));
-        reList.add(new RE("\\[sup\\](.+?)\\[/sup\\]", "<sup>$1</sup>"));
-        reList.add(new RE("\\[trn1\\]", ""));
-        reList.add(new RE("\\[/trn1\\]", ""));
-        reList.add(new RE("\\[trs\\]", ""));
-        reList.add(new RE("\\[/trs\\]", ""));
-        // FIXME: In the following two lines, the exclamation marks are escaped. Maybe, it is superfluous.
-        reList.add(new RE("\\[\\!trs\\]", ""));
-        reList.add(new RE("\\[/\\!trs\\]", ""));
-        reList.add(new RE("\\[u\\](.+?)\\[/u\\]",
-                "<span style='text-decoration:underline'>$1</span>"));
-        reList.add(new RE("\\[url\\](.+?)\\[/url\\]", "<a href='$1'>$1</a>"));
-        reList.add(new RE("\\[video\\]", ""));
-        reList.add(new RE("\\[/video\\]", ""));
-        // The following line tries to replace a letter surrounded by ['][/'] tags (indicating stress)
-        // with a red letter (the default behavior in Lingvo).
-        reList.add(new RE("\\['\\].\\[/'\\]", "<span style='color:red'>$1</span>"));
-        // FIXME: In the following two lines, the asterisk symbols are escaped. Maybe, it is superfluous.
-        reList.add(new RE("\\[\\*\\]", ""));
-        reList.add(new RE("\\[/\\*\\]", ""));
-        RELIST = Collections.unmodifiableList(reList);
+    static class LingvoDSLTag {
+        private static final List<RE> RE_LIST;
+
+        static String replaceTag(final String line) {
+            String result = line;
+            for (RE re : RE_LIST) {
+                result = re.pattern.matcher(result).replaceAll(re.replacement);
+            }
+            return result.replaceAll("\\[\\[(.+?)\\]\\]", "[$1]");
+        }
+
+        /**
+         * Initialize regex patterns as an immutable list.
+         */
+        static {
+            List<RE> reList = new ArrayList<>();
+            reList.add(new RE("\\[b\\](.+?)\\[/b\\]", "<span style='font-style: bold'>$1</span>"));
+            reList.add(new RE("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
+            reList.add(new RE("\\[trn\\](.+?)\\[/trn\\]", "$1"));
+            reList.add(new RE("\\[t\\](.+?)\\[/t\\]", "$1&nbsp;"));
+            reList.add(new RE("\\[br\\]", "<br/>"));
+            // Green is default color in Lingvo
+            reList.add(new RE("\\[c\\](.+?)\\[/c\\]", "<span style='color:green'>$1</span>"));
+            // The following line tries to replace [c value]text[/c] with text colored as per the value.
+            // Since the color names are plain words like 'red', or 'blue', or 'steelgray' etc.,
+            // FIXME: I use the ([a-z]+?) regular expression, but am not sure if it is correct.
+            reList.add(new RE("\\[c\\s([a-z]+?)\\](.+?)\\[/c\\]", "<span style='color:$1'>$2</span>"));
+            reList.add(new RE("\\[com\\]", ""));
+            reList.add(new RE("\\[/com\\]", ""));
+            reList.add(new RE("\\[ex\\]", ""));
+            reList.add(new RE("\\[/ex\\]", ""));
+            reList.add(new RE("\\[lang\\]", ""));
+            reList.add(new RE("\\[/lang\\]", ""));
+            reList.add(new RE("\\[m\\]", "&nbsp;"));
+            reList.add(new RE("\\[/m\\]", ""));
+            reList.add(new RE("\\[m1\\]", "&nbsp;"));
+            reList.add(new RE("\\[m2\\]", "&nbsp;"));
+            reList.add(new RE("\\[m3\\]", "&nbsp;"));
+            reList.add(new RE("\\[m4\\]", "&nbsp;"));
+            reList.add(new RE("\\[m5\\]", "&nbsp;"));
+            reList.add(new RE("\\[m6\\]", "&nbsp;"));
+            reList.add(new RE("\\[m7\\]", "&nbsp;"));
+            reList.add(new RE("\\[m8\\]", "&nbsp;"));
+            reList.add(new RE("\\[m9\\]", "&nbsp;"));
+            reList.add(new RE("\\[p\\]", ""));
+            reList.add(new RE("\\[/p\\]", ""));
+            reList.add(new RE("\\[preview\\]", ""));
+            reList.add(new RE("\\[/preview\\]", ""));
+            reList.add(new RE("\\[ref\\]", ""));
+            reList.add(new RE("\\[/ref\\]", ""));
+            reList.add(new RE("\\[s\\]", ""));
+            reList.add(new RE("\\[/s\\]", ""));
+            reList.add(new RE("\\[sub\\](.+?)\\[/sub\\]", "<sub>$1</sub>"));
+            reList.add(new RE("\\[sup\\](.+?)\\[/sup\\]", "<sup>$1</sup>"));
+            reList.add(new RE("\\[trn1\\]", ""));
+            reList.add(new RE("\\[/trn1\\]", ""));
+            reList.add(new RE("\\[trs\\]", ""));
+            reList.add(new RE("\\[/trs\\]", ""));
+            // FIXME: In the following two lines, the exclamation marks are escaped. Maybe, it is superfluous.
+            reList.add(new RE("\\[\\!trs\\]", ""));
+            reList.add(new RE("\\[/\\!trs\\]", ""));
+            reList.add(new RE("\\[u\\](.+?)\\[/u\\]",
+                    "<span style='text-decoration:underline'>$1</span>"));
+            reList.add(new RE("\\[url\\](.+?)\\[/url\\]", "<a href='$1'>$1</a>"));
+            reList.add(new RE("\\[video\\]", ""));
+            reList.add(new RE("\\[/video\\]", ""));
+            // The following line tries to replace a letter surrounded by ['][/'] tags (indicating stress)
+            // with a red letter (the default behavior in Lingvo).
+            reList.add(new RE("\\['\\].\\[/'\\]", "<span style='color:red'>$1</span>"));
+            // FIXME: In the following two lines, the asterisk symbols are escaped. Maybe, it is superfluous.
+            reList.add(new RE("\\[\\*\\]", ""));
+            reList.add(new RE("\\[/\\*\\]", ""));
+            RE_LIST = Collections.unmodifiableList(reList);
+        }
     }
 }
