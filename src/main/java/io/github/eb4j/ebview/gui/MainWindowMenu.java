@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.AWTException;
+import java.awt.Frame;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
@@ -45,7 +46,10 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         } catch (AWTException ignore) {
         }
         if (SystemTray.isSupported()) {
-            trayIcon.addActionListener(actionEvent -> app.setVisible(true));
+            trayIcon.addActionListener(actionEvent -> {
+                app.setVisible(true);
+                app.setState(Frame.NORMAL);
+            });
         }
     }
 
