@@ -365,4 +365,14 @@ public final class EBDictStringHook extends HookAdapter<String> {
         output.append("\uD83C\uDFA6</a>");
     }
 
+    @Override
+    public void beginReference() {
+        output.append("<span class=\"reference\">");
+    }
+
+    @Override
+    public void endReference(long pos) {
+        output.append("</span>");
+    }
+
 }

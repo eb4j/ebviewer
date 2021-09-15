@@ -87,6 +87,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
                 + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
                 + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; } "
                 + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; }"
+                + ".reference { font-style: italic; }"
         );
     }
 
