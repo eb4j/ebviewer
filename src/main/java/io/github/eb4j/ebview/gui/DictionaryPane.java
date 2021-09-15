@@ -108,12 +108,12 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             } else {
                 wasPrev = true;
             }
-            txt.append("<div id =\"" + i + "\"><b><span class=\"word\">");
+            txt.append("<div class=\"block\" id =\"" + i + "\"><span class=\"word\">");
             txt.append(de.getWord());
-            txt.append("</span></b>");
-            txt.append(" - ");
+            txt.append("</span>");
+            txt.append(" - <span class=\"article\">");
             txt.append(de.getArticle());
-            txt.append("</div>");
+            txt.append("</span></div>");
             i++;
         }
         txt.append("</html>");
