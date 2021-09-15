@@ -233,30 +233,30 @@ public final class EBDictStringHook extends HookAdapter<String> {
         this.decType = type;
         switch (decType) {
             case BOLD:
-                output.append("<i>");
+                output.append("<span style=\"font-style: bold\">");
                 break;
             case ITALIC:
-                output.append("<b>");
+                output.append("<span style=\"font-style: italic\">");
                 break;
             default:
-                output.append("<u>");
+                output.append("<span style=\"text-decoration:underline\">");
                 break;
         }
     }
 
     @Override
     public void endDecoration() {
-        switch (decType) {
-            case BOLD:
-                output.append("</i>");
-                break;
-            case ITALIC:
-                output.append("</b>");
-                break;
-            default:
-                output.append("</u>");
-                break;
-        }
+        output.append("</span>");
+    }
+
+    @Override
+    public void beginKeyword() {
+        output.append("<span class=\"keyword\">");
+    }
+
+    @Override
+    public void endKeyword() {
+        output.append("</span>");
     }
 
     @Override
