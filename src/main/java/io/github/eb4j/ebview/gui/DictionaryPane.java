@@ -74,7 +74,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     }
 
     @Override
-    @SuppressWarnings({"avoidinlineconditionals", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     public void setFont(final Font font) {
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
@@ -85,6 +85,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         }
     }
 
+    @SuppressWarnings({"avoidinlineconditionals"})
     private void setStyle() {
         Font font = getFont();
         baseStyleSheet = new StyleSheet();
