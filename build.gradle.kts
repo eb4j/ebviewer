@@ -65,7 +65,7 @@ dependencies {
 
     implementation("com.formdev:flatlaf:1.2")
     testImplementation("org.codehaus.groovy:groovy-all:3.0.5")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
