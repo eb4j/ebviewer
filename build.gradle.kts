@@ -55,7 +55,7 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.32")
 
     implementation("commons-io:commons-io:2.11.0")
-    implementation("org.apache.commons:commons-lang3:3.11")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-codec:commons-codec:1.15")
 
     implementation("io.github.dictzip:dictzip:0.9.5")
