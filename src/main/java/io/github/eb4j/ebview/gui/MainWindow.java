@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -43,14 +45,17 @@ public final class MainWindow extends JFrame implements IMainWindow {
     private final Set<String> selectedDicts = new HashSet<>();
     private final List<DictionaryEntry> ourResult = new ArrayList<>();
     private final DefaultListModel<String> historyModel = new DefaultListModel<>();
-    private final JButton searchButton = new JButton();
     private final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
+    private final JButton searchButton = new JButton();
+    private final BasicArrowButton zoomUpButton = new BasicArrowButton(BasicArrowButton.NORTH);
+    private final BasicArrowButton zoomDownButton = new BasicArrowButton(BasicArrowButton.SOUTH);
 
     private final DictionariesManager dictionariesManager;
 
     private JTextField searchWordField;
     private DefaultListModel<String> headingsModel;
     private DictionaryPane dictionaryPane;
+    private JLabel zoomLevel;
 
     private JList<String> headingsList;
     private JList<String> history;
@@ -136,30 +141,37 @@ public final class MainWindow extends JFrame implements IMainWindow {
         setPreferredSize(new Dimension(800, 500));
         setLayout(new BorderLayout());
         //
+        dictionaryPane = new DictionaryPane();
+        dictionaryInfoList = new JList<>(dictionaryInfoModel);
+        JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
+        dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
+        //
         // GUI parts
         JPanel panel1 = new JPanel();
+        JLabel zoomLabel = new JLabel("zoom:");
+        zoomLevel = new JLabel();
+        zoomLevel.setText(dictionaryPane.getZoomLevel());
         panel1.setLayout(new FlowLayout());
         searchWordField = new JTextField();
         searchWordField.setPreferredSize(new Dimension(500, 30));
         searchButton.setText("Search");
         panel1.add(searchWordField);
         panel1.add(searchButton);
+        panel1.add(zoomLabel);
+        panel1.add(zoomDownButton);
+        panel1.add(zoomLevel);
+        panel1.add(zoomUpButton);
         //
         headingsModel = new DefaultListModel<>();
         headingsList = new JList<>(headingsModel);
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
-        dictionaryPane = new DictionaryPane();
         JScrollPane articlePane = new JScrollPane(dictionaryPane);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.PAGE_AXIS));
-        //
-        dictionaryInfoList = new JList<>(dictionaryInfoModel);
-        JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
-        dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
         //
         TitledBorder historyTitleBorder = new TitledBorder("History");
         historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
@@ -194,6 +206,16 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
         searchButton.addActionListener(e -> {
             startSearch();
+        });
+
+        zoomDownButton.addActionListener(e -> {
+            dictionaryPane.decreaseZoom();
+            zoomLevel.setText(dictionaryPane.getZoomLevel());
+        });
+
+        zoomUpButton.addActionListener(e -> {
+            dictionaryPane.increaseZoom();
+            zoomLevel.setText(dictionaryPane.getZoomLevel());
         });
 
         headingsList.addListSelectionListener(e -> {

@@ -46,16 +46,19 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     static final Logger LOG = LoggerFactory.getLogger(DictionaryPane.class.getName());
 
-    private final StyleSheet baseStyleSheet = new StyleSheet();
     private final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
+
+    private StyleSheet baseStyleSheet;
+    private int zoomLevel = 0;
 
     public DictionaryPane() {
         super();
         setContentType("text/html");
         ((HTMLDocument) getDocument()).setPreservesUnknownTags(false);
+        setFont(getFont());
+        setStyle();
         htmlEditorKit.setStyleSheet(baseStyleSheet);
         setEditorKit(htmlEditorKit);
-        setFont(getFont());
         FocusListener listener = new FocusAdapter() {
             @Override
             public void focusGained(final FocusEvent e) {
@@ -80,15 +83,49 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         if (!(doc instanceof HTMLDocument)) {
             return;
         }
+    }
+
+    private void setStyle() {
+        Font font = getFont();
+        baseStyleSheet = new StyleSheet();
         baseStyleSheet.addRule("body { font-family: " + font.getName() + "; "
                 + " font-size: " + font.getSize() + "; "
                 + " font-style: " + (font.getStyle() == Font.BOLD ? "bold"
                 : font.getStyle() == Font.ITALIC ? "italic" : "normal") + "; "
                 + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
                 + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; } "
-                + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; }"
+                + ".word {font-size: " + (zoomLevel + 2 + font.getSize()) + "; font-style: bold; }"
+                + ".article {font-size: " + (zoomLevel + font.getSize()) + "; }"
                 + ".reference { font-style: italic; }"
         );
+        htmlEditorKit.setStyleSheet(baseStyleSheet);
+    }
+
+    private void limitZoom() {
+        int size = getFont().getSize();
+        if (size + zoomLevel > 64) {
+            zoomLevel = 64 - size;
+            return;
+        }
+        if (size + zoomLevel < 6) {
+            zoomLevel = size - 6;
+        }
+    }
+
+    public void increaseZoom() {
+        zoomLevel++;
+        limitZoom();
+        setStyle();
+    }
+
+    public void decreaseZoom() {
+        zoomLevel--;
+        limitZoom();
+        setStyle();
+    }
+
+    public String getZoomLevel() {
+        return String.valueOf(zoomLevel);
     }
 
     @Override
