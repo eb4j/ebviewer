@@ -5,7 +5,7 @@ plugins {
     jacoco
     application
     id("com.github.spotbugs") version "4.7.5"
-    id("com.diffplug.spotless") version "5.14.3"
+    id("com.diffplug.spotless") version "5.15.0"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "v1.4.0"
     id("com.palantir.git-version") version "0.12.3"
