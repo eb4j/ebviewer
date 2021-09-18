@@ -21,13 +21,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -64,20 +62,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
         this.dictionariesManager = dictionariesManager;
-        // Set X11 application class name to make some desktop user interfaces
-        // (like Gnome Shell) recognize
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Class<?> cls = toolkit.getClass();
-        if (cls.getName().equals("sun.awt.X11.XToolkit")) {
-            try {
-                Field field = cls.getDeclaredField("awtAppClassName");
-                field.setAccessible(true);
-                field.set(toolkit, "EBViewer");
-            } catch (NoSuchFieldException | IllegalAccessException ignored) {
-            }
-        }
         setWindowIcon(this);
-
         initializeGUI();
         setActions();
         pack();
