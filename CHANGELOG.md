@@ -22,6 +22,13 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Change menu names and shortcuts
 * When minimize app, close to system tray
+* Bump versions
+  * gradle graalvm-native-image@1.4.1
+  * spotless@5.15.0
+  * flatlaf@1.6
+  * spotbugs@4.7.5
+  * groovy@3.0.9
+  * commons-lang3@3.12.0
 
 ## [0.4.1]
 
