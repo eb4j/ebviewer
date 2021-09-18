@@ -3,6 +3,26 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.4.2]
+
+### Added
+* System Tray icon
+* Can close dictionaries
+* Add guidance message when starting
+* Add dictionaries names when add dictionary 
+* Blacklisting unusable subbooks by title
+* Linux desktop file
+* Static code analysis
+* Can Zoom up/down font size
+
+### Fixed
+* Text styleing for bold and italic on EPWING dictionary
+* LingvoDSL: Styling update
+
+### Changed
+* Change menu names and shortcuts
+* When minimize app, close to system tray
+
 ## [0.4.1]
 
 ### Added
