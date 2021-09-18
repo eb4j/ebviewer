@@ -4,7 +4,6 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,11 +25,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_16X16;
 import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_32X32;
@@ -40,28 +36,27 @@ import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_32X32;
  * @author Hiroshi Miura
  */
 public final class MainWindow extends JFrame implements IMainWindow {
-    private final Set<String> selectedDicts = new HashSet<>();
-    private final List<DictionaryEntry> ourResult = new ArrayList<>();
-    private final DefaultListModel<String> historyModel = new DefaultListModel<>();
-    private final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
     private final JButton searchButton = new JButton();
     private final BasicArrowButton zoomUpButton = new BasicArrowButton(BasicArrowButton.NORTH);
     private final BasicArrowButton zoomDownButton = new BasicArrowButton(BasicArrowButton.SOUTH);
 
     private final DictionariesManager dictionariesManager;
+    private final EBViewerModel ebViewerModel;
 
-    private JTextField searchWordField;
-    private DefaultListModel<String> headingsModel;
-    private DictionaryPane dictionaryPane;
+    private static JList<String> dictionaryInfoList;
+    private static final DictionaryPane dictionaryPane = new DictionaryPane();
+
+    private static final JTextField searchWordField = new JTextField();
+
     private JLabel zoomLevel;
-
-    private JList<String> headingsList;
-    private JList<String> history;
-    private JList<String> dictionaryInfoList;
+    private JLabel selectAllDictionary;
+    JList<String> headingsList;
+    JList<String> history;
 
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
         this.dictionariesManager = dictionariesManager;
+        ebViewerModel = new EBViewerModel();
         setWindowIcon(this);
         initializeGUI();
         setActions();
@@ -75,24 +70,13 @@ public final class MainWindow extends JFrame implements IMainWindow {
         window.setIconImages(icons);
     }
 
-    public void setDictionaryList(final List<String> dictList) {
-        dictionaryInfoModel.removeAllElements();
-        dictionaryInfoModel.addAll(dictList);
-        selectedDicts.addAll(dictList);
-    }
 
-    public void addToHistory(final String word) {
-        historyModel.add(0, word);
-    }
-
-    public String getSearchWord() {
+    public static String getSearchWord() {
         return searchWordField.getText();
     }
 
-    public void updateResult(final List<DictionaryEntry> result) {
-        ourResult.clear();
-        ourResult.addAll(result);
-        updateResult();
+    public static void setMessage(final String message) {
+        dictionaryPane.setText(message);
     }
 
     @Override
@@ -105,29 +89,21 @@ public final class MainWindow extends JFrame implements IMainWindow {
         return this;
     }
 
-    private void updateResult() {
-        List<String> wordList = new ArrayList<>();
-        List<DictionaryEntry> entries = new ArrayList<>();
-        for (DictionaryEntry dictionaryEntry : ourResult) {
-            String name = dictionaryEntry.getDictName();
-            if (selectedDicts.contains(name)) {
-                entries.add(dictionaryEntry);
-                wordList.add(String.format("<html><span style='font-style: italic'>%s</span>&nbsp;&nbsp;%s</html>",
-                        name.substring(0, 2), dictionaryEntry.getWord()));
-            }
-        }
-        headingsModel.removeAllElements();
-        headingsModel.addAll(wordList);
+    public static void updateDictionaryPane(final List<DictionaryEntry> entries) {
         dictionaryPane.setFoundResult(entries);
         dictionaryPane.setCaretPosition(0);
+    }
+
+    public static void updateDictionaryList(final int[] indecs) {
+        dictionaryInfoList.setSelectedIndices(indecs);
     }
 
     private void initializeGUI() {
         setPreferredSize(new Dimension(800, 500));
         setLayout(new BorderLayout());
         //
-        dictionaryPane = new DictionaryPane();
-        dictionaryInfoList = new JList<>(dictionaryInfoModel);
+        selectAllDictionary = new JLabel("Select all");
+        dictionaryInfoList = new JList<>(ebViewerModel.getDictionaryInfoModel());
         JScrollPane dictionaryInfoPane = new JScrollPane(dictionaryInfoList);
         dictionaryInfoPane.setPreferredSize(new Dimension(180, 80));
         //
@@ -137,7 +113,6 @@ public final class MainWindow extends JFrame implements IMainWindow {
         zoomLevel = new JLabel();
         zoomLevel.setText(dictionaryPane.getZoomLevel());
         panel1.setLayout(new FlowLayout());
-        searchWordField = new JTextField();
         searchWordField.setPreferredSize(new Dimension(500, 30));
         searchButton.setText("Search");
         panel1.add(searchWordField);
@@ -147,8 +122,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         panel1.add(zoomLevel);
         panel1.add(zoomUpButton);
         //
-        headingsModel = new DefaultListModel<>();
-        headingsList = new JList<>(headingsModel);
+        headingsList = new JList<>(ebViewerModel.getHeadingsModel());
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
@@ -161,10 +135,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
         TitledBorder historyTitleBorder = new TitledBorder("History");
         historyTitleBorder.setTitleJustification(TitledBorder.CENTER);
         historyTitleBorder.setTitlePosition(TitledBorder.TOP);
-        history = new JList<>(historyModel);
+        history = new JList<>(ebViewerModel.getHistoryModel());
         JScrollPane historyPane = new JScrollPane(history);
         historyPane.setPreferredSize(new Dimension(180, 300));
         historyPane.setBorder(historyTitleBorder);
+        infoPanel.add(selectAllDictionary);
         infoPanel.add(dictionaryInfoPane);
         infoPanel.add(historyPane);
         //
@@ -172,6 +147,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
+        dictionaryPane.setText("Please add dictionaries from Dictionary menu at first.");
         if (SystemTray.isSupported()) {
             setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         } else {
@@ -180,7 +156,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     private void startSearch() {
-        Searcher searchSwingWorker = new Searcher(this);
+        Searcher searchSwingWorker = new Searcher(ebViewerModel, dictionariesManager);
         searchSwingWorker.execute();
     }
 
@@ -258,12 +234,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 return;
             }
             int[] indecs = dictionaryInfoList.getSelectedIndices();
-            selectedDicts.clear();
-            for (int idx: indecs) {
-                String dictName = dictionaryInfoModel.get(idx);
-                selectedDicts.add(dictName);
+            ebViewerModel.selectDicts(indecs);
+        });
+
+        selectAllDictionary.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ebViewerModel.selectAllDict();
             }
-            updateResult();
         });
     }
 }

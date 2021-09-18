@@ -126,7 +126,11 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
     }
 
     public String getZoomLevel() {
-        return String.valueOf(zoomLevel);
+        if (zoomLevel > 0) {
+            return "+" + zoomLevel;
+        } else {
+            return String.valueOf(zoomLevel);
+        }
     }
 
     @Override

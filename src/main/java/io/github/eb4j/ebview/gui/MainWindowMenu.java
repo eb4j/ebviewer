@@ -71,6 +71,11 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(app)) {
             manager.loadDictionaries(chooser.getSelectedFile());
         }
+        StringBuilder sb = new StringBuilder("Dictionaries added:\n");
+        for (String dict: manager.getDictionaryNames()) {
+            sb.append(" ").append(dict).append("\n");
+        }
+        MainWindow.setMessage(sb.toString());
     }
 
     public void closeActionPerformed() {

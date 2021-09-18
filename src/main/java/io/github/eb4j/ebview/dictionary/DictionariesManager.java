@@ -50,6 +50,10 @@ public class DictionariesManager {
         }
     }
 
+    public List<String> getDictionaryNames() {
+        return Collections.unmodifiableList(dictionaries.stream().map(IDictionary::getDictionaryName).collect(Collectors.toList()));
+    }
+
     /**
      * load dictionaries.
      * @param dictionaryDirectory directory where dictinary stored.
@@ -92,7 +96,7 @@ public class DictionariesManager {
             }
             return dict.readArticlesPredictive(word);
         } catch (Exception ex) {
-            // Log.log(ex);
+            LOG.warn("look up failed", ex);
         }
         return Collections.emptyList();
     }

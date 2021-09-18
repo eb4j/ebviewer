@@ -1,6 +1,7 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
+import io.github.eb4j.ebview.dictionary.DictionariesManager;
 
 import javax.swing.SwingWorker;
 import java.util.List;
@@ -12,11 +13,13 @@ import java.util.stream.Collectors;
  * @author Hiroshi Miura
  */
 class Searcher extends SwingWorker<Object, Object> {
-    private final MainWindow mainWindow;
+    private final EBViewerModel ebViewerModel;
+    private final DictionariesManager manager;
 
-    Searcher(final MainWindow mainWindow) {
+    Searcher(final EBViewerModel model, final DictionariesManager manager) {
         super();
-        this.mainWindow = mainWindow;
+        this.manager = manager;
+        ebViewerModel = model;
     }
 
     /**
@@ -26,11 +29,11 @@ class Searcher extends SwingWorker<Object, Object> {
      */
     @Override
     protected Object doInBackground() {
-        String word = mainWindow.getSearchWord();
+        String word = ebViewerModel.getSearchWord();
         new Thread(() -> {
             try {
-                List<DictionaryEntry> result = mainWindow.getDictionariesManager().findWord(word);
-                mainWindow.addToHistory(word);
+                List<DictionaryEntry> result = manager.findWord(word);
+                ebViewerModel.addToHistory(word);
                 publish(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -49,8 +52,8 @@ class Searcher extends SwingWorker<Object, Object> {
                     .map(DictionaryEntry::getDictName)
                     .distinct()
                     .collect(Collectors.toList());
-            mainWindow.setDictionaryList(dictList);
-            mainWindow.updateResult(entries);
+            ebViewerModel.setDictionaryList(dictList);
+            ebViewerModel.updateResult(entries);
         }
     }
 
