@@ -35,7 +35,7 @@ public class EBDictionary {
         try {
             // try dictionary and appendix first.
             eBookDictionary = new Book(eBookDirectory, appendixDirectory);
-            LOG.info("Load dictionary with appendix.");
+            LOG.info("Loading appendix for " + eBookDictionary.getSubBook(0).getTitle());
         } catch (EBException ignore) {
             // There may be no appendix, try again with dictionary only.
             try {

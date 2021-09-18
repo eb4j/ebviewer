@@ -44,7 +44,7 @@ public class DictionariesManager {
     public void closeDict(final IDictionary dict) {
         try {
             dict.close();
-            LOG.info("-- remove " + dict.getDictionaryName());
+            LOG.info("remove " + dict.getDictionaryName());
         } catch (Exception e) {
             LOG.error("Dictionary error: ", e);
         }
@@ -73,7 +73,7 @@ public class DictionariesManager {
                 Set<IDictionary> dicts = factory.loadDict(file);
                 dictionaries.addAll(dicts);
                 for (IDictionary dict: dicts) {
-                    LOG.info("-- add " + dict.getDictionaryName());
+                    LOG.info("added " + dict.getDictionaryName());
                 }
                 return;
             }
