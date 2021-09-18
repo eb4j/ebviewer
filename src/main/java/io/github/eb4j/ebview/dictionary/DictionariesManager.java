@@ -3,6 +3,8 @@ package io.github.eb4j.ebview.dictionary;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.utils.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
  */
 public class DictionariesManager {
 
+    static final Logger LOG = LoggerFactory.getLogger(DictionariesManager.class.getName());
+
     protected final List<IDictionaryFactory> factories = new ArrayList<>();
     protected final List<IDictionary> dictionaries = new ArrayList<>();
 
@@ -30,11 +34,19 @@ public class DictionariesManager {
         factories.add(new StarDict());
     }
 
+    public void closeDictionaries() {
+        synchronized (this) {
+            dictionaries.stream().forEach(this::closeDict);
+            dictionaries.clear();
+        }
+    }
+
     public void closeDict(final IDictionary dict) {
         try {
             dict.close();
+            LOG.info("-- remove " + dict.getDictionaryName());
         } catch (Exception e) {
-            // Log.log(e);
+            LOG.error("Dictionary error: ", e);
         }
     }
 
@@ -60,14 +72,15 @@ public class DictionariesManager {
             if (factory.isSupportedFile(file)) {
                 Set<IDictionary> dicts = factory.loadDict(file);
                 dictionaries.addAll(dicts);
-                System.err.println("-- add " + file.getPath());
+                for (IDictionary dict: dicts) {
+                    LOG.info("-- add " + dict.getDictionaryName());
+                }
                 return;
             }
         }
     }
 
     public List<DictionaryEntry> findWord(final String word) {
-        List<IDictionary> dicts;
         return dictionaries.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
     }
 

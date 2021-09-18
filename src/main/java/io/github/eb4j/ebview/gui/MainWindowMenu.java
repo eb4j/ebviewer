@@ -74,6 +74,10 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
     }
 
     public void closeActionPerformed() {
+        manager.closeDictionaries();
+    }
+
+    public void trayActionPerformed() {
         app.setVisible(false);
     }
 
@@ -138,32 +142,41 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
     }
 
     public void initMenuComponents() {
-        fileMenu = new JMenu("File");
-        fileMenu.setMnemonic(KeyEvent.VK_F);
-        fileMenu.addMenuListener(this);
+        appMenu = new JMenu("Application");
+        appMenu.setMnemonic(KeyEvent.VK_W);
+        appMenu.addMenuListener(this);
         //
-        fileOpenMenuItem = new JMenuItem("Add Dictionary");
-        fileOpenMenuItem.setMnemonic(KeyEvent.VK_A);
-        fileOpenMenuItem.setActionCommand("open");
-        fileOpenMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
-        fileOpenMenuItem.addActionListener(this);
+        appTrayMenuItem = new JMenuItem("Quit to tray");
+        appTrayMenuItem.setMnemonic(KeyEvent.VK_Q);
+        appTrayMenuItem.setActionCommand("tray");
+        appTrayMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+        appTrayMenuItem.addActionListener(this);
         //
-        fileCloseMenuItem = new JMenuItem("Close to tray");
-        fileCloseMenuItem.setMnemonic(KeyEvent.VK_C);
-        fileCloseMenuItem.setActionCommand("close");
-        fileCloseMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-        fileCloseMenuItem.addActionListener(this);
+        appQuitMenuItem = new JMenuItem("Exit application");
+        appQuitMenuItem.setMnemonic(KeyEvent.VK_E);
+        appQuitMenuItem.setActionCommand("quit");
+        appQuitMenuItem.addActionListener(this);
         //
-        fileQuitMenuItem = new JMenuItem("Quit");
-        fileQuitMenuItem.setMnemonic(KeyEvent.VK_Q);
-        fileQuitMenuItem.setActionCommand("quit");
-        fileQuitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
-        fileQuitMenuItem.addActionListener(this);
+        appMenu.add(appTrayMenuItem);
+        appMenu.add(appQuitMenuItem);
         //
-        fileMenu.add(fileOpenMenuItem);
-        fileMenu.add(fileCloseMenuItem);
-        fileMenu.add(new JMenuBar());
-        fileMenu.add(fileQuitMenuItem);
+        dictMenu = new JMenu("Dictionary");
+        dictMenu.setMnemonic(KeyEvent.VK_D);
+        dictMenu.addMenuListener(this);
+        //
+        dictOpenMenuItem = new JMenuItem("Add dictionaries");
+        dictOpenMenuItem.setMnemonic(KeyEvent.VK_A);
+        dictOpenMenuItem.setActionCommand("open");
+        dictOpenMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+        dictOpenMenuItem.addActionListener(this);
+        //
+        dictCloseMenuItem = new JMenuItem("Close dictionaries");
+        dictCloseMenuItem.setMnemonic(KeyEvent.VK_C);
+        dictCloseMenuItem.setActionCommand("close");
+        dictCloseMenuItem.addActionListener(this);
+        //
+        dictMenu.add(dictOpenMenuItem);
+        dictMenu.add(dictCloseMenuItem);
         //
         helpMenu = new JMenu("Help");
         helpMenu.setMnemonic(KeyEvent.VK_H);
@@ -177,16 +190,19 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         helpMenu.add(helpAboutMenuItem);
         //
         mainMenu = new JMenuBar();
-        mainMenu.add(fileMenu);
+        mainMenu.add(appMenu);
+        mainMenu.add(dictMenu);
         mainMenu.add(helpMenu);
         app.setJMenuBar(mainMenu);
     }
 
     private JMenuBar mainMenu;
-    private JMenu fileMenu;
-    private JMenuItem fileOpenMenuItem;
-    private JMenuItem fileCloseMenuItem;
-    private JMenuItem fileQuitMenuItem;
+    private JMenu appMenu;
+    private JMenuItem appTrayMenuItem;
+    private JMenuItem appQuitMenuItem;
+    private JMenu dictMenu;
+    private JMenuItem dictOpenMenuItem;
+    private JMenuItem dictCloseMenuItem;
     private JMenu helpMenu;
     private JMenuItem helpAboutMenuItem;
 }
