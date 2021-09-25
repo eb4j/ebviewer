@@ -1,3 +1,7 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     groovy
     java
@@ -8,27 +12,46 @@ plugins {
     id("com.diffplug.spotless") version "5.15.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
-    id("com.palantir.git-version") version "0.12.3"
+    id("com.palantir.git-version") version "0.12.3" apply false
 }
 
-val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
-val details = versionDetails()
-if (details.isCleanTag) {
-    version = details.lastTag.substring(1)
-} else {
-    version = details.lastTag.substring(1) + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+fun getProps(f: File): Properties {
+    val props = Properties()
+    props.load(FileInputStream(f))
+    return props
 }
 
-tasks.register("writeVersionFile") {
-    val folder = project.file("src/main/resources");
-    if (!folder.exists()) {
-        folder.mkdirs()
+val folder = project.file("src/main/resources");
+if (!folder.exists()) {
+    folder.mkdirs()
+}
+
+val props = project.file("src/main/resources/version.properties")
+try {
+    // apply this plugin in a try-catch block so that we can handle cases without .git directory
+    apply(plugin = "com.palantir.git-version")
+    val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+    val details = versionDetails()
+    if (details.isCleanTag) {
+        version = details.lastTag.substring(1)
+    } else {
+        version = details.lastTag.substring(1) + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
     }
-    val props = project.file("src/main/resources/version.properties")
-    props.delete()
-    props.appendText("version=" + project.version + "\n")
-    props.appendText("commit=" + details.gitHashFull + "\n")
-    props.appendText("branch=" + details.branchName)
+    tasks.register("writeVersionFile") {
+        props.delete()
+        props.appendText("version=" + project.version + "\n")
+        props.appendText("commit=" + details.gitHashFull + "\n")
+        props.appendText("branch=" + details.branchName)
+    }
+} catch (e:Exception) {
+    project.logger.error(e.message)
+    if (props.exists()) {
+        val versionProperties = getProps(props)
+        // versionProperties.forEach { (k, v) -> if (k is String) project.extra.set(k, v) }
+        version = versionProperties.getProperty("version")
+    } else {
+        version = "1.0.0-SNAPSHOT"
+    }
 }
 
 tasks.getByName("jar") {
