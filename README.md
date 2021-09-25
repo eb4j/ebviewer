@@ -45,8 +45,6 @@ Copyright (C) 2020 Suguru Ono
 
 Copyright (C) 2015-2020 Aaron Madlon-Kay
 
-Copyright (C) 2012 Joop Eggen
-
 Copyright (C) 2011 Didier Briel
 
 Copyright (C) 2009-2010 Alex Buloichik
