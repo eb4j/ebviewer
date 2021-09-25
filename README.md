@@ -25,11 +25,13 @@ The applicaiton is written by Java, you can run the application on any PC platfo
 You need to install Java Runtime Version 11, 14 or 16 on your operating system.
 When you want to watch movie in your dictionary, VLC is required.
 
-## Build
+## Build from source
 
-ebviewer uses Java and Gradle build system. As usual java application, it is easy to build.
+ebviewer uses Java, git version control and Gradle build system.
 
 ```console
+git clone https://github.com/eb4j/ebviewer
+cd ebviewer
 ./gradlew build
 ```
 
