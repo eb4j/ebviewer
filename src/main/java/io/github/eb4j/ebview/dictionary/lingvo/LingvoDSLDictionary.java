@@ -131,7 +131,7 @@ public class LingvoDSLDictionary implements IDictionary {
             for (RE re : RE_LIST) {
                 result = re.pattern.matcher(result).replaceAll(re.replacement);
             }
-            return result.replaceAll("\\[\\[(.+?)\\]\\]", "[$1]");
+            return result;
         }
 
         /**
@@ -139,6 +139,9 @@ public class LingvoDSLDictionary implements IDictionary {
          */
         static {
             List<RE> reList = new ArrayList<>();
+            reList.add(new RE("\\[\\[(.+?)\\]\\]", "&#91;$1&#93;"));
+            reList.add(new RE("\\\\\\[", "&#91;"));
+            reList.add(new RE("\\\\\\]", "&#93;"));
             reList.add(new RE("\\[b\\](.+?)\\[/b\\]", "<span style='font-style: bold'>$1</span>"));
             reList.add(new RE("\\[i\\](.+?)\\[/i\\]", "<span style='font-style: italic'>$1</span>"));
             reList.add(new RE("\\[trn\\](.+?)\\[/trn\\]", "$1"));
@@ -156,17 +159,16 @@ public class LingvoDSLDictionary implements IDictionary {
             reList.add(new RE("\\[/ex\\]", ""));
             reList.add(new RE("\\[lang\\]", ""));
             reList.add(new RE("\\[/lang\\]", ""));
-            reList.add(new RE("\\[m\\]", "&nbsp;"));
-            reList.add(new RE("\\[/m\\]", ""));
-            reList.add(new RE("\\[m1\\]", "&nbsp;"));
-            reList.add(new RE("\\[m2\\]", "&nbsp;"));
-            reList.add(new RE("\\[m3\\]", "&nbsp;"));
-            reList.add(new RE("\\[m4\\]", "&nbsp;"));
-            reList.add(new RE("\\[m5\\]", "&nbsp;"));
-            reList.add(new RE("\\[m6\\]", "&nbsp;"));
-            reList.add(new RE("\\[m7\\]", "&nbsp;"));
-            reList.add(new RE("\\[m8\\]", "&nbsp;"));
-            reList.add(new RE("\\[m9\\]", "&nbsp;"));
+            reList.add(new RE("\\[m\\](.+?)\\[/m\\]", "$1"));
+            reList.add(new RE("\\[m1\\](.+?)\\[/m\\]", "<p style=\"text-indent: 30px\">$1</p>"));
+            reList.add(new RE("\\[m2\\](.+?)\\[/m\\]", "<p style=\"text-indent: 60px\">$1</p>"));
+            reList.add(new RE("\\[m3\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m4\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m5\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m6\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m7\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m8\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m9\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
             reList.add(new RE("\\[p\\]", ""));
             reList.add(new RE("\\[/p\\]", ""));
             reList.add(new RE("\\[preview\\]", ""));
