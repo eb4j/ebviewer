@@ -56,7 +56,7 @@ dependencies {
 
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("commons-codec:commons-codec:1.15")
+    implementation("tokyo.northside:url-protocol-handler:0.1.4")
 
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")

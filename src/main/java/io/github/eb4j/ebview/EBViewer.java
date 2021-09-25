@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.gui.MainWindowMenu;
-import io.github.eb4j.ebview.protocol.URLProtocolHandler;
+import tokyo.northside.protocol.URLProtocolHandler;
 
 import javax.swing.JFrame;
 import java.io.File;
