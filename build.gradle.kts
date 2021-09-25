@@ -8,6 +8,7 @@ plugins {
     checkstyle
     jacoco
     application
+    distribution
     id("com.github.spotbugs") version "4.7.5"
     id("com.diffplug.spotless") version "5.15.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
@@ -149,5 +150,14 @@ nativeImage {
         add("--enable-all-security-services")
         add("--initialize-at-run-time=sun.awt.dnd.SunDropTargetContextPeer\$EventDispatcher")
         add("--report-unsupported-elements-at-runtime")
+    }
+}
+
+distributions {
+    create("source") {
+        contents {
+            from (".")
+            exclude ("out", "build", ".gradle", ".github", ".idea", ".gitignore")
+        }
     }
 }
