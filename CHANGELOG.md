@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.4.3]
+
+### Fixed
+- Allow build from source distribution
+
+### Changed
+- Update README: run and build sections
+- Improve javadoc syntax
+- Externalize data URL protocol handler
+- Bump versions
+  - junit@5.8.1
+  - spotless@5.15.1
+
 ## [0.4.2]
 
 ### Added
@@ -69,7 +82,9 @@ Beta release.
 ## 0.1.0
 * First release
 
-[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/eb4j/ebviewer/compare/v0.4.2...v0.4.3
+[0.4.2]: https://github.com/eb4j/ebviewer/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/eb4j/ebviewer/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/eb4j/ebviewer/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/eb4j/ebviewer/compare/v0.3.0...v0.3.1
