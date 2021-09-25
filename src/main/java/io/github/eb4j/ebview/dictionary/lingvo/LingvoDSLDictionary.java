@@ -23,7 +23,7 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * Dictionary implementation for Lingvo DSL format.
- *
+ * <p>
  * Lingvo DSL format described in Lingvo help. See also
  * http://www.dsleditor.narod.ru/art_03.htm(russian).
  *
