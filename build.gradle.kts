@@ -153,6 +153,10 @@ nativeImage {
     }
 }
 
+application {
+    executableDir = ""
+}
+
 distributions {
     create("source") {
         contents {

@@ -25,20 +25,20 @@ The applicaiton is written by Java, you can run the application on any PC platfo
 On linux or macOS which already have java 11 or later installed and set PATH properly,
 
 ```console
-ebviewer-0.4.3/bin/ebviewer
+ebviewer-0.4.3/ebviewer
 ```
 
 On windows
 
 ```console
-ebviewer-0.4.3\bin\ebviewer.bat
+ebviewer-0.4.3\ebviewer.bat
 ```
 
 When you have java but there is no PATH set,
 
 ```console
 set JAVA_HOME=C:\Program Files\Java\jdk11.0.123.456\
-ebviewer-0.4.3\bin\ebviewer.bat
+ebviewer-0.4.3\ebviewer.bat
 ```
 
 
