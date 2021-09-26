@@ -35,6 +35,7 @@ public class DictionariesManager {
         factories.add(new EPWING());
         factories.add(new LingvoDSL());
         factories.add(new StarDict());
+        factories.add(new PDic());
         stemmer = new Stemmer();
     }
 
