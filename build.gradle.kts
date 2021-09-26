@@ -9,7 +9,7 @@ plugins {
     jacoco
     application
     distribution
-    id("com.github.spotbugs") version "4.7.5"
+    id("com.github.spotbugs") version "4.7.6"
     id("com.diffplug.spotless") version "5.15.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
