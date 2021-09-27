@@ -4,6 +4,7 @@ import io.github.eb4j.EBException;
 import io.github.eb4j.GraphicData;
 import io.github.eb4j.SoundData;
 import io.github.eb4j.SubBook;
+import io.github.eb4j.ebview.utils.ImageUtils;
 import io.github.eb4j.hook.Hook;
 import io.github.eb4j.hook.HookAdapter;
 import io.github.eb4j.util.ImageUtil;
@@ -305,7 +306,7 @@ public final class EBDictStringHook extends HookAdapter<String> {
         try {
             byte[] bytes = graphicData.getMonoGraphic(pos, lastWidth, lastHeight);
             output.append("\" src=\"data:image/png;base64,");
-            output.append(Utils.convertMonoGraphic2Base64(bytes, lastWidth, lastHeight)).append("\"/>");
+            output.append(ImageUtils.convertMonoGraphic2Base64(bytes, lastWidth, lastHeight)).append("\"/>");
         } catch (EBException | IOException e) {
             e.printStackTrace();
         }
@@ -317,12 +318,12 @@ public final class EBDictStringHook extends HookAdapter<String> {
             byte[] bytes = graphicData.getColorGraphic(pos);
             if (format == Hook.JPEG) {
                 output.append("<img src=\"data:image/jpeg;base64,");
-                output.append(Utils.convertImage2Base64("jpeg", bytes));
+                output.append(ImageUtils.convertImage2Base64("jpeg", bytes));
                 output.append("\" alt=\"");
             } else {
                 bytes = ImageUtil.dibToPNG(bytes);
                 output.append("<img src=\"data:image/png;base64,");
-                output.append(Utils.convertImage2Base64("png", bytes));
+                output.append(ImageUtils.convertImage2Base64("png", bytes));
                 output.append("\" alt=\"");
             }
         } catch (EBException | IOException e) {

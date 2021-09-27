@@ -68,7 +68,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.eb4j:eb4j:2.2.2")
+    implementation("io.github.eb4j:eb4j:2.3.0")
     implementation("org.slf4j:slf4j-simple:1.7.32")
 
     implementation("commons-io:commons-io:2.11.0")

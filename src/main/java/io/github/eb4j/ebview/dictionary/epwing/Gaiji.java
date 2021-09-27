@@ -4,6 +4,7 @@ import io.github.eb4j.EBException;
 import io.github.eb4j.ExtFont;
 import io.github.eb4j.SubAppendix;
 import io.github.eb4j.SubBook;
+import io.github.eb4j.ebview.utils.ImageUtils;
 import io.github.eb4j.ext.UnicodeMap;
 import io.github.eb4j.util.HexUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -91,7 +92,7 @@ public class Gaiji {
 
     private String convertImage(final byte[] data, final int width, final int height) throws IOException {
         StringBuilder sb = new StringBuilder("<img src=\"data:image/png;base64,");
-        sb.append(Utils.convertMonoGraphic2Base64(data, width, height));
+        sb.append(ImageUtils.convertMonoGraphic2Base64(data, width, height));
         sb.append("\"/>");
         return sb.toString();
     }
