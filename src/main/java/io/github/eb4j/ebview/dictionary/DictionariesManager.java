@@ -2,6 +2,7 @@ package io.github.eb4j.ebview.dictionary;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.utils.Stemmer;
 import io.github.eb4j.ebview.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,10 @@ import java.util.stream.Collectors;
 /**
  * Class for load dictionaries.
  *
- * @author Alex Buloichik (alex73mail@gmail.com)
+ * @author Alex Buloichik
  * @author Didier Briel
  * @author Aaron Madlon-Kay
+ * @author Hiroshi Miura
  */
 public class DictionariesManager {
 
@@ -27,11 +29,13 @@ public class DictionariesManager {
 
     protected final List<IDictionaryFactory> factories = new ArrayList<>();
     protected final List<IDictionary> dictionaries = new ArrayList<>();
+    private Stemmer stemmer;
 
     public DictionariesManager() {
         factories.add(new EPWING());
         factories.add(new LingvoDSL());
         factories.add(new StarDict());
+        stemmer = new Stemmer();
     }
 
     public void closeDictionaries() {
@@ -56,7 +60,7 @@ public class DictionariesManager {
 
     /**
      * load dictionaries.
-     * @param dictionaryDirectory directory where dictinary stored.
+     * @param dictionaryDirectory directory where dictionary stored.
      */
     public void loadDictionaries(final File dictionaryDirectory) {
         List<File> listFiles = FileUtils.findFiles(dictionaryDirectory);
@@ -85,19 +89,30 @@ public class DictionariesManager {
     }
 
     public List<DictionaryEntry> findWord(final String word) {
-        return dictionaries.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
+        List<DictionaryEntry> result;
+        result = dictionaries.stream().flatMap(dict -> doLookUp(dict, word).stream()).collect(Collectors.toList());
+        if (result.size() == 0) {
+            String[] stemmed = stemmer.doStem(word);
+            if (stemmed.length > 1) {
+                result = dictionaries.stream().flatMap(dict -> doPredictiveLookup(dict, stemmed[0]).stream()).collect(Collectors.toList());
+            }
+        }
+        return result;
+    }
+
+    private List<DictionaryEntry> doPredictiveLookup(final IDictionary dict, final String word) {
+        try {
+            return dict.readArticlesPredictive(word);
+        } catch (Exception ignored) {
+            return Collections.emptyList();
+        }
     }
 
     private List<DictionaryEntry> doLookUp(final IDictionary dict, final String word) {
         try {
-            List<DictionaryEntry> result = dict.readArticles(word);
-            if (!result.isEmpty()) {
-                return result;
-            }
-            return dict.readArticlesPredictive(word);
-        } catch (Exception ex) {
-            LOG.warn("look up failed", ex);
+            return dict.readArticles(word);
+        } catch (Exception ignored) {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
     }
 }

@@ -79,10 +79,13 @@ Copyright (C) 2020 Suguru Ono
 
 Copyright (C) 2015-2020 Aaron Madlon-Kay
 
-Copyright (C) 2011 Didier Briel
+Copyright (C) 2007-2015 Didier Briel
 
-Copyright (C) 2009-2010 Alex Buloichik
+Copyright (C) 2008-2010 Alex Buloichik
 
+Copyright (C) 2007 Zoltan Bartko
+
+Copyright (C) 2000-2006 Keith Godfrey, Maxym Mykhalchuk, and Henry Pijffers
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
