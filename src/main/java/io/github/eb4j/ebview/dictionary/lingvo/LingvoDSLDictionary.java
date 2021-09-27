@@ -179,6 +179,9 @@ public class LingvoDSLDictionary implements IDictionary {
             reList.add(new RE("\\[s\\](.+?\\.wav)\\[/s\\]", "<a href=\"file://@dir@/$1\"/>SOUND: $1</a>"));
             reList.add(new RE("\\[s\\](.+?\\.jpg)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
             reList.add(new RE("\\[s\\](.+?\\.bmp)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
+            reList.add(new RE("\\[s\\](.+?\\.tif)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
+            reList.add(new RE("\\[s\\](.+?\\.tiff)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
+            reList.add(new RE("\\[s\\](.+?\\.png)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
             reList.add(new RE("\\[video\\](.+?)\\[/video\\]", "<a href=\"file://@dir@/$1\">VIDEO: $1</a>"));
             reList.add(new RE("\\[s\\](.+?)\\[/s\\]", "UNSUPPORTED MEDIA: $1"));
             reList.add(new RE("\\[sub\\](.+?)\\[/sub\\]", "<sub>$1</sub>"));
