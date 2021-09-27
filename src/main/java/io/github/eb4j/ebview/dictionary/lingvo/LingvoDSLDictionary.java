@@ -34,7 +34,7 @@ import java.util.zip.GZIPInputStream;
 public class LingvoDSLDictionary implements IDictionary {
 
     protected final DictionaryData<String> data;
-
+    private final String dictionaryDir;
     private final String bookName;
 
 
@@ -47,6 +47,7 @@ public class LingvoDSLDictionary implements IDictionary {
             bookName = fileName.substring(0, fileName.length() - 4);
         }
         readDslFile(file);
+        dictionaryDir = file.getParentFile().getAbsolutePath();
     }
 
     @SuppressWarnings("avoidinlineconditionals")
@@ -95,13 +96,13 @@ public class LingvoDSLDictionary implements IDictionary {
 
     @Override
     public List<DictionaryEntry> readArticles(final String word) {
-        return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
+        return data.lookUp(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue().replaceAll("@dir@", dictionaryDir), bookName))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<DictionaryEntry> readArticlesPredictive(final String word) {
-        return data.lookUpPredictive(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
+        return data.lookUpPredictive(word).stream().map(e -> new DictionaryEntry(e.getKey(), e.getValue().replaceAll("@dir@", dictionaryDir), bookName))
                 .collect(Collectors.toList());
     }
 
@@ -175,8 +176,11 @@ public class LingvoDSLDictionary implements IDictionary {
             reList.add(new RE("\\[/preview\\]", ""));
             reList.add(new RE("\\[ref\\]", ""));
             reList.add(new RE("\\[/ref\\]", ""));
-            reList.add(new RE("\\[s\\]", ""));
-            reList.add(new RE("\\[/s\\]", ""));
+            reList.add(new RE("\\[s\\](.+?\\.wav)\\[/s\\]", "<a href=\"file://@dir@/$1\"/>SOUND: $1</a>"));
+            reList.add(new RE("\\[s\\](.+?\\.jpg)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
+            reList.add(new RE("\\[s\\](.+?\\.bmp)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
+            reList.add(new RE("\\[video\\](.+?)\\[/video\\]", "<a href=\"file://@dir@/$1\">VIDEO: $1</a>"));
+            reList.add(new RE("\\[s\\](.+?)\\[/s\\]", "UNSUPPORTED MEDIA: $1"));
             reList.add(new RE("\\[sub\\](.+?)\\[/sub\\]", "<sub>$1</sub>"));
             reList.add(new RE("\\[sup\\](.+?)\\[/sup\\]", "<sup>$1</sup>"));
             reList.add(new RE("\\[trn1\\]", ""));
@@ -189,8 +193,6 @@ public class LingvoDSLDictionary implements IDictionary {
             reList.add(new RE("\\[u\\](.+?)\\[/u\\]",
                     "<span style='text-decoration:underline'>$1</span>"));
             reList.add(new RE("\\[url\\](.+?)\\[/url\\]", "<a href='$1'>$1</a>"));
-            reList.add(new RE("\\[video\\]", ""));
-            reList.add(new RE("\\[/video\\]", ""));
             // The following line tries to replace a letter surrounded by ['][/'] tags (indicating stress)
             // with a red letter (the default behavior in Lingvo).
             reList.add(new RE("\\['\\].\\[/'\\]", "<span style='color:red'>$1</span>"));

@@ -51,7 +51,7 @@ public class DictionariesManager {
     }
 
     public List<String> getDictionaryNames() {
-        return Collections.unmodifiableList(dictionaries.stream().map(IDictionary::getDictionaryName).collect(Collectors.toList()));
+        return dictionaries.stream().map(IDictionary::getDictionaryName).collect(Collectors.toUnmodifiableList());
     }
 
     /**
