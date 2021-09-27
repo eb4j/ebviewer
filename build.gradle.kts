@@ -9,7 +9,7 @@ plugins {
     jacoco
     application
     distribution
-    id("com.github.spotbugs") version "4.7.5"
+    id("com.github.spotbugs") version "4.7.6"
     id("com.diffplug.spotless") version "5.15.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
@@ -22,37 +22,30 @@ fun getProps(f: File): Properties {
     return props
 }
 
-val folder = project.file("src/main/resources");
-if (!folder.exists()) {
-    folder.mkdirs()
-}
-
+// we handle cases without .git directory
 val props = project.file("src/main/resources/version.properties")
-try {
-    // apply this plugin in a try-catch block so that we can handle cases without .git directory
+val dotgit = project.file(".git")
+if (dotgit.exists()) {
     apply(plugin = "com.palantir.git-version")
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
-    if (details.isCleanTag) {
-        version = details.lastTag.substring(1)
-    } else {
-        version = details.lastTag.substring(1) + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+    val baseVersion = details.lastTag.substring(1)
+    if (details.isCleanTag) {  // release version
+        version = baseVersion
+    } else {  // snapshot version
+        version = baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
     }
-    tasks.register("writeVersionFile") {
-        props.delete()
-        props.appendText("version=" + project.version + "\n")
-        props.appendText("commit=" + details.gitHashFull + "\n")
-        props.appendText("branch=" + details.branchName)
+} else if (props.exists()) { // when version.properties already exist, just use it.
+    version = getProps(props).getProperty("version")
+}
+
+tasks.register("writeVersionFile") {
+    val folder = project.file("src/main/resources");
+    if (!folder.exists()) {
+        folder.mkdirs()
     }
-} catch (e:Exception) {
-    project.logger.error(e.message)
-    if (props.exists()) {
-        val versionProperties = getProps(props)
-        // versionProperties.forEach { (k, v) -> if (k is String) project.extra.set(k, v) }
-        version = versionProperties.getProperty("version")
-    } else {
-        version = "1.0.0-SNAPSHOT"
-    }
+    props.delete()
+    props.appendText("version=" + project.version)
 }
 
 tasks.getByName("jar") {
