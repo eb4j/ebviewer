@@ -8,6 +8,7 @@ Very simple dictionary search application supporting;
 - LingvoDSL dz compression (.dsl.dz)
 - StarDict (.ifo .dict)
 - StarDict (.dict.dz)
+- PDIC
 
 ![Application image](https://raw.githubusercontent.com/eb4j/ebviewer/main/docs/img/screen_image.png)
 
@@ -81,6 +82,8 @@ Copyright (C) 2015-2020 Aaron Madlon-Kay
 
 Copyright (C) 2007-2015 Didier Briel
 
+Copyright (C) 2014 wak
+ 
 Copyright (C) 2008-2010 Alex Buloichik
 
 Copyright (C) 2007 Zoltan Bartko

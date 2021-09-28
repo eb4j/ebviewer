@@ -29,12 +29,13 @@ public class DictionariesManager {
 
     protected final List<IDictionaryFactory> factories = new ArrayList<>();
     protected final List<IDictionary> dictionaries = new ArrayList<>();
-    private Stemmer stemmer;
+    private final Stemmer stemmer;
 
     public DictionariesManager() {
         factories.add(new EPWING());
         factories.add(new LingvoDSL());
         factories.add(new StarDict());
+        factories.add(new PDic());
         stemmer = new Stemmer();
     }
 
@@ -94,7 +95,9 @@ public class DictionariesManager {
         if (result.size() == 0) {
             String[] stemmed = stemmer.doStem(word);
             if (stemmed.length > 1) {
-                result = dictionaries.stream().flatMap(dict -> doPredictiveLookup(dict, stemmed[0]).stream()).collect(Collectors.toList());
+                result = dictionaries.stream()
+                        .flatMap(dict -> doPredictiveLookup(dict, stemmed[0]).stream())
+                        .collect(Collectors.toList());
             }
         }
         return result;
