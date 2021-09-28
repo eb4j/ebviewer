@@ -71,14 +71,14 @@ class PdicInfo {
     /**
      * byte配列の本文文字列をCharBufferに変換する.
      */
-    static public CharBuffer decodetoCharBuffer(Charset cs, byte[] array, int pos, int len) {
+    static CharBuffer decodetoCharBuffer(final Charset cs, final byte[] array, final int pos, final int len) {
         return cs.decode(ByteBuffer.wrap(array, pos, len));
     }
 
     /**
      * 本文の文字列をByteBufferに変換する.
      */
-    static protected ByteBuffer encodetoByteBuffer(Charset cs, String str) {
+    static ByteBuffer encodetoByteBuffer(final Charset cs, final String str) {
         return cs.encode(str);
     }
 
@@ -128,7 +128,7 @@ class PdicInfo {
      *
      * @return true when successfully read block, otherwise false.
      */
-    public boolean readIndexBlock(String indexcache) {
+    public boolean readIndexBlock(final String indexcache) {
         if (mSrcStream != null) {
             m_bodyptr = m_start + m_size; // 本体位置=( index開始位置＋インデックスのサイズ)
             if (indexcache != null) {
@@ -137,7 +137,8 @@ class PdicInfo {
                     int readlen = fis.read(buff);
                     if (readlen == buff.length) {
                         final int indexlen = m_nindex;
-                        final int[] indexptr = mIndexPtr = new int[m_nindex + 1];
+                        final int[] indexptr = new int[m_nindex + 1];
+                        mIndexPtr = indexptr;
                         int ptr = 0;
                         for (int i = 0; i <= indexlen; i++) {
                             int b;
@@ -164,7 +165,8 @@ class PdicInfo {
 
             // インデックスの先頭から見出し語のポインタを拾っていく
             final int nindex = m_nindex;
-            final int[] indexPtr = mIndexPtr = new int[nindex + 1]; // インデックスポインタの配列確保
+            final int[] indexPtr =  new int[nindex + 1]; // インデックスポインタの配列確保
+            mIndexPtr = indexPtr;
             if (mPdicInfoCache.createIndex(m_blockbits, nindex, indexPtr)) {
                 byte[] buff = new byte[indexPtr.length * 4];
                 int p = 0;
@@ -194,7 +196,7 @@ class PdicInfo {
     /**
      * num個目の見出し語の実体が入っているブロック番号を返す.
      */
-    public int getBlockNo(int num) {
+    public int getBlockNo(final int num) {
         int blkptr = mIndexPtr[num] - m_blockbits;
         mLastIndex = num;
         if (m_blockbits == 4) {
@@ -211,7 +213,7 @@ class PdicInfo {
      * @param pos start position
      * @return length of index.
      */
-    static protected int getLengthToNextZero(final byte[] array, final int pos) {
+    static int getLengthToNextZero(final byte[] array, final int pos) {
         return ArrayUtils.indexOf(array, (byte) 0, pos) - pos;
         // int len = 0;
         // while (array[pos + len] != 0)
@@ -231,11 +233,11 @@ class PdicInfo {
         return m_searchmax;
     }
 
-    public void setSearchMax(int m) {
+    public void setSearchMax(final int m) {
         m_searchmax = m;
     }
 
-    public void setDicName(String b) {
+    public void setDicName(final String b) {
         m_dicname = b;
     }
 
@@ -244,7 +246,7 @@ class PdicInfo {
     }
 
     // 単語を検索する
-    public boolean searchWord(String _word) {
+    public boolean searchWord(final String _word) {
         // 検索結果クリア
         int cnt = 0;
         mSearchResult.clear();
@@ -418,7 +420,7 @@ class PdicInfo {
         public AnalyzeBlock() {
         }
 
-        public void setBuffer(byte[] buff) {
+        public void setBuffer(final byte[] buff) {
             mBuff = buff;
             mLongfield = ((buff[1] & 0x80) != 0);
             ByteBuffer mBB = ByteBuffer.wrap(buff);
@@ -428,7 +430,7 @@ class PdicInfo {
             mCompLen = 0;
         }
 
-        public void setSearch(String word) {
+        public void setSearch(final String word) {
             ByteBuffer __word = encodetoByteBuffer(mMainCharset, word);
             mEncodeCache.put(word, __word);
             mWord = new byte[__word.limit()];
@@ -440,7 +442,7 @@ class PdicInfo {
         }
 
         /**
-         * ブロックデータの中から指定語を探す
+         * ブロックデータの中から指定語を探す.
          */
         public boolean searchWord() {
             final byte[] _word = mWord;
@@ -528,9 +530,9 @@ class PdicInfo {
         }
 
         /**
-         * 最後の検索結果の単語を返す
+         * 最後の検索結果の単語を返す.
          *
-         * @return
+         * @return search result
          */
         PdicElement getRecord() {
             if (mFoundPtr == -1) {
@@ -538,8 +540,7 @@ class PdicInfo {
             }
             final PdicElement res = new PdicElement();
 
-            final byte[] compbuff = mCompbuff;
-            res.mIndex = decodetoCharBuffer(mMainCharset, compbuff, 0, mCompLen).toString();
+            res.mIndex = decodetoCharBuffer(mMainCharset, mCompbuff, 0, mCompLen).toString();
             // ver6対応 見出し語が、<検索インデックス><TAB><表示用文字列>の順に
             // 設定されていてるので、分割する。
             // それ以前のverではdispに空文字列を保持させる。

@@ -73,7 +73,7 @@ public class PdicDictionary implements IDictionary {
         List<DictionaryEntry> lists = new ArrayList<>();
         if (dicInfo.searchWord(word.toLowerCase())) {
             PdicResult result = dicInfo.getResult();
-            for (int i = 0; i < result.getCount(); i ++) {
+            for (int i = 0; i < result.getCount(); i++) {
                 String disp = result.getDisp(i);
                 if (disp.equals("")) {
                     disp = result.getIndex(i);

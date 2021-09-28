@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
  * @author wak (Apache-2.0)
  * @author Hiroshi Miura
  */
-@SuppressWarnings("visibilitymodifier")
+@SuppressWarnings({"visibilitymodifier", "membername"})
 final class PdicHeader {
     private static final int L_HEADERNAME = 100;    //   ヘッダー部文字列長
     private static final int L_DICTITLE = 40;        //   辞書タイトル名長
@@ -42,14 +42,14 @@ final class PdicHeader {
     /**
      * コンストラクタ.
      */
-    public PdicHeader() {
+    PdicHeader() {
     }
 
     /**
      * @param header_block ヘッダーデータ部分
      * @return 辞書バージョン
      */
-    public int load(ByteBuffer header_block) throws RuntimeException {
+    public int load(final ByteBuffer header_block) throws RuntimeException {
         int ret = 0;
         // Charset sjisset = Charset.forName("X-SJIS");
 
