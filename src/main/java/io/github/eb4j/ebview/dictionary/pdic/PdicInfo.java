@@ -241,7 +241,7 @@ class PdicInfo {
     public boolean searchWord(String _word) {
         // 検索結果クリア
         int cnt = 0;
-        mSearchResult.removeAll(mSearchResult);
+        mSearchResult.clear();
 
         int ret = searchIndexBlock(_word);
 
@@ -318,7 +318,7 @@ class PdicInfo {
     }
 
     public PdicResult getMoreResult() {
-        mSearchResult.removeAll(mSearchResult);
+        mSearchResult.clear();
         if (mAnalyze != null) {
             int cnt = 0;
             // 前方一致するものだけ結果に入れる
@@ -559,8 +559,9 @@ class PdicInfo {
             int qtr = ptr;
 
             // 圧縮長
-            int complen = buff[qtr++];
-            complen &= 0xFF;
+            // int complen = buff[qtr++];
+            // complen &= 0xFF;
+            qtr++;
 
             // 見出し語属性 skip
             attr = buff[qtr++];
