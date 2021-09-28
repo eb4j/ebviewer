@@ -18,7 +18,7 @@ public class PDic implements IDictionaryFactory {
      * @return Whether or not the file is supported
      */
     @Override
-    public boolean isSupportedFile(File file) {
+    public boolean isSupportedFile(final File file) {
         return file.getPath().endsWith(".DIC") || file.getPath().endsWith(".dic");
     }
 
@@ -29,7 +29,7 @@ public class PDic implements IDictionaryFactory {
      * @return An IDictionary file that can read articles from the file
      */
     @Override
-    public Set<IDictionary> loadDict(File file) {
+    public Set<IDictionary> loadDict(final File file) {
         Set<IDictionary> result = new HashSet<>();
         try {
             IDictionary dictionary = new PdicDictionary(file);
