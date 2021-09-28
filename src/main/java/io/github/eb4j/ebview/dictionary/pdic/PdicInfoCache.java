@@ -20,7 +20,7 @@ class PdicInfoCache {
     private byte[] mFixedBuffer;
     private byte[] mSegmentData = null;
 
-    public PdicInfoCache(final RandomAccessFile file, final int start, final int size) {
+    PdicInfoCache(final RandomAccessFile file, final int start, final int size) {
         mFile = file;
         mStart = start;
         mSize = size;
@@ -101,9 +101,9 @@ class PdicInfoCache {
 
             if (address >= mBlockSize) {
                 address %= mBlockSize;
-                segmentdata = getSegment(segment++);
+                segmentdata = getSegment(segment);
             }
-            b = segmentdata[address++];
+            b = segmentdata[address];
             b &= 0xFF;
             dat |= (b << 8);
         }
@@ -137,9 +137,9 @@ class PdicInfoCache {
             dat |= (b << 16);
             if (address >= mBlockSize) {
                 address %= mBlockSize;
-                segmentdata = getSegment(segment++);
+                segmentdata = getSegment(segment);
             }
-            b = segmentdata[address++];
+            b = segmentdata[address];
             b &= 0x7F;
             dat |= (b << 24);
         }
@@ -161,7 +161,7 @@ class PdicInfoCache {
             }
         }
         if (lb > 0) {
-            short sb = ab[pb++];
+            short sb = ab[pb];
             if (sb == 0x09) {        // 比較対象の'\t'は'\0'とみなす
                 return 0;
             }
@@ -170,12 +170,14 @@ class PdicInfoCache {
         return 0;
     }
 
-    public int compare(byte[] aa, int pa, int la, int ptr, int len) {
+    public int compare(final byte[] aa, final int pa, final int la, final int ptr, final int len) {
         int segment = ptr / mBlockSize;
         int address = ptr % mBlockSize;
         byte[] segmentdata = getSegment(segment++);
 
-        if (segmentdata == null) return -1;
+        if (segmentdata == null) {
+            return -1;
+        }
 
         if (len < 0) {
             return 1;
@@ -186,10 +188,7 @@ class PdicInfoCache {
             return compareArrayAsUnsigned(aa, pa, la, segmentdata, address, len);
         } else {
             int lena = mBlockSize - address;
-            int leno = la;
-            if (la >= lena) {
-                leno = lena;
-            }
+            int leno = Math.min(la, lena);
             int ret = compareArrayAsUnsigned(aa, pa, leno, segmentdata, address, lena);
             PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, lena);
             if (ret != 0) {
@@ -199,21 +198,30 @@ class PdicInfoCache {
                 return -1;
             }
             address = 0;
-            segmentdata = getSegment(segment++);
+            segmentdata = getSegment(segment);
             PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, len - lena);
             return compareArrayAsUnsigned(aa, pa + lena, la - lena, segmentdata, address, len - lena);
         }
     }
 
 
-    public boolean createIndex(int blockbits, int nindex, int[] indexPtr) {
+    /**
+     * Create index of words.
+     * @param blockbits
+     * @param nindex
+     * @param indexPtr
+     * @return true when success, otherwise false.
+     */
+    public boolean createIndex(final int blockbits, final int nindex, final int[] indexPtr) {
         // インデックスの先頭から見出し語のポインタを拾っていく
         int blocksize = 64 * 1024;
         int[] params = new int[]{0, 0, nindex, blocksize, blockbits, 1, 0};
 
-        int segment = 0;
         mSegmentData = null;
-        while (countIndexWords(params, getSegment(segment++), indexPtr)) ;
+        boolean hasNext = true;
+        for (int i = 0; hasNext; i++) {
+            hasNext = countIndexWords(params, getSegment(i), indexPtr);
+        }
         indexPtr[params[0]] = params[1] + blockbits; // ターミネータを入れておく
         return true;
     }

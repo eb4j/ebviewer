@@ -17,7 +17,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.WeakHashMap;
 
-
+@SuppressWarnings("membername")
 class PdicInfo {
     protected File m_file;
     protected int m_bodyptr;
@@ -44,7 +44,8 @@ class PdicInfo {
 
     private RandomAccessFile mSrcStream = null;
 
-    public PdicInfo(File file, int start, int size, int nindex, boolean blockbits, int blocksize) {
+    PdicInfo(final File file, final int start, final int size, final int nindex, final boolean blockbits,
+             final int blocksize) {
         m_file = file;
         m_start = start;
         m_size = size;
@@ -121,6 +122,7 @@ class PdicInfo {
 
     /**
      * Read index blocks.
+     *
      * @return true when successfully read block, otherwise false.
      */
     public boolean readIndexBlock(String indexcache) {
@@ -487,7 +489,7 @@ class PdicInfo {
                 qtr++;
 
                 // 見出し語圧縮位置保存
-                while ((compbuff[complen++] = buff[qtr++]) != 0);
+                while ((compbuff[complen++] = buff[qtr++]) != 0) ;
 
                 // 見出し語の方が短ければ不一致
                 if (complen < wordlen) {
@@ -570,8 +572,9 @@ class PdicInfo {
             // 見出し語属性 skip
             attr = buff[qtr++];
 
-            // 見出し語 skip
-            while (buff[qtr++] != 0);
+            while (buff[qtr++] != 0) {
+                // 見出し語 skip
+            }
 
             // 訳語
             if ((attr & 0x10) != 0) { // 拡張属性ありの時
@@ -658,7 +661,7 @@ class PdicInfo {
             qtr++;
 
             // 見出し語圧縮位置保存
-            while ((compbuff[complen++] = buff[qtr++]) != 0);
+            while ((compbuff[complen++] = buff[qtr++]) != 0) ;
 
             // 見出し語の方が短ければ不一致
             if (complen < wordlen) {

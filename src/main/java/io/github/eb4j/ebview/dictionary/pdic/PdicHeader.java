@@ -5,8 +5,8 @@ package io.github.eb4j.ebview.dictionary.pdic;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 
+@SuppressWarnings("visibilitymodifier")
 final class PdicHeader {
     private final static int L_HEADERNAME = 100;    //   ヘッダー部文字列長
     private final static int L_DICTITLE = 40;        //   辞書タイトル名長
