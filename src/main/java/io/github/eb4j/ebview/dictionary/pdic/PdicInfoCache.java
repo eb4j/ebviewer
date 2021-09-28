@@ -179,7 +179,7 @@ class PdicInfoCache {
         }
 
         if (address + len < mBlockSize) {
-            String test = PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, len).toString();
+            PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, len);
             return compareArrayAsUnsigned(aa, pa, la, segmentdata, address, len);
         } else {
             int lena = mBlockSize - address;
@@ -188,7 +188,7 @@ class PdicInfoCache {
                 leno = lena;
             }
             int ret = compareArrayAsUnsigned(aa, pa, leno, segmentdata, address, lena);
-            String test = PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, lena).toString();
+            PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, lena);
             if (ret != 0) {
                 return ret;
             }
@@ -197,7 +197,7 @@ class PdicInfoCache {
             }
             address = 0;
             segmentdata = getSegment(segment++);
-            test = PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, len - lena).toString();
+            PdicInfo.decodetoCharBuffer(CharsetICU.forNameICU("BOCU-1"), segmentdata, address, len - lena);
             return compareArrayAsUnsigned(aa, pa + lena, la - lena, segmentdata, address, len - lena);
         }
     }

@@ -29,7 +29,6 @@ class PdicInfo {
     protected int m_nindex;
     protected int m_blocksize;
     protected boolean m_match;
-    protected int m_cachesize; // キャッシュサイズ
     protected int m_searchmax; // 最大検索件数
     protected String m_dicname; // 辞書名
 
@@ -52,7 +51,6 @@ class PdicInfo {
         m_nindex = nindex;
         m_blockbits = (blockbits) ? 4 : 2;
         m_blocksize = blocksize;
-		m_cachesize = 10;
         m_searchmax = 10;
 
         mSearchResult = new PdicResult();
