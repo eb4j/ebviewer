@@ -18,7 +18,6 @@ class PdicInfoCache {
     private final int mSize;
     private final WeakHashMap<Integer, WeakReference<byte[]>> mMap = new WeakHashMap<>();
     private byte[] mFixedBuffer;
-    private byte[] mSegmentData = null;
 
     PdicInfoCache(final RandomAccessFile file, final int start, final int size) {
         mFile = file;
@@ -212,7 +211,6 @@ class PdicInfoCache {
         int blocksize = 64 * 1024;
         int[] params = new int[]{0, 0, nindex, blocksize, blockbits, 1, 0};
 
-        mSegmentData = null;
         boolean hasNext = true;
         for (int i = 0; hasNext; i++) {
             hasNext = countIndexWords(params, getSegment(i), indexPtr);
