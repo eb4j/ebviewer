@@ -337,7 +337,7 @@ class PdicInfo {
         return mSearchResult;
     }
 
-    public boolean hasMoreResult(boolean incrementptr) {
+    public boolean hasMoreResult(final boolean incrementptr) {
         boolean result = mAnalyze.hasMoreResult(incrementptr);
         if (!result) {
             if (mAnalyze.isEob()) {    // EOBなら次のブロック読み出し
@@ -365,7 +365,7 @@ class PdicInfo {
      * @param blkno
      * @return 読み込まれたデータブロック
      */
-    byte[] readBlockData(int blkno) {
+    byte[] readBlockData(final int blkno) {
         byte[] buff = new byte[0x200];
         byte[] pbuf = buff;
         try {
@@ -410,7 +410,6 @@ class PdicInfo {
         private int mNextPtr = -1;
         private final byte[] mCompbuff = new byte[1024];
         private int mCompLen = 0;
-        private ByteBuffer mBB;
         private boolean mEob = false;
 
         public AnalyzeBlock() {
@@ -419,7 +418,7 @@ class PdicInfo {
         public void setBuffer(byte[] buff) {
             mBuff = buff;
             mLongfield = ((buff[1] & 0x80) != 0);
-            mBB = ByteBuffer.wrap(buff);
+            ByteBuffer mBB = ByteBuffer.wrap(buff);
             mBB.order(ByteOrder.LITTLE_ENDIAN);
             mNextPtr = 2;
             mEob = false;
