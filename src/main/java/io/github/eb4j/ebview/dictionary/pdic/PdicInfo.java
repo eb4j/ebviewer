@@ -44,6 +44,7 @@ class PdicInfo {
 
     private RandomAccessFile mSrcStream = null;
 
+    @SuppressWarnings("avoidinlineconditionals")
     PdicInfo(final File file, final int start, final int size, final int nindex, final boolean blockbits,
              final int blocksize) {
         m_file = file;
@@ -608,7 +609,7 @@ class PdicInfo {
         }
 
         // 次の項目が検索語に前方一致するかチェックする
-        public boolean hasMoreResult(boolean incrementptr) {
+        public boolean hasMoreResult(final boolean incrementptr) {
             byte[] _word;
             final byte[] buff = mBuff;
             final boolean longfield = mLongfield;
@@ -654,7 +655,7 @@ class PdicInfo {
             ptr++;
 
             // 圧縮長
-            int complen = (int) buff[qtr++];
+            int complen = buff[qtr++];
             complen &= 0xFF;
 
             // 見出し語属性 skip

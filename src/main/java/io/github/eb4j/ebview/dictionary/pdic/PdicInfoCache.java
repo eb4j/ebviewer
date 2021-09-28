@@ -33,23 +33,7 @@ class PdicInfoCache {
         }
     }
 
-    byte[] getSegmentWithoutCache(int segment, int blocksize) {
-        if (mSegmentData == null) {
-            mSegmentData = new byte[blocksize];
-        }
-        try {
-            mFile.seek(mStart + (long) segment * blocksize);
-            if (mFile.read(mSegmentData, 0, blocksize) < 0) {
-                return null;
-            }
-        } catch (IOException e) {
-            return null;
-        }
-        return mSegmentData;
-    }
-
-
-    byte[] getSegment(int segment) {
+    byte[] getSegment(final int segment) {
         byte[] segmentdata = null;
 
         if (mFix) {
@@ -87,7 +71,7 @@ class PdicInfoCache {
     }
 
 
-    public int getShort(int ptr) {
+    public int getShort(final int ptr) {
         int segment = ptr / mBlockSize;
         int address = ptr % mBlockSize;
         byte[] segmentdata = getSegment(segment++);
@@ -110,7 +94,7 @@ class PdicInfoCache {
         return dat;
     }
 
-    public int getInt(int ptr) {
+    public int getInt(final int ptr) {
         int segment = ptr / mBlockSize;
         int address = ptr % mBlockSize;
         byte[] segmentdata = getSegment(segment++);
@@ -146,6 +130,7 @@ class PdicInfoCache {
         return dat;
     }
 
+    @SuppressWarnings("finalparameters")
     private static int compareArrayAsUnsigned(byte[] aa, int pa, int la, byte[] ab, int pb, int lb) {
         while (la-- > 0) {
             short sa = aa[pa++];
@@ -170,6 +155,16 @@ class PdicInfoCache {
         return 0;
     }
 
+    /**
+     *
+     * @param aa
+     * @param pa
+     * @param la
+     * @param ptr
+     * @param len
+     * @return
+     */
+    @SuppressWarnings("finalparameters")
     public int compare(final byte[] aa, final int pa, final int la, final int ptr, final int len) {
         int segment = ptr / mBlockSize;
         int address = ptr % mBlockSize;
@@ -226,7 +221,7 @@ class PdicInfoCache {
         return true;
     }
 
-    private boolean countIndexWords(int[] params, byte[] buff, int[] indexPtr) {
+    private boolean countIndexWords(final int[] params, final byte[] buff, final int[] indexPtr) {
         int curidx = params[0];
         int curptr = params[1];
         int max = params[2];

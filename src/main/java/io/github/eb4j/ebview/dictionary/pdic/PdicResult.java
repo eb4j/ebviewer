@@ -13,27 +13,27 @@ final class PdicResult extends ArrayList<PdicElement> {
         return size();
     }
 
-    public String getIndex(int idx) {
+    public String getIndex(final int idx) {
         return get(idx).mIndex;
     }
 
-    public String getDisp(int idx) {
+    public String getDisp(final int idx) {
         return get(idx).mDisp;
     }
 
-    public byte getAttr(int idx) {
+    public byte getAttr(final int idx) {
         return get(idx).mAttr;
     }
 
-    public String getTrans(int idx) {
+    public String getTrans(final int idx) {
         return get(idx).mTrans;
     }
 
-    public String getPhone(int idx) {
+    public String getPhone(final int idx) {
         return get(idx).mPhone;
     }
 
-    public String getSample(int idx) {
+    public String getSample(final int idx) {
         return get(idx).mSample;
     }
 

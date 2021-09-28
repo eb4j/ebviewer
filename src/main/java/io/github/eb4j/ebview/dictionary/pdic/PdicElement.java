@@ -3,6 +3,7 @@
  */
 package io.github.eb4j.ebview.dictionary.pdic;
 
+@SuppressWarnings("visibilitymodifier")
 final class PdicElement {
     public byte mAttr = 0;
     public String mIndex = null;
@@ -11,7 +12,7 @@ final class PdicElement {
     public String mSample = null;
     public String mPhone = null;
 
-    public PdicElement() {
+    PdicElement() {
     }
 
 }

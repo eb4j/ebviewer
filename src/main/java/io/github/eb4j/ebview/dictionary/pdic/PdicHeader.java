@@ -8,8 +8,8 @@ import java.nio.ByteOrder;
 
 @SuppressWarnings("visibilitymodifier")
 final class PdicHeader {
-    private final static int L_HEADERNAME = 100;    //   ヘッダー部文字列長
-    private final static int L_DICTITLE = 40;        //   辞書タイトル名長
+    private static final int L_HEADERNAME = 100;    //   ヘッダー部文字列長
+    private static final int L_DICTITLE = 40;        //   辞書タイトル名長
 
     // public String headername; //   辞書ヘッダータイトル
     // public String dictitle;   //   辞書名
