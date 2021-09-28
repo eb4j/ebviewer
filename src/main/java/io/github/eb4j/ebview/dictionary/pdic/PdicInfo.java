@@ -1,9 +1,7 @@
-/**
- * Copyright (C) 2014 wak (Apache-2.0)
- */
 package io.github.eb4j.ebview.dictionary.pdic;
 
 import com.ibm.icu.charset.CharsetICU;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +15,10 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.WeakHashMap;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 @SuppressWarnings("membername")
 class PdicInfo {
     protected File m_file;
@@ -203,17 +205,18 @@ class PdicInfo {
     }
 
     /**
-     * 次の０までの長さを返す
+     * 次の０までの長さを返す.
      *
-     * @param array
-     * @param pos
-     * @return
+     * @param array target byte array
+     * @param pos start position
+     * @return length of index.
      */
-    static protected int getLengthToNextZero(byte[] array, int pos) {
-        int len = 0;
-        while (array[pos + len] != 0)
-            len++;
-        return len;
+    static protected int getLengthToNextZero(final byte[] array, final int pos) {
+        return ArrayUtils.indexOf(array, (byte) 0, pos) - pos;
+        // int len = 0;
+        // while (array[pos + len] != 0)
+        //     len++;
+        // return len;
     }
 
     boolean IsMatch() {
@@ -251,7 +254,7 @@ class PdicInfo {
         boolean match = false;
 
         boolean searchret = false;
-        for (; ; ) {
+        while (true) {
             // 最終ブロックは超えない
             if (ret < m_nindex) {
                 // 該当ブロック読み出し

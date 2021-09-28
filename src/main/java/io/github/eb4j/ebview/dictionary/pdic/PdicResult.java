@@ -1,10 +1,11 @@
-/**
- * Copyright (C) 2014 wak (Apache-2.0)
- */
 package io.github.eb4j.ebview.dictionary.pdic;
 
 import java.util.ArrayList;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 final class PdicResult extends ArrayList<PdicElement> {
 
     private static final long serialVersionUID = -7784622190169021306L;

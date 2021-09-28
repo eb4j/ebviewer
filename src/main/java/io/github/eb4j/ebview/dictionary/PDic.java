@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Hiroshi Miura
+ */
 public class PDic implements IDictionaryFactory {
     /**
      * Determine whether or not the supplied file is supported by this factory.

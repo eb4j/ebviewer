@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2014 wak (Apache-2.0)
- */
 package io.github.eb4j.ebview.dictionary.pdic;
 
 import com.ibm.icu.charset.CharsetICU;
@@ -10,6 +7,10 @@ import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 class PdicInfoCache {
     private final boolean mFix;
     private final int mBlockSize;

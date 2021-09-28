@@ -1,11 +1,12 @@
-/**
- * Copyright (C) 2014 wak (Apache-2.0)
- */
 package io.github.eb4j.ebview.dictionary.pdic;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 @SuppressWarnings("visibilitymodifier")
 final class PdicHeader {
     private static final int L_HEADERNAME = 100;    //   ヘッダー部文字列長

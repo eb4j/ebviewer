@@ -13,6 +13,10 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 public class PdicDictionary implements IDictionary {
 
     static final Logger LOG = LoggerFactory.getLogger(PdicDictionary.class.getName());
@@ -65,7 +69,7 @@ public class PdicDictionary implements IDictionary {
      * @return List of entries. May be empty, but cannot be null.
      */
     @Override
-    public List<DictionaryEntry> readArticles(String word) {
+    public List<DictionaryEntry> readArticles(final String word) {
         List<DictionaryEntry> lists = new ArrayList<>();
         if (dicInfo.searchWord(word.toLowerCase())) {
             PdicResult result = dicInfo.getResult();
@@ -98,7 +102,7 @@ public class PdicDictionary implements IDictionary {
      * @return List of entries. May be empty, but cannot be null.
      */
     @Override
-    public List<DictionaryEntry> readArticlesPredictive(String word) {
+    public List<DictionaryEntry> readArticlesPredictive(final String word) {
         return readArticles(word);
     }
 
@@ -106,6 +110,6 @@ public class PdicDictionary implements IDictionary {
      * Dispose IDictionary. Default is no action.
      */
     @Override
-    public void close() throws IOException {
+    public void close() {
     }
 }

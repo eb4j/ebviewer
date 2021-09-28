@@ -1,8 +1,9 @@
-/**
- * Copyright (C) 2014 wak (Apache-2.0)
- */
 package io.github.eb4j.ebview.dictionary.pdic;
 
+/**
+ * @author wak (Apache-2.0)
+ * @author Hiroshi Miura
+ */
 @SuppressWarnings("visibilitymodifier")
 final class PdicElement {
     public byte mAttr = 0;
