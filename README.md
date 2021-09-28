@@ -8,7 +8,7 @@ Very simple dictionary search application supporting;
 - LingvoDSL dz compression (.dsl.dz)
 - StarDict (.ifo .dict)
 - StarDict (.dict.dz)
-- PDIC
+- PDIC/Unicode (PDIC format v6.00, 6.10) (.DIC)
 
 ![Application image](https://raw.githubusercontent.com/eb4j/ebviewer/main/docs/img/screen_image.png)
 
