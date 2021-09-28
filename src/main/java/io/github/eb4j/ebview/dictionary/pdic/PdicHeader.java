@@ -21,22 +21,22 @@ final class PdicHeader {
     public short header_size;     //   ヘッダーのバイト数
     // public short index_size;  //  ( ) インデックスのバイト数 未使用
 
-    public short nindex;       //  ( ) インデックスの要素の数 未使用
-    public short nblock;       //  ( ) 使用データブロック数 未使用
-    public int nword;    //   登録単語数
+    // public short nindex;       //  ( ) インデックスの要素の数 未使用
+    // public short nblock;       //  ( ) 使用データブロック数 未使用
+    // public int nword;    //   登録単語数
 
-    public byte dicorder;      //   辞書の順番
-    public byte dictype;       //   辞書の種別
+    // public byte dicorder;      //   辞書の順番
+    // public byte dictype;       //   辞書の種別
 
     public byte attrlen;       //   単語属性の長さ
     public byte os;          // OS
     public boolean index_blkbit;   // false:16bit, true:32bit
     public int extheader;      //   拡張ヘッダーサイズ
     public int nindex2;       //   インデックス要素の数
-    public int nblock2;       //   使用データブロック数
+    // public int nblock2;       //   使用データブロック数
 
-    public int update_count;    //   辞書更新回数
-    public String dicident;      //   辞書識別子
+    // public int update_count;    //   辞書更新回数
+    // public String dicident;      //   辞書識別子
 
     /**
      * コンストラクタ.
@@ -95,7 +95,7 @@ final class PdicHeader {
             extheader = header_block.getInt();
             header_block.getInt();  //empty_block2
             nindex2 = header_block.getInt();
-            nblock2 = header_block.getInt();
+            header_block.getInt();  // nblock2
 
             // 固定部分チェック
             if (attrlen == 1) {

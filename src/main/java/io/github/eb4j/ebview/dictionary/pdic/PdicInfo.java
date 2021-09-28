@@ -107,7 +107,7 @@ class PdicInfo {
             if ((max - min) <= 1) {
                 return min;
             }
-            final int look = (min + max) / 2;
+            final int look = (int) (((long) min + max) / 2);
             final int len = indexPtr[look + 1] - indexPtr[look] - blockbits;
             final int comp = pdicInfoCache.compare(_word, 0, _wordlen, indexPtr[look], len);
             if (comp < 0) {
