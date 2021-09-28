@@ -39,7 +39,9 @@ class PdicInfoCache {
         }
         try {
             mFile.seek(mStart + (long) segment * blocksize);
-            mFile.read(mSegmentData, 0, blocksize);
+            if (mFile.read(mSegmentData, 0, blocksize) < 0) {
+                return null;
+            }
         } catch (IOException e) {
             return null;
         }
@@ -55,11 +57,12 @@ class PdicInfoCache {
                 mFixedBuffer = new byte[mSize];
                 try {
                     mFile.seek(mStart);
-                    mFile.read(mFixedBuffer, 0, mSize);
+                    if (mFile.read(mFixedBuffer, 0, mSize) >= 0) {
+                        return mFixedBuffer;
+                    }
                 } catch (IOException ignored) {
                 }
             }
-            return mFixedBuffer;
         }
 
         WeakReference<byte[]> ref = mMap.get(segment);

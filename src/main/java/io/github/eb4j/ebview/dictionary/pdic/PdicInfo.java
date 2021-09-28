@@ -369,7 +369,9 @@ class PdicInfo {
             mSrcStream.seek(m_bodyptr + (long) blkno * m_blocksize);
 
             // 1ブロック分読込(１セクタ分先読み)
-            mSrcStream.read(pbuf, 0, 0x200);
+            if (mSrcStream.read(pbuf, 0, 0x200) < 0) {
+                return null;
+            }
 
             // 長さ取得
             int len = ((int) (pbuf[0])) & 0xFF;
@@ -384,7 +386,9 @@ class PdicInfo {
                 if (len * m_blocksize > 0x200) {
                     pbuf = new byte[m_blocksize * len];
                     System.arraycopy(buff, 0, pbuf, 0, 0x200);
-                    mSrcStream.read(pbuf, 0x200, len * m_blocksize - 0x200);
+                    if (mSrcStream.read(pbuf, 0x200, len * m_blocksize - 0x200) < 0) {
+                        return null;
+                    }
                 }
             } else {
                 pbuf = null;
