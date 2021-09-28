@@ -69,14 +69,14 @@ class PdicInfo {
     }
 
     /**
-     * byte配列の本文文字列をCharBufferに変換する
+     * byte配列の本文文字列をCharBufferに変換する.
      */
     static public CharBuffer decodetoCharBuffer(Charset cs, byte[] array, int pos, int len) {
         return cs.decode(ByteBuffer.wrap(array, pos, len));
     }
 
     /**
-     * 本文の文字列をByteBufferに変換する
+     * 本文の文字列をByteBufferに変換する.
      */
     static protected ByteBuffer encodetoByteBuffer(Charset cs, String str) {
         return cs.encode(str);
@@ -219,27 +219,27 @@ class PdicInfo {
         // return len;
     }
 
-    boolean IsMatch() {
+    boolean isMatch() {
         return m_match;
     }
 
-    public String GetFilename() {
+    public String getFilename() {
         return m_file.getName();
     }
 
-    public int GetSearchMax() {
+    public int getSearchMax() {
         return m_searchmax;
     }
 
-    public void SetSearchMax(int m) {
+    public void setSearchMax(int m) {
         m_searchmax = m;
     }
 
-    public void SetDicName(String b) {
+    public void setDicName(String b) {
         m_dicname = b;
     }
 
-    public String GetDicName() {
+    public String getDicName() {
         return m_dicname;
     }
 

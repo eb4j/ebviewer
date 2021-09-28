@@ -51,7 +51,7 @@ public class PdicDictionary implements IDictionary {
                         LOG.warn("Failed to load dictionary index of " + srcFile.getName());
                         throw new RuntimeException();
                     }
-                    dicInfo.SetDicName(file.getName());
+                    dicInfo.setDicName(file.getName());
                 }
             }
         }
@@ -59,7 +59,7 @@ public class PdicDictionary implements IDictionary {
 
     @Override
     public String getDictionaryName() {
-        return dicInfo.GetDicName();
+        return dicInfo.getDicName();
     }
 
     /**
