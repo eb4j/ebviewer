@@ -12,7 +12,7 @@ final class PdicHeader {
     private final static int L_DICTITLE = 40;        //   辞書タイトル名長
 
     public String headername; //   辞書ヘッダータイトル
-    public String dictitle;   //   辞書名
+    // public String dictitle;   //   辞書名
     public short version;      //   辞書のバージョン
     public short lword;        //   見出語の最大長
     public short ljapa;        //   訳語の最大長
@@ -70,7 +70,7 @@ final class PdicHeader {
         headername = sjisset.decode(ByteBuffer.wrap(headernamebuff))
                 .toString();
         header_block.get(dictitlebuff);
-        dictitle = sjisset.decode(ByteBuffer.wrap(dictitlebuff)).toString();
+        // dictitle = sjisset.decode(ByteBuffer.wrap(dictitlebuff)).toString();
         version = header_block.getShort();
         if ((version & 0xFF00) == 0x0500 || (version & 0xFF00) == 0x0600) {
             lword = header_block.getShort();
@@ -107,44 +107,6 @@ final class PdicHeader {
 
             // 固定部分チェック
             if (attrlen == 1) {
-                ret = version >> 8;
-            }
-        } else if ((version & 0xFF00) == 0x0400) {
-
-            lword = header_block.getShort();
-            ljapa = header_block.getShort();
-
-            block_size = header_block.getShort();
-            index_block = header_block.getShort();
-            header_size = header_block.getShort();
-            index_size = header_block.getShort();
-            empty_block = header_block.getShort();
-            nindex = header_block.getShort();
-            nblock = header_block.getShort();
-
-            nword = header_block.getInt();
-
-            dicorder = header_block.get();
-            dictype = header_block.get();
-            attrlen = header_block.get();
-
-            olenumber = header_block.getInt();
-            os = header_block.get();
-
-            lid_word = header_block.getShort();
-            lid_japa = header_block.getShort();
-            lid_exp = header_block.getShort();
-            lid_pron = header_block.getShort();
-            lid_other = header_block.getShort();
-            extheader = header_block.getInt();
-            empty_block2 = header_block.getInt();
-            nindex2 = header_block.getInt();
-            nblock2 = header_block.getInt();
-            index_blkbit = (header_block.get() != 0);
-            // 固定部分チェック
-            if (block_size == 0x100 &&
-                    header_size == 0x100 &&
-                    attrlen == 1) {
                 ret = version >> 8;
             }
         } else {
