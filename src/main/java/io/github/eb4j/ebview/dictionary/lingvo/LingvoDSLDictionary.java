@@ -46,8 +46,8 @@ public class LingvoDSLDictionary implements IDictionary {
         } else {
             bookName = fileName.substring(0, fileName.length() - 4);
         }
-        readDslFile(file);
         dictionaryDir = file.getParentFile().getAbsolutePath();
+        readDslFile(file);
     }
 
     @SuppressWarnings("avoidinlineconditionals")
@@ -161,29 +161,26 @@ public class LingvoDSLDictionary implements IDictionary {
             reList.add(new RE("\\[lang\\]", ""));
             reList.add(new RE("\\[/lang\\]", ""));
             reList.add(new RE("\\[m\\](.+?)\\[/m\\]", "$1"));
-            reList.add(new RE("\\[m1\\](.+?)\\[/m\\]", "<p style=\"text-indent: 30px\">$1</p>"));
-            reList.add(new RE("\\[m2\\](.+?)\\[/m\\]", "<p style=\"text-indent: 60px\">$1</p>"));
-            reList.add(new RE("\\[m3\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m4\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m5\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m6\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m7\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m8\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
-            reList.add(new RE("\\[m9\\](.+?)\\[/m\\]", "<p style=\"text-indent: 90px\">$1</p>"));
+            reList.add(new RE("\\[m1\\](.+?)\\[/m\\]", "<div style=\"text-indent: 30px\">$1</div>"));
+            reList.add(new RE("\\[m2\\](.+?)\\[/m\\]", "<div style=\"text-indent: 60px\">$1</div>"));
+            reList.add(new RE("\\[m3\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m4\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m5\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m6\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m7\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m8\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
+            reList.add(new RE("\\[m9\\](.+?)\\[/m\\]", "<div style=\"text-indent: 90px\">$1</div>"));
             reList.add(new RE("\\[p\\]", ""));
             reList.add(new RE("\\[/p\\]", ""));
             reList.add(new RE("\\[preview\\]", ""));
             reList.add(new RE("\\[/preview\\]", ""));
             reList.add(new RE("\\[ref\\]", ""));
             reList.add(new RE("\\[/ref\\]", ""));
-            reList.add(new RE("\\[s\\](.+?\\.wav)\\[/s\\]", "<a href=\"file://@dir@/$1\"/>SOUND: $1</a>"));
+            reList.add(new RE("\\[s\\](.+?\\.wav)\\[/s\\]", "<a href=\"file://@dir@/$1\">SOUND: $1</a>"));
             reList.add(new RE("\\[s\\](.+?\\.jpg)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
-            reList.add(new RE("\\[s\\](.+?\\.bmp)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
-            reList.add(new RE("\\[s\\](.+?\\.tif)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
-            reList.add(new RE("\\[s\\](.+?\\.tiff)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
             reList.add(new RE("\\[s\\](.+?\\.png)\\[/s\\]", "<img src=\"file://@dir@/$1\"/>"));
             reList.add(new RE("\\[video\\](.+?)\\[/video\\]", "<a href=\"file://@dir@/$1\">VIDEO: $1</a>"));
-            reList.add(new RE("\\[s\\](.+?)\\[/s\\]", "UNSUPPORTED MEDIA: $1"));
+            reList.add(new RE("\\[s\\](.+?)\\[/s\\]", "<a href=\"file://@dir@/$1\">MEDIA: $1</a>"));
             reList.add(new RE("\\[sub\\](.+?)\\[/sub\\]", "<sub>$1</sub>"));
             reList.add(new RE("\\[sup\\](.+?)\\[/sup\\]", "<sup>$1</sup>"));
             reList.add(new RE("\\[trn1\\]", ""));
