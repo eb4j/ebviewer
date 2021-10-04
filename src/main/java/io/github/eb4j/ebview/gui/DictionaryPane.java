@@ -1,7 +1,6 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
-import io.github.eb4j.ebview.gui.dialogs.MoviePlay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +9,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
@@ -32,8 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -221,39 +216,4 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
-    public static class LinkActionListener implements HyperlinkListener {
-
-        @Override
-        public void hyperlinkUpdate(final HyperlinkEvent hyperlinkEvent) {
-            if (hyperlinkEvent.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                URL url = hyperlinkEvent.getURL();
-                if (url.getProtocol().equals("file")) {
-                    try {
-                        String path = url.toURI().getPath();
-                        if (path.endsWith(".wav")) {
-                            playSound(new File(path));
-                        } else if (path.endsWith(".mpg")) {
-                            MoviePlay player = new MoviePlay(354, 280);
-                            player.play(path);
-                        }
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-    public static synchronized void playSound(final File file) {
-        new Thread(() -> {
-            try {
-                Clip clip = AudioSystem.getClip();
-                AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-                clip.open(inputStream);
-                clip.start();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        }).start();
-    }
 }
