@@ -10,7 +10,7 @@ plugins {
     application
     distribution
     id("com.github.spotbugs") version "4.7.6"
-    id("com.diffplug.spotless") version "5.15.2"
+    id("com.diffplug.spotless") version "5.16.0"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
     id("com.palantir.git-version") version "0.12.3" apply false
