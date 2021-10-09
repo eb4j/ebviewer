@@ -10,8 +10,8 @@ import java.util.LinkedList;
  * @author Maxym Mykhalchuk
  */
 public class WordIterator extends BreakIterator {
-    BreakIterator breaker;
-    String text;
+    private final BreakIterator breaker;
+    private String text;
 
     public WordIterator() {
         breaker = BreakIterator.getWordInstance();
@@ -24,7 +24,7 @@ public class WordIterator extends BreakIterator {
      * @param newText
      *            new text to scan.
      */
-    public void setText(String newText) {
+    public void setText(final String newText) {
         text = newText;
         breaker.setText(newText);
         nextItems.clear();
@@ -41,8 +41,7 @@ public class WordIterator extends BreakIterator {
     }
 
     /**
-     * Return character index of the text boundary that was most recently
-     * returned by next(), previous(), first(), or last()
+     *  Index of the text boundary that was most recently returned by next(), previous(), first(), or last().
      *
      * @return The boundary most recently returned.
      */
@@ -50,7 +49,7 @@ public class WordIterator extends BreakIterator {
         return breaker.current();
     }
 
-    LinkedList<Integer> nextItems = new LinkedList<>();
+    private final LinkedList<Integer> nextItems = new LinkedList<>();
 
     /**
      * Return the boundary of the word following the current boundary.
@@ -141,7 +140,7 @@ public class WordIterator extends BreakIterator {
      *            later boundaries.
      * @return The index of the nth boundary from the current position.
      */
-    public int next(int n) {
+    public int next(final int n) {
         throw new RuntimeException("Not Implemented");
     }
 
@@ -159,7 +158,7 @@ public class WordIterator extends BreakIterator {
      *            cause an IllegalArgumentException to be thrown.
      * @return The first boundary after the specified offset.
      */
-    public int following(int offset) {
+    public int following(final int offset) {
         throw new RuntimeException("Not Implemented");
     }
 
@@ -173,7 +172,7 @@ public class WordIterator extends BreakIterator {
      * @param newText
      *            new text to scan.
      */
-    public void setText(java.text.CharacterIterator newText) {
+    public void setText(final java.text.CharacterIterator newText) {
         throw new RuntimeException("Not Implemented");
     }
 

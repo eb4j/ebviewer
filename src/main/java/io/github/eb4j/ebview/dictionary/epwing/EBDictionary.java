@@ -20,14 +20,14 @@ import java.util.Set;
 public class EBDictionary {
 
     static final Logger LOG = LoggerFactory.getLogger(EBDictionary.class.getName());
-    static final Set<String> ignoreBookList = new HashSet<>();
+    static final Set<String> IGNORE_BOOK_LIST = new HashSet<>();
     private final List<SubBook> subBooks;
 
     static {
-        ignoreBookList.add("「広辞苑」紹介");
-        ignoreBookList.add("ＥＰＷＩＮＧ電子カタログ");
-        ignoreBookList.add("ＥＰＷＩＮＧ　紹介");
-        ignoreBookList.add("書籍選択");
+        IGNORE_BOOK_LIST.add("「広辞苑」紹介");
+        IGNORE_BOOK_LIST.add("ＥＰＷＩＮＧ電子カタログ");
+        IGNORE_BOOK_LIST.add("ＥＰＷＩＮＧ　紹介");
+        IGNORE_BOOK_LIST.add("書籍選択");
     }
 
     public EBDictionary(final File catalogFile) throws Exception {
@@ -61,7 +61,7 @@ public class EBDictionary {
     public Set<IDictionary> getEBDictionarySubBooks() {
         Set<IDictionary> result = new HashSet<>();
         for (int i = 0, subBooksSize = subBooks.size(); i < subBooksSize; i++) {
-            if (!ignoreBookList.contains(subBooks.get(i).getTitle())) {
+            if (!IGNORE_BOOK_LIST.contains(subBooks.get(i).getTitle())) {
                 result.add(new EBDictionarySubbook(this, i));
             }
         }

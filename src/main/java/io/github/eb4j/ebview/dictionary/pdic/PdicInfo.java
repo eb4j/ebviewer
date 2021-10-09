@@ -91,15 +91,15 @@ class PdicInfo {
         int min = 0;
         int max = m_nindex - 1;
 
-        ByteBuffer __word = mEncodeCache.get(word);
-        if (__word == null) {
-            __word = encodetoByteBuffer(mMainCharset, word);
-            mEncodeCache.put(word, __word);
+        ByteBuffer buffer = mEncodeCache.get(word);
+        if (buffer == null) {
+            buffer = encodetoByteBuffer(mMainCharset, word);
+            mEncodeCache.put(word, buffer);
         }
-        int limit = __word.limit();
-        byte[] _word = new byte[limit];
-        System.arraycopy(__word.array(), 0, _word, 0, limit);
-        int _wordlen = _word.length;
+        int limit = buffer.limit();
+        byte[] bytes = new byte[limit];
+        System.arraycopy(buffer.array(), 0, bytes, 0, limit);
+        int wordlen = bytes.length;
 
         int[] indexPtr = mIndexPtr;
         int blockbits = m_blockbits;
@@ -111,7 +111,7 @@ class PdicInfo {
             }
             final int look = (int) (((long) min + max) / 2);
             final int len = indexPtr[look + 1] - indexPtr[look] - blockbits;
-            final int comp = pdicInfoCache.compare(_word, 0, _wordlen, indexPtr[look], len);
+            final int comp = pdicInfoCache.compare(bytes, 0, wordlen, indexPtr[look], len);
             if (comp < 0) {
                 max = look;
             } else if (comp > 0) {
@@ -246,12 +246,12 @@ class PdicInfo {
     }
 
     // 単語を検索する
-    public boolean searchWord(final String _word) {
+    public boolean searchWord(final String word) {
         // 検索結果クリア
         int cnt = 0;
         mSearchResult.clear();
 
-        int ret = searchIndexBlock(_word);
+        int ret = searchIndexBlock(word);
 
         boolean match = false;
 
@@ -264,7 +264,7 @@ class PdicInfo {
                 byte[] pblk = readBlockData(block);
                 if (pblk != null) {
                     mAnalyze.setBuffer(pblk);
-                    mAnalyze.setSearch(_word);
+                    mAnalyze.setSearch(word);
                     searchret = mAnalyze.searchWord();
                     // 未発見でEOBの時のみもう一回、回る
                     if (!searchret && mAnalyze.mEob) {
@@ -283,7 +283,7 @@ class PdicInfo {
                     break;
                 }
                 // 完全一致するかチェック
-                if (res.mIndex.compareTo(_word) == 0) {
+                if (res.mIndex.compareTo(word) == 0) {
                     match = true;
                 }
                 mSearchResult.add(res);
@@ -296,8 +296,8 @@ class PdicInfo {
     }
 
     // 前方一致する単語の有無を返す
-    boolean searchPrefix(final String _word) {
-        int ret = searchIndexBlock(_word);
+    boolean searchPrefix(final String word) {
+        int ret = searchIndexBlock(word);
 
         for (int blk = 0; blk < 2; blk++) {
             // 最終ブロックは超えない
@@ -311,7 +311,7 @@ class PdicInfo {
 
             if (pblk != null) {
                 mAnalyze.setBuffer(pblk);
-                mAnalyze.setSearch(_word);
+                mAnalyze.setSearch(word);
 
                 if (mAnalyze.searchWord()) {
                     return true;
@@ -417,7 +417,7 @@ class PdicInfo {
         private int mCompLen = 0;
         private boolean mEob = false;
 
-        public AnalyzeBlock() {
+        AnalyzeBlock() {
         }
 
         public void setBuffer(final byte[] buff) {
@@ -431,10 +431,10 @@ class PdicInfo {
         }
 
         public void setSearch(final String word) {
-            ByteBuffer __word = encodetoByteBuffer(mMainCharset, word);
-            mEncodeCache.put(word, __word);
-            mWord = new byte[__word.limit()];
-            System.arraycopy(__word.array(), 0, mWord, 0, __word.limit());
+            ByteBuffer buffer = encodetoByteBuffer(mMainCharset, word);
+            mEncodeCache.put(word, buffer);
+            mWord = new byte[buffer.limit()];
+            System.arraycopy(buffer.array(), 0, mWord, 0, buffer.limit());
         }
 
         public boolean isEob() {
@@ -445,11 +445,11 @@ class PdicInfo {
          * ブロックデータの中から指定語を探す.
          */
         public boolean searchWord() {
-            final byte[] _word = mWord;
+            final byte[] bytes = mWord;
             final byte[] buff = mBuff;
             final boolean longfield = mLongfield;
             final byte[] compbuff = mCompbuff;
-            final int wordlen = _word.length;
+            final int wordlen = bytes.length;
 
             mFoundPtr = -1;
 
@@ -506,11 +506,11 @@ class PdicInfo {
                 boolean equal = true;
                 for (int i = 0; i < wordlen; i++) {
 
-                    if (compbuff[i] != _word[i]) {
+                    if (compbuff[i] != bytes[i]) {
                         equal = false;
                         int cc = compbuff[i];
                         cc &= 0xFF;
-                        int cw = _word[i];
+                        int cw = bytes[i];
                         cw &= 0xFF;
                         // 超えてたら打ち切る
                         if (cc > cw) {
@@ -613,7 +613,7 @@ class PdicInfo {
 
         // 次の項目が検索語に前方一致するかチェックする
         public boolean hasMoreResult(final boolean incrementptr) {
-            byte[] _word;
+            byte[] word;
             final byte[] buff = mBuff;
             final boolean longfield = mLongfield;
             final byte[] compbuff = mCompbuff;
@@ -622,9 +622,9 @@ class PdicInfo {
             if (mFoundPtr == -1) {
                 return false;
             }
-            _word = mWord;
+            word = mWord;
 
-            int wordlen = _word.length;
+            int wordlen = word.length;
 
             // 訳語データ読込
             int ptr = mNextPtr;
@@ -675,11 +675,11 @@ class PdicInfo {
             // 前方一致で比較
             boolean equal = true;
             for (int i = 0; i < wordlen; i++) {
-                if (compbuff[i] != _word[i]) {
+                if (compbuff[i] != word[i]) {
                     equal = false;
                     int cc = compbuff[i];
                     cc &= 0xFF;
-                    int cw = _word[i];
+                    int cw = word[i];
                     cw &= 0xFF;
                     // 超えてたら打ち切る
                     if (cc > cw) {

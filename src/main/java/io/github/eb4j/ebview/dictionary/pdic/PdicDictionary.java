@@ -39,8 +39,8 @@ public class PdicDictionary implements IDictionary {
             if (len == headerSize) {
                 header = new PdicHeader();
                 if (header.load(headerbuff) != 0) {
-                    // Unicode辞書 かつ ver6以上のみ許容
-                    if ((header.version & 0xFF00) < 0x0600 || header.os != 0x20) {
+                    // Unicode辞書 かつ ver5以上のみ許容
+                    if ((header.version & 0xFF00) < 0x0500 || header.os != 0x20) {
                         LOG.warn("Unsupported dictionary version" + srcFile.getName());
                         throw new RuntimeException();
                     }

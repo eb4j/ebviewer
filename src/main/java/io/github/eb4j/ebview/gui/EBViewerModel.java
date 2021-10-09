@@ -11,9 +11,9 @@ import java.util.Set;
 
 public final class EBViewerModel {
 
-    private static final DefaultListModel<String> dictionaryInfoModel = new DefaultListModel<>();
-    private static final DefaultListModel<String> historyModel = new DefaultListModel<>();
-    private static final DefaultListModel<String> headingsModel = new DefaultListModel<>();
+    private static final DefaultListModel<String> DICTIONARY_INFO_MODEL = new DefaultListModel<>();
+    private static final DefaultListModel<String> HISTORY_MODEL = new DefaultListModel<>();
+    private static final DefaultListModel<String> HEADINGS_MODEL = new DefaultListModel<>();
 
     private final Set<String> selectedDicts = new HashSet<>();
     private final List<DictionaryEntry> ourResult = new ArrayList<>();
@@ -22,23 +22,23 @@ public final class EBViewerModel {
     }
 
     DefaultListModel<String> getDictionaryInfoModel() {
-        return dictionaryInfoModel;
+        return DICTIONARY_INFO_MODEL;
     }
 
     DefaultListModel<String> getHeadingsModel() {
-        return headingsModel;
+        return HEADINGS_MODEL;
     }
 
     DefaultListModel<String> getHistoryModel() {
-        return historyModel;
+        return HISTORY_MODEL;
     }
 
     void selectAllDict() {
         selectedDicts.clear();
-        int[] indecs = new int[dictionaryInfoModel.getSize()];
-        for (int i = 0; i < dictionaryInfoModel.getSize(); i++) {
+        int[] indecs = new int[DICTIONARY_INFO_MODEL.getSize()];
+        for (int i = 0; i < DICTIONARY_INFO_MODEL.getSize(); i++) {
             indecs[i] = i;
-            selectedDicts.add(dictionaryInfoModel.get(i));
+            selectedDicts.add(DICTIONARY_INFO_MODEL.get(i));
         }
         MainWindow.updateDictionaryList(indecs);
         updateResult();
@@ -55,25 +55,25 @@ public final class EBViewerModel {
     void selectDicts(final int[] indecs) {
         selectedDicts.clear();
         for (int idx: indecs) {
-            String dictName = dictionaryInfoModel.get(idx);
+            String dictName = DICTIONARY_INFO_MODEL.get(idx);
             selectedDicts.add(dictName);
         }
         updateResult();
     }
 
     void setDictionaryList(final List<String> dictList) {
-        dictionaryInfoModel.removeAllElements();
-        dictionaryInfoModel.addAll(dictList);
+        DICTIONARY_INFO_MODEL.removeAllElements();
+        DICTIONARY_INFO_MODEL.addAll(dictList);
         selectedDicts.addAll(dictList);
     }
 
     void addToHistory(final String word) {
-        historyModel.add(0, word);
+        HISTORY_MODEL.add(0, word);
     }
 
     void updateHeadingsModel(final List<String> wordList) {
-        headingsModel.removeAllElements();
-        headingsModel.addAll(wordList);
+        HEADINGS_MODEL.removeAllElements();
+        HEADINGS_MODEL.addAll(wordList);
     }
 
     public void updateResult(final List<DictionaryEntry> result) {

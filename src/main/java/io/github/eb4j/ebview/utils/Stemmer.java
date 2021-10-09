@@ -19,19 +19,19 @@ import java.util.List;
  */
 public class Stemmer {
 
-    public static final String[] EMPTY_STRINGS_LIST = new String[0];
+    private static final String[] EMPTY_STRINGS_LIST = new String[0];
 
     public Stemmer() {
     }
 
-    public String[] doStem(String str) {
+    public String[] doStem(final String str) {
         if (StringUtils.isBlank(str)) {
             return EMPTY_STRINGS_LIST;
         }
         return tokenizeTextToStringsNoCache(str);
     }
 
-    private static String[] tokenizeTextToStringsNoCache(String str) {
+    private static String[] tokenizeTextToStringsNoCache(final String str) {
         if (StringUtils.isBlank(str)) {
             return EMPTY_STRINGS_LIST;
         }

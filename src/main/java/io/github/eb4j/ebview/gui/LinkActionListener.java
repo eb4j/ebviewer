@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class LinkActionListener implements HyperlinkListener {
 
-    private static final String[] movieExts = {".mpg", ".MPG", ".ogv", ".mp4", ".mov"};
+    private static final String[] MOVIE_EXTS = {".mpg", ".MPG", ".ogv", ".mp4", ".mov"};
 
     private static boolean hasExt(final String path, final String[] extrn) {
         return Arrays.stream(extrn).anyMatch(entry -> path.endsWith(entry));
@@ -42,7 +42,7 @@ public class LinkActionListener implements HyperlinkListener {
                     String path = url.toURI().getPath();
                     if (path.endsWith(".wav") || path.endsWith(".WAV")) {
                         playSound(new File(path));
-                    } else if (hasExt(path, movieExts)) {
+                    } else if (hasExt(path, MOVIE_EXTS)) {
                         MoviePlay player = new MoviePlay(354, 280);
                         player.play(path);
                     }

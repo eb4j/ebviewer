@@ -46,57 +46,57 @@ final class PdicHeader {
     }
 
     /**
-     * @param header_block ヘッダーデータ部分
+     * @param headerBlock ヘッダーデータ部分
      * @return 辞書バージョン
      */
-    public int load(final ByteBuffer header_block) throws RuntimeException {
+    public int load(final ByteBuffer headerBlock) throws RuntimeException {
         int ret = 0;
         // Charset sjisset = Charset.forName("X-SJIS");
 
         byte[] headernamebuff = new byte[L_HEADERNAME];
         byte[] dictitlebuff = new byte[L_DICTITLE];
 
-        header_block.flip();
-        header_block.order(ByteOrder.LITTLE_ENDIAN);
-        header_block.get(headernamebuff);
+        headerBlock.flip();
+        headerBlock.order(ByteOrder.LITTLE_ENDIAN);
+        headerBlock.get(headernamebuff);
         // headername = sjisset.decode(ByteBuffer.wrap(headernamebuff)).toString();
-        header_block.get(dictitlebuff);
+        headerBlock.get(dictitlebuff);
         // dictitle = sjisset.decode(ByteBuffer.wrap(dictitlebuff)).toString();
-        version = header_block.getShort();
+        version = headerBlock.getShort();
         if ((version & 0xFF00) == 0x0500 || (version & 0xFF00) == 0x0600) {
-            header_block.getShort();  // lword
-            header_block.getShort();  // ljapa
+            headerBlock.getShort();  // lword
+            headerBlock.getShort();  // ljapa
 
-            block_size = header_block.getShort();
-            index_block = header_block.getShort();
-            header_size = header_block.getShort();
-            header_block.getShort();  // index_size
-            header_block.getShort();  // empty_block
-            header_block.getShort();  // nindex
-            header_block.getShort();  // nblock
+            block_size = headerBlock.getShort();
+            index_block = headerBlock.getShort();
+            header_size = headerBlock.getShort();
+            headerBlock.getShort();  // index_size
+            headerBlock.getShort();  // empty_block
+            headerBlock.getShort();  // nindex
+            headerBlock.getShort();  // nblock
 
-            header_block.getInt();  // nword
+            headerBlock.getInt();  // nword
 
-            header_block.get();  // dicorder
-            header_block.get();  // dictype
-            attrlen = header_block.get();
-            os = header_block.get();
+            headerBlock.get();  // dicorder
+            headerBlock.get();  // dictype
+            attrlen = headerBlock.get();
+            os = headerBlock.get();
 
-            header_block.getInt();  // ole_number
+            headerBlock.getInt();  // ole_number
 
             // lid_dummy
-            header_block.getShort();
-            header_block.getShort();
-            header_block.getShort();
-            header_block.getShort();
-            header_block.getShort();
+            headerBlock.getShort();
+            headerBlock.getShort();
+            headerBlock.getShort();
+            headerBlock.getShort();
+            headerBlock.getShort();
 
-            index_blkbit = (header_block.get() != 0);
-            header_block.get(); // dummy0
-            extheader = header_block.getInt();
-            header_block.getInt();  //empty_block2
-            nindex2 = header_block.getInt();
-            header_block.getInt();  // nblock2
+            index_blkbit = (headerBlock.get() != 0);
+            headerBlock.get(); // dummy0
+            extheader = headerBlock.getInt();
+            headerBlock.getInt();  //empty_block2
+            nindex2 = headerBlock.getInt();
+            headerBlock.getInt();  // nblock2
 
             // 固定部分チェック
             if (attrlen == 1) {

@@ -44,14 +44,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
     private final EBViewerModel ebViewerModel;
 
     private static JList<String> dictionaryInfoList;
-    private static final DictionaryPane dictionaryPane = new DictionaryPane();
+    private static final DictionaryPane DICTIONARY_PANE = new DictionaryPane();
 
-    private static final JTextField searchWordField = new JTextField();
+    private static final JTextField SEARCH_WORD_FIELD = new JTextField();
 
     private JLabel zoomLevel;
     private JLabel selectAllDictionary;
-    JList<String> headingsList;
-    JList<String> history;
+    private JList<String> headingsList;
+    private JList<String> history;
 
     public MainWindow(final DictionariesManager dictionariesManager) {
         super("EBViewer");
@@ -72,11 +72,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
 
     public static String getSearchWord() {
-        return searchWordField.getText();
+        return SEARCH_WORD_FIELD.getText();
     }
 
     public static void setMessage(final String message) {
-        dictionaryPane.setText(message);
+        DICTIONARY_PANE.setText(message);
     }
 
     @Override
@@ -90,8 +90,8 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     public static void updateDictionaryPane(final List<DictionaryEntry> entries) {
-        dictionaryPane.setFoundResult(entries);
-        dictionaryPane.setCaretPosition(0);
+        DICTIONARY_PANE.setFoundResult(entries);
+        DICTIONARY_PANE.setCaretPosition(0);
     }
 
     public static void updateDictionaryList(final int[] indecs) {
@@ -111,11 +111,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
         JPanel panel1 = new JPanel();
         JLabel zoomLabel = new JLabel("zoom:");
         zoomLevel = new JLabel();
-        zoomLevel.setText(dictionaryPane.getZoomLevel());
+        zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
         panel1.setLayout(new FlowLayout());
-        searchWordField.setPreferredSize(new Dimension(500, 30));
+        SEARCH_WORD_FIELD.setPreferredSize(new Dimension(500, 30));
         searchButton.setText("Search");
-        panel1.add(searchWordField);
+        panel1.add(SEARCH_WORD_FIELD);
         panel1.add(searchButton);
         panel1.add(zoomLabel);
         panel1.add(zoomDownButton);
@@ -126,7 +126,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
-        JScrollPane articlePane = new JScrollPane(dictionaryPane);
+        JScrollPane articlePane = new JScrollPane(DICTIONARY_PANE);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
         JPanel infoPanel = new JPanel();
@@ -147,7 +147,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
-        dictionaryPane.setText("Please add dictionaries from Dictionary menu at first.");
+        DICTIONARY_PANE.setText("Please add dictionaries from Dictionary menu at first.");
         if (SystemTray.isSupported()) {
             setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         } else {
@@ -161,7 +161,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     private void setActions() {
-        searchWordField.addActionListener(e -> {
+        SEARCH_WORD_FIELD.addActionListener(e -> {
             startSearch();
         });
 
@@ -170,13 +170,13 @@ public final class MainWindow extends JFrame implements IMainWindow {
         });
 
         zoomDownButton.addActionListener(e -> {
-            dictionaryPane.decreaseZoom();
-            zoomLevel.setText(dictionaryPane.getZoomLevel());
+            DICTIONARY_PANE.decreaseZoom();
+            zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
         });
 
         zoomUpButton.addActionListener(e -> {
-            dictionaryPane.increaseZoom();
-            zoomLevel.setText(dictionaryPane.getZoomLevel());
+            DICTIONARY_PANE.increaseZoom();
+            zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
         });
 
         headingsList.addListSelectionListener(e -> {
@@ -187,7 +187,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
             if (index == -1) {
                 return;
             }
-            dictionaryPane.moveTo(index);
+            DICTIONARY_PANE.moveTo(index);
             headingsList.clearSelection();
         });
 
@@ -198,7 +198,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
             }
             Object obj = history.getSelectedValue();
             if (obj != null) {
-                searchWordField.setText(obj.toString());
+                SEARCH_WORD_FIELD.setText(obj.toString());
             }
         });
 
@@ -208,7 +208,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 if (me.getClickCount() == 2) {
                     Object obj = history.getSelectedValue();
                     if (obj != null) {
-                        searchWordField.setText(obj.toString());
+                        SEARCH_WORD_FIELD.setText(obj.toString());
                         startSearch();
                     }
                 }
@@ -221,7 +221,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                     Object obj = history.getSelectedValue();
                     if (obj != null) {
-                        searchWordField.setText(obj.toString());
+                        SEARCH_WORD_FIELD.setText(obj.toString());
                         startSearch();
                     }
                 }
