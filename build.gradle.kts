@@ -81,7 +81,7 @@ dependencies {
 
     implementation("uk.co.caprica:vlcj:4.7.1")
 
-    implementation("com.formdev:flatlaf:1.6")
+    implementation("com.formdev:flatlaf:1.6.1")
     testImplementation("org.codehaus.groovy:groovy-all:3.0.9")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
