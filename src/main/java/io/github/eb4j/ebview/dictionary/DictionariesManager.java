@@ -2,6 +2,7 @@ package io.github.eb4j.ebview.dictionary;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.dictionary.oxford.OxfordDriver;
 import io.github.eb4j.ebview.utils.Stemmer;
 import io.github.eb4j.ebview.utils.FileUtils;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public class DictionariesManager {
         factories.add(new LingvoDSL());
         factories.add(new StarDict());
         factories.add(new PDic());
+        dictionaries.add(new OxfordDriver());
         stemmer = new Stemmer();
     }
 

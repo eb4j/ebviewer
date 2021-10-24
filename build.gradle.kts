@@ -76,6 +76,7 @@ dependencies {
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
     implementation("com.ibm.icu:icu4j-charset:69.1")
 
+    implementation("tokyo.northside:java-oxford-dictionaries:0.2.0")
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
