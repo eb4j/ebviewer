@@ -74,7 +74,7 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
-    implementation("com.ibm.icu:icu4j-charset:69.1")
+    implementation("com.ibm.icu:icu4j-charset:70.1")
 
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
