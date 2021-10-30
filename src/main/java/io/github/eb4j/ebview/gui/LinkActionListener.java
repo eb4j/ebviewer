@@ -5,9 +5,11 @@ import io.github.eb4j.ebview.gui.dialogs.MoviePlay;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -21,16 +23,29 @@ public class LinkActionListener implements HyperlinkListener {
     }
 
     public static synchronized void playSound(final File file) {
-        new Thread(() -> {
-            try {
-                Clip clip = AudioSystem.getClip();
-                AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
+        new SwingWorker<Void, Void>() {
+            private Clip clip;
+            private AudioInputStream inputStream;
+
+            @Override
+            protected Void doInBackground() throws Exception {
+                clip = AudioSystem.getClip();
+                inputStream = AudioSystem.getAudioInputStream(file);
                 clip.open(inputStream);
                 clip.start();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+                clip.drain();
+                return null;
             }
-        }).start();
+
+            @Override
+            protected void done() {
+                try {
+                    inputStream.close();
+                } catch (IOException ignored) {
+                }
+                clip.close();
+            }
+        }.execute();
     }
 
     @Override
@@ -39,9 +54,9 @@ public class LinkActionListener implements HyperlinkListener {
             URL url = hyperlinkEvent.getURL();
             if (url.getProtocol().equals("file")) {
                 try {
-                    String path = url.toURI().getPath();
+                    String path = url.getPath();
                     if (path.endsWith(".wav") || path.endsWith(".WAV")) {
-                        playSound(new File(path));
+                        playSound(new File(url.toURI()));
                     } else if (hasExt(path, MOVIE_EXTS)) {
                         MoviePlay player = new MoviePlay(354, 280);
                         player.play(path);
