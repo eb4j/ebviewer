@@ -18,9 +18,16 @@ plugins {
 
 fun getProps(f: File): Properties {
     val props = Properties()
-    props.load(FileInputStream(f))
+    try {
+        props.load(FileInputStream(f))
+    } catch (t: Throwable) {
+        println("Can't read $f: $t, assuming empty")
+    }
     return props
 }
+
+// load local.properties when exist.
+val localProperties = getProps(File(rootDir, "local.properties"))
 
 // we handle cases without .git directory
 val props = project.file("src/main/resources/version.properties")
@@ -55,7 +62,7 @@ tasks.getByName("jar") {
 group = "io.github.eb4j"
 
 application {
-    mainClass.set("io.github.eb4j.ebview.EBViewer")
+    mainClass.set("io.github.eb4j.ebview.HeadlessEBViewer")
 }
 
 application.applicationDistribution.into("") {
@@ -69,7 +76,11 @@ repositories {
 
 dependencies {
     implementation("io.github.eb4j:eb4j:2.3.0")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+
+    if (localProperties["useLocalProjectorServer"] == "true") {
+        implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    }
 
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
