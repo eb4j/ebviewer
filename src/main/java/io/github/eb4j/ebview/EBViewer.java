@@ -38,11 +38,11 @@ public class EBViewer implements Runnable {
      * @param args command line arguments.
      */
     public static void main(final String... args) {
-        // if (ProjectorServer.isEnabled()) {
+        if (ProjectorServer.isEnabled()) {
             if (!ProjectorLauncher.runProjectorServer()) {
                 throw new RuntimeException("Fail to start projector server");
             }
-       // }
+        }
         URLProtocolHandler.install();
         FlatLightLaf.setup();
         File dictionaryDirectory = null;

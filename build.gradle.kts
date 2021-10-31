@@ -63,6 +63,12 @@ application {
     mainClass.set("io.github.eb4j.ebview.EBViewer")
 }
 
+tasks.register<JavaExec>("projectorRun") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.eb4j.ebview.EBViewer")
+    systemProperty("org.jetbrains.projector.server.enable", "true")
+}
+
 application.applicationDistribution.into("") {
     from("README.md", "COPYING")
 }
