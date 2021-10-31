@@ -9,6 +9,7 @@ plugins {
     jacoco
     application
     distribution
+    kotlin("jvm") version "1.5.20"
     id("com.github.spotbugs") version "4.7.9"
     id("com.diffplug.spotless") version "5.17.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
@@ -25,9 +26,6 @@ fun getProps(f: File): Properties {
     }
     return props
 }
-
-// load local.properties when exist.
-val localProperties = getProps(File(rootDir, "local.properties"))
 
 // we handle cases without .git directory
 val props = project.file("src/main/resources/version.properties")
@@ -62,7 +60,7 @@ tasks.getByName("jar") {
 group = "io.github.eb4j"
 
 application {
-    mainClass.set("io.github.eb4j.ebview.HeadlessEBViewer")
+    mainClass.set("io.github.eb4j.ebview.EBViewer")
 }
 
 application.applicationDistribution.into("") {
@@ -78,9 +76,7 @@ dependencies {
     implementation("io.github.eb4j:eb4j:2.3.0")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
-    if (localProperties["useLocalProjectorServer"] == "true") {
-        implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    }
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
