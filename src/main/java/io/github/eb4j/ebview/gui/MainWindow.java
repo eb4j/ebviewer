@@ -147,12 +147,15 @@ public final class MainWindow extends JFrame implements IMainWindow {
         getContentPane().add(headingsPane, BorderLayout.WEST);
         getContentPane().add(articlePane, BorderLayout.CENTER);
         getContentPane().add(infoPanel, BorderLayout.EAST);
-        DICTIONARY_PANE.setText("Please add dictionaries from Dictionary menu at first.");
         if (SystemTray.isSupported()) {
             setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         } else {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
+    }
+
+    public void showMessage(final String msg) {
+        DICTIONARY_PANE.setText(msg);
     }
 
     private void startSearch() {
