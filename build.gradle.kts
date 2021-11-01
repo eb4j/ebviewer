@@ -63,10 +63,12 @@ application {
     mainClass.set("io.github.eb4j.ebview.EBViewer")
 }
 
+val home = System.getProperty("user.home")
 tasks.register<JavaExec>("projectorRun") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.eb4j.ebview.EBViewer")
     systemProperty("org.jetbrains.projector.server.enable", "true")
+    args = listOf("$home/Dicts")
     group = "application"
 }
 
