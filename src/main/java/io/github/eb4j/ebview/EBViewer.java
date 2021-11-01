@@ -4,6 +4,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.gui.MainWindowMenu;
+import org.jetbrains.projector.server.ProjectorLauncher;
+import org.jetbrains.projector.server.ProjectorServer;
 import tokyo.northside.protocol.URLProtocolHandler;
 
 import javax.swing.JFrame;
@@ -14,13 +16,18 @@ public class EBViewer implements Runnable {
     private final DictionariesManager dictionariesManager;
     private final MainWindow mw;
 
-    public EBViewer(final File dictionaryDirectory) {
+    public EBViewer(final File dictionaryDirectory, final boolean remote) {
         dictionariesManager = new DictionariesManager();
         if (dictionaryDirectory != null) {
             dictionariesManager.loadDictionaries(dictionaryDirectory);
         }
         mw = new MainWindow(dictionariesManager);
-        new MainWindowMenu(this);
+        if (!remote) {
+            new MainWindowMenu(this);
+            mw.showMessage("Please add dictionaries from Dictionary menu at first.");
+        } else {
+            mw.showMessage("Please enter search word above input box.");
+        }
     }
 
     public DictionariesManager getDictionariesManager() {
@@ -36,6 +43,12 @@ public class EBViewer implements Runnable {
      * @param args command line arguments.
      */
     public static void main(final String... args) {
+        boolean remote = ProjectorServer.isEnabled();
+        if (remote) {
+            if (!ProjectorLauncher.runProjectorServer()) {
+                throw new RuntimeException("Fail to start projector server");
+            }
+        }
         URLProtocolHandler.install();
         FlatLightLaf.setup();
         File dictionaryDirectory = null;
@@ -43,7 +56,7 @@ public class EBViewer implements Runnable {
             dictionaryDirectory = new File(args[0]);
         }
         try {
-            EBViewer viewer = new EBViewer(dictionaryDirectory);
+            EBViewer viewer = new EBViewer(dictionaryDirectory, remote);
             Thread t = new Thread(viewer);
             t.start();
         } catch (Exception e) {

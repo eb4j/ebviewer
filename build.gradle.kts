@@ -9,6 +9,7 @@ plugins {
     jacoco
     application
     distribution
+    kotlin("jvm") version "1.5.20"
     id("com.github.spotbugs") version "4.7.9"
     id("com.diffplug.spotless") version "5.17.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
@@ -18,7 +19,11 @@ plugins {
 
 fun getProps(f: File): Properties {
     val props = Properties()
-    props.load(FileInputStream(f))
+    try {
+        props.load(FileInputStream(f))
+    } catch (t: Throwable) {
+        println("Can't read $f: $t, assuming empty")
+    }
     return props
 }
 
@@ -58,6 +63,15 @@ application {
     mainClass.set("io.github.eb4j.ebview.EBViewer")
 }
 
+val home = System.getProperty("user.home")
+tasks.register<JavaExec>("projectorRun") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.eb4j.ebview.EBViewer")
+    systemProperty("org.jetbrains.projector.server.enable", "true")
+    args = listOf("$home/Dicts")
+    group = "application"
+}
+
 application.applicationDistribution.into("") {
     from("README.md", "COPYING")
 }
@@ -69,19 +83,32 @@ repositories {
 
 dependencies {
     implementation("io.github.eb4j:eb4j:2.3.0")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
-
-    implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
+
+    // for pdic
     implementation("com.ibm.icu:icu4j-charset:70.1")
 
+    // for stardict
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
+    // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
 
     implementation("com.formdev:flatlaf:1.6.1")
+
+    // for projector support
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("commons-io:commons-io:2.11.0")
+    implementation("org.jsoup:jsoup:1.13.1")
+    implementation("org.java-websocket:Java-WebSocket:1.5.1")
+    implementation("dnsjava:dnsjava:2.1.9")
+    implementation("org.javassist:javassist:3.27.0-GA")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.2.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+
     testImplementation("org.codehaus.groovy:groovy-all:3.0.9")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
