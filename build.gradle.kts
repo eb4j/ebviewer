@@ -105,7 +105,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.13.1")
     implementation("org.java-websocket:Java-WebSocket:1.5.2")
     implementation("dnsjava:dnsjava:2.1.9")
-    implementation("org.javassist:javassist:3.27.0-GA")
+    implementation("org.javassist:javassist:3.28.0-GA")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.2.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
 
