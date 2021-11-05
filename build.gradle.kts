@@ -102,7 +102,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("commons-io:commons-io:2.11.0")
-    implementation("org.jsoup:jsoup:1.13.1")
+    implementation("org.jsoup:jsoup:1.14.3")
     implementation("org.java-websocket:Java-WebSocket:1.5.2")
     implementation("dnsjava:dnsjava:2.1.9")
     implementation("org.javassist:javassist:3.27.0-GA")
