@@ -11,7 +11,7 @@ plugins {
     distribution
     kotlin("jvm") version "1.5.31"
     id("com.github.spotbugs") version "4.7.9"
-    id("com.diffplug.spotless") version "5.17.1"
+    id("com.diffplug.spotless") version "6.0.0"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
     id("com.palantir.git-version") version "0.12.3" apply false
