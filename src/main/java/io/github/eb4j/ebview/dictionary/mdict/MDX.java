@@ -4,6 +4,8 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.mdict.MDException;
 import io.github.eb4j.mdict.MDictDictionary;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,10 +45,17 @@ public class MDX implements IDictionary {
         List<DictionaryEntry> result = new ArrayList<>();
         for (Map.Entry<String, Object> entry: mdictionary.getEntries(word)) {
             String heading = entry.getKey();
-            String article = mdictionary.getText((Long) entry.getValue());
+            String article = cleaHtmlArticle(mdictionary.getText((Long) entry.getValue()));
             result.add(new DictionaryEntry(heading, article, getDictionaryName()));
         }
         return result;
+    }
+
+    private String cleaHtmlArticle(final String mdictHtmlText) {
+        Safelist whitelist = new Safelist();
+        whitelist.addTags("b", "br");
+        whitelist.addAttributes("font", "color", "face");
+        return Jsoup.clean(mdictHtmlText, whitelist);
     }
 
 }
