@@ -44,11 +44,40 @@ public class MDX implements IDictionary {
     public List<DictionaryEntry> readArticles(final String word) throws Exception {
         List<DictionaryEntry> result = new ArrayList<>();
         for (Map.Entry<String, Object> entry: mdictionary.getEntries(word)) {
-            String heading = entry.getKey();
-            String article = cleaHtmlArticle(mdictionary.getText((Long) entry.getValue()));
-            result.add(new DictionaryEntry(heading, article, getDictionaryName()));
+            addEntry(result, entry);
         }
         return result;
+    }
+
+    /**
+     * Read article's text. Matching is predictive, so e.g. supplying "term"
+     * will return articles for "term", "terminology", "termite", etc. The
+     * default implementation simply calls {@link #readArticles(String)} for
+     * backwards compatibility.
+     *
+     * @param word The word to look up in the dictionary
+     * @return List of entries. May be empty, but cannot be null.
+     */
+    @Override
+    public List<DictionaryEntry> readArticlesPredictive(String word) throws Exception {
+        List<DictionaryEntry> result = new ArrayList<>();
+        for (Map.Entry<String, Object> entry: mdictionary.getEntriesPredictive(word)) {
+            addEntry(result, entry);
+        }
+        return result;
+    }
+
+    private void addEntry(final List<DictionaryEntry> result, final Map.Entry<String, Object> entry) throws MDException {
+        if (entry.getValue() instanceof Long) {
+            result.add(new DictionaryEntry(entry.getKey(),
+                    cleaHtmlArticle(mdictionary.getText((Long) entry.getValue())), getDictionaryName()));
+        } else {
+            Long[] values = (Long[]) entry.getValue();
+            for (int i = 0; i < values.length; i++) {
+                result.add(new DictionaryEntry(entry.getKey(), cleaHtmlArticle(mdictionary.getText(values[i])),
+                        getDictionaryName()));
+            }
+        }
     }
 
     private String cleaHtmlArticle(final String mdictHtmlText) {
