@@ -1,7 +1,8 @@
 package io.github.eb4j.ebview.utils;
 
+import javax.imageio.ImageIO;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.io.IOException;
 import java.net.URL;
 
 public final class ResourceUtil {
@@ -33,7 +34,13 @@ public final class ResourceUtil {
      */
     public static Image getImage(final String resourceName) {
         URL resourceURL = ResourceUtil.class.getResource(resourceName);
-        return Toolkit.getDefaultToolkit().getImage(resourceURL);
+        if (resourceURL != null) {
+            try {
+                return ImageIO.read(resourceURL);
+            } catch (IOException ignored) {
+            }
+        }
+        return null;
     }
 
     /**
