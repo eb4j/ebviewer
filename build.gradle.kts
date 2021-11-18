@@ -94,7 +94,7 @@ dependencies {
     implementation("com.github.takawitter:trie4j:0.9.8")
 
     // for mdict
-    implementation("io.github.eb4j:mdict4j:0.1.1")
+    implementation("io.github.eb4j:mdict4j:0.1.2")
 
     // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
