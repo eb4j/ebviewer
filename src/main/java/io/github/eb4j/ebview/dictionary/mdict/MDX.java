@@ -43,7 +43,7 @@ public class MDX implements IDictionary {
         List<DictionaryEntry> result = new ArrayList<>();
         for (Map.Entry<String, Object> entry: mdictionary.getEntries(word)) {
             String heading = entry.getKey();
-            String article = mdictionary.getText((long) entry.getValue());
+            String article = mdictionary.getText((Long) entry.getValue());
             result.add(new DictionaryEntry(heading, article, getDictionaryName()));
         }
         return result;
