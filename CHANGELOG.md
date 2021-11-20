@@ -2,9 +2,25 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-- Support MDict dictionary format(#38,#64)
 
-# [0.6.0]
+## [0.7.0]
+### Added
+- Support MDict dictionary format(#38,#64)
+- Support JetBrains Projector(#47)
+  - Can build for headless and remote execution
+
+### Changed
+- Sound tweaks(#46)
+- Bump versions
+  - icu4j@70.1 (#45)
+  - websocket@1.5.2 (#49)
+  - SLF4j@1.7.32 (#53)
+  - Kotlin(JVM)@1.5.31 (#54)
+  - spotless@6.0.0 (#56)
+  - flatlaf@1.6.4 (#63)
+  - spotbugs@4.7.10 (#61)
+
+## [0.6.0]
 ### Added
 - Support PDICW/Unicode dictionary format v6.00 and v6.10
 - Support fuzzy match(#33)
@@ -13,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - Bump spotless@5.15.2
 - Bump EB4j@2.3.0
 
-# [0.5.2]
+## [0.5.2]
 ### Added
 -  DSL: support image/sound tag
 
@@ -107,7 +123,8 @@ Beta release.
 ## 0.1.0
 * First release
 
-[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/eb4j/ebviewer/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/eb4j/ebviewer/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/eb4j/ebviewer/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/eb4j/ebviewer/compare/v0.5.0...v0.5.1
