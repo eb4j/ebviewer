@@ -19,13 +19,6 @@ public class MDX implements IDictionary {
 
     public MDX(final File mdxFile) throws MDException, IOException {
         String mdxPath = mdxFile.getPath();
-        // String f = mdxPath;
-        // if (f.endsWith(".mdx")) {
-        //     f = f.substring(0, f.length() - ".mdx".length());
-        // }
-        // String dictName = f;
-        // String parent = mdxFile.getParent();
-        // File mddFile = new File(dictName + ".mdd");
         mdictionary = MDictDictionary.loadDicitonary(mdxPath);
     }
 
