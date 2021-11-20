@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Support MDict dictionary format(#38,#64)
 
 # [0.6.0]
 ### Added

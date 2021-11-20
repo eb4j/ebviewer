@@ -93,6 +93,10 @@ dependencies {
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
+    // for mdict
+    implementation("io.github.eb4j:mdict4j:0.1.4")
+    implementation("org.jsoup:jsoup:1.14.3")
+
     // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
 
@@ -102,7 +106,6 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.slf4j:slf4j-simple:1.7.32")
     implementation("commons-io:commons-io:2.11.0")
-    implementation("org.jsoup:jsoup:1.13.1")
     implementation("org.java-websocket:Java-WebSocket:1.5.2")
     implementation("dnsjava:dnsjava:2.1.9")
     implementation("org.javassist:javassist:3.27.0-GA")
