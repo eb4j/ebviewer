@@ -69,7 +69,8 @@ public class DictionariesManager {
         for (File f : listFiles) {
             try {
                 loadDictionary(f);
-            } catch (Exception ignore) {
+            } catch (Exception e) {
+                LOG.warn("get exception when loading", e);
             }
         }
     }

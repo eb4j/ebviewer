@@ -6,13 +6,11 @@ Very simple dictionary search application supporting;
 - EPWING ebz compression (.ebz) 
 - LingvoDSL (.dsl)
 - LingvoDSL dz compression (.dsl.dz)
-- MDict(*1)  (.mdx)
+- MDict  (.mdx, .mdd)
 - StarDict (.ifo .dict)
 - StarDict (.dict.dz)
 - PDIC/Unicode (PDIC format v6.00, 6.10) (.DIC)
 
-(*1) MDict support is _Experimental_ status that supports text only
- 
   ![Application image](https://raw.githubusercontent.com/eb4j/ebviewer/main/docs/img/screen_image.png)
 
 ## Install
