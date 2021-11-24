@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.7.1]
+### Added
+* Support MDict image and sound(#65)
+
+### Changed
+* Bump mdict4j@0.2.0(#65)
+
 ## [0.7.0]
 ### Added
 - Support MDict dictionary format(#38,#64)
@@ -123,7 +130,8 @@ Beta release.
 ## 0.1.0
 * First release
 
-[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/eb4j/ebviewer/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/eb4j/ebviewer/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/eb4j/ebviewer/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/eb4j/ebviewer/compare/v0.5.1...v0.5.2
