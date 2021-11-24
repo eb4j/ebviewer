@@ -1,6 +1,7 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.gui.dialogs.MoviePlay;
+import uk.co.caprica.vlcj.player.component.AudioPlayerComponent;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -17,6 +18,8 @@ import java.util.Arrays;
 public class LinkActionListener implements HyperlinkListener {
 
     private static final String[] MOVIE_EXTS = {".mpg", ".MPG", ".ogv", ".mp4", ".mov"};
+    private static final String[] SOUND_EXTS = {".wav", ".WAV"};
+    private static final String[] MUSIC_EXTS = {".mp3", ".MP3"};
 
     private static boolean hasExt(final String path, final String[] extrn) {
         return Arrays.stream(extrn).anyMatch(entry -> path.endsWith(entry));
@@ -55,11 +58,14 @@ public class LinkActionListener implements HyperlinkListener {
             if (url.getProtocol().equals("file")) {
                 try {
                     String path = url.getPath();
-                    if (path.endsWith(".wav") || path.endsWith(".WAV")) {
+                    if (hasExt(path, SOUND_EXTS)) {
                         playSound(new File(url.toURI()));
                     } else if (hasExt(path, MOVIE_EXTS)) {
                         MoviePlay player = new MoviePlay(354, 280);
                         player.play(path);
+                    } else if (hasExt(path, MUSIC_EXTS)) {
+                        AudioPlayerComponent audioPlayerComponent = new AudioPlayerComponent();
+                        audioPlayerComponent.mediaPlayer().media().play(path);
                     }
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
