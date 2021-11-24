@@ -17,7 +17,7 @@ Very simple dictionary search application supporting;
 
 You can download a binary zip archive from [github release](https://github.com/eb4j/ebviewer/releases)
 
-* [Download v0.6.0 binary distribution](https://github.com/eb4j/ebviewer/releases/download/v0.6.0/ebviewer-0.6.0.zip)
+* [Download v0.7.1 binary distribution](https://github.com/eb4j/ebviewer/releases/download/v0.7.1/ebviewer-0.7.1.zip)
 
 After downloading the zip archive, please extract zip archive to arbitary folder.
 The applicaiton is written by Java, you can run the application on any PC platforms, such as macOS, Windows and Linux.
@@ -27,26 +27,26 @@ The applicaiton is written by Java, you can run the application on any PC platfo
 On linux or macOS which already have java 11 or later installed and set PATH properly,
 
 ```console
-ebviewer-0.6.0/ebviewer
+ebviewer-0.7.1/ebviewer
 ```
 
 On windows
 
 ```console
-ebviewer-0.6.0\ebviewer.bat
+ebviewer-0.7.1\ebviewer.bat
 ```
 
 When you have java but there is no PATH set,
 
 ```console
 set JAVA_HOME=C:\Program Files\Java\jdk11.0.123.456\
-ebviewer-0.6.0\ebviewer.bat
+ebviewer-0.7.1\ebviewer.bat
 ```
 
 
 ## Dependency
 
-You need to install Java Runtime Version 11 or 16 on your operating system.
+You need to install Java Runtime Version 11 or 17 on your operating system.
 When you want to watch movie in your dictionary, VLC is required.
 
 ## Build from source
@@ -56,8 +56,8 @@ ebviewer uses Java and Gradle build system.
 From source distribution
 
 ```console
-unzip ebviewer-source-0.6.0.zip
-cd ebviewer-source-0.6.0
+unzip ebviewer-source-0.7.1.zip
+cd ebviewer-source-0.7.1
 ./buildw.bat build
 ```
 
