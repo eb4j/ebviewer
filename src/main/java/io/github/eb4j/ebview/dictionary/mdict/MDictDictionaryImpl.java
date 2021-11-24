@@ -63,7 +63,7 @@ public class MDictDictionaryImpl implements IDictionary {
      * @return List of entries. May be empty, but cannot be null.
      */
     @Override
-    public List<DictionaryEntry> readArticlesPredictive(String word) throws Exception {
+    public List<DictionaryEntry> readArticlesPredictive(final String word) throws Exception {
         List<DictionaryEntry> result = new ArrayList<>();
         for (Map.Entry<String, Object> entry: mdictionary.getEntriesPredictive(word)) {
             addEntry(result, entry);
@@ -71,7 +71,8 @@ public class MDictDictionaryImpl implements IDictionary {
         return result;
     }
 
-    private void addEntry(final List<DictionaryEntry> result, final Map.Entry<String, Object> entry) throws MDException {
+    private void addEntry(final List<DictionaryEntry> result, final Map.Entry<String, Object> entry)
+            throws MDException {
         if (entry.getValue() instanceof Long) {
             result.add(new DictionaryEntry(entry.getKey(),
                     retrieveDataAndUpdateLink(cleaHtmlArticle(mdictionary.getText((Long) entry.getValue()))),

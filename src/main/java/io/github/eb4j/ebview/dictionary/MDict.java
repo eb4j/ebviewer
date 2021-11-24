@@ -19,7 +19,7 @@ public class MDict implements IDictionaryFactory {
      * @return Whether or not the file is supported
      */
     @Override
-    public boolean isSupportedFile(File file) {
+    public boolean isSupportedFile(final File file) {
         return file.getPath().endsWith(".MDX") || file.getPath().endsWith(".mdx");
     }
 
@@ -30,7 +30,7 @@ public class MDict implements IDictionaryFactory {
      * @return An IDictionary file that can read articles from the file
      */
     @Override
-    public Set<IDictionary> loadDict(File file) throws MDException, IOException {
+    public Set<IDictionary> loadDict(final File file) throws MDException, IOException {
         Set<IDictionary> result = new HashSet<>();
         result.add(new MDictDictionaryImpl(file));
         return result;
