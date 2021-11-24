@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MDX implements IDictionary {
+public class MDictDictionaryImpl implements IDictionary {
 
     private final MDictDictionary mdictionary;
     private final MDictDictionary mData;
 
-    public MDX(final File mdxFile) throws MDException, IOException {
+    public MDictDictionaryImpl(final File mdxFile) throws MDException, IOException {
         String mdxPath = mdxFile.getPath();
         mdictionary = MDictDictionary.loadDicitonary(mdxPath);
         if (mdictionary.getMdxVersion().equals("2.0")) {
@@ -149,6 +149,4 @@ public class MDX implements IDictionary {
         }
         return result;
     }
-
-
 }

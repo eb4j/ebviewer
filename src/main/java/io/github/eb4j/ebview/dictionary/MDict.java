@@ -1,7 +1,7 @@
 package io.github.eb4j.ebview.dictionary;
 
 import io.github.eb4j.ebview.data.IDictionary;
-import io.github.eb4j.ebview.dictionary.mdict.MDX;
+import io.github.eb4j.ebview.dictionary.mdict.MDictDictionaryImpl;
 import io.github.eb4j.mdict.MDException;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class MDict implements IDictionaryFactory {
     @Override
     public Set<IDictionary> loadDict(File file) throws MDException, IOException {
         Set<IDictionary> result = new HashSet<>();
-        result.add(new MDX(file));
+        result.add(new MDictDictionaryImpl(file));
         return result;
     }
 }
