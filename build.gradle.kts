@@ -93,6 +93,9 @@ dependencies {
     implementation("io.github.dictzip:dictzip:0.9.5")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
+    // for lingvodsl
+    implementation("io.github.eb4j:dsl4j:0.1.0-12-b118868005-SNAPSHOT")
+
     // for mdict
     implementation("io.github.eb4j:mdict4j:0.2.0")
     implementation("org.jsoup:jsoup:1.14.3")

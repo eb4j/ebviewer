@@ -1,11 +1,15 @@
 package io.github.eb4j.ebview.dictionary;
 
+import io.github.eb4j.dsl.DslDictionary;
+import io.github.eb4j.dsl.visitor.HtmlDslVisitor;
+import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
-import io.github.eb4j.ebview.dictionary.lingvo.LingvoDSLDictionary;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Dictionary driver for Lingvo DSL format.
@@ -31,4 +35,54 @@ public class LingvoDSL implements IDictionaryFactory {
         return result;
     }
 
+    /**
+     * Dictionary implementation for Lingvo DSL format.
+     *
+     * @author Alex Buloichik
+     * @author Aaron Madlon-Kay
+     * @author Hiroshi Miura
+     */
+    public static class LingvoDSLDictionary implements IDictionary {
+
+        protected final DslDictionary dictionary;
+        private final String bookName;
+        private final HtmlDslVisitor htmlDslVisitor;
+
+        public LingvoDSLDictionary(final File file) throws Exception {
+            String fileName = file.getName();
+            if (fileName.endsWith(".dz")) {
+                bookName = fileName.substring(0, fileName.length() - 7);
+            } else {
+                bookName = fileName.substring(0, fileName.length() - 4);
+            }
+            dictionary = DslDictionary.loadDictionary(file);
+            htmlDslVisitor = new HtmlDslVisitor();
+        }
+
+        @Override
+        public String getDictionaryName() {
+            return bookName;
+        }
+
+        @Override
+        public List<DictionaryEntry> readArticles(final String word) {
+            return dictionary.lookup(word).getEntries(htmlDslVisitor).stream()
+                    .map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<DictionaryEntry> readArticlesPredictive(final String word) {
+            return dictionary.lookupPredictive(word).getEntries(htmlDslVisitor).stream()
+                    .map(e -> new DictionaryEntry(e.getKey(), e.getValue(), bookName))
+                    .collect(Collectors.toList());
+        }
+
+        /**
+         * Dispose IDictionary. Default is no action.
+         */
+        @Override
+        public void close() {
+        }
+    }
 }
