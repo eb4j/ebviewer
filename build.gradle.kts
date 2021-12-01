@@ -94,7 +94,7 @@ dependencies {
     implementation("com.github.takawitter:trie4j:0.9.8")
 
     // for lingvodsl
-    implementation("io.github.eb4j:dsl4j:0.1.0-12-b118868005-SNAPSHOT")
+    implementation("io.github.eb4j:dsl4j:0.3.0")
 
     // for mdict
     implementation("io.github.eb4j:mdict4j:0.2.0")
