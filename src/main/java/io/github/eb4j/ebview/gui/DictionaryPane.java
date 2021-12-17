@@ -161,7 +161,7 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
             return;
         }
         int pos1 = el.getStartOffset();
-        int pos2 = el.getEndOffset();
+        int pos2 = el.getEndOffset() - 1;
         try {
             Rectangle2D rect1 = modelToView2D(pos1);
             Rectangle2D rect2 = modelToView2D(pos2);
