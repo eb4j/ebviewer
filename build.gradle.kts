@@ -97,7 +97,7 @@ dependencies {
     implementation("io.github.eb4j:dsl4j:0.3.0")
 
     // for mdict
-    implementation("io.github.eb4j:mdict4j:0.2.0")
+    implementation("io.github.eb4j:mdict4j:0.2.3")
     implementation("org.jsoup:jsoup:1.14.3")
 
     // for video replay
