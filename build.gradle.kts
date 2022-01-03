@@ -10,7 +10,7 @@ plugins {
     application
     distribution
     kotlin("jvm") version "1.6.0"
-    id("com.github.spotbugs") version "4.8.0"
+    id("com.github.spotbugs") version "5.0.3"
     id("com.diffplug.spotless") version "6.0.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
@@ -97,7 +97,7 @@ dependencies {
     implementation("io.github.eb4j:dsl4j:0.3.0")
 
     // for mdict
-    implementation("io.github.eb4j:mdict4j:0.2.0")
+    implementation("io.github.eb4j:mdict4j:0.2.3")
     implementation("org.jsoup:jsoup:1.14.3")
 
     // for oxford-api
