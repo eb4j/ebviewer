@@ -142,8 +142,8 @@ tasks.jacocoTestReport {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = true  // coveralls plugin depends on xml format report
-        html.isEnabled = true
+        xml.required.set(true)
+        html.required.set(true)
     }
 }
 
