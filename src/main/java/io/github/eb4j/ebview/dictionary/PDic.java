@@ -1,7 +1,7 @@
 package io.github.eb4j.ebview.dictionary;
 
 import io.github.eb4j.ebview.data.IDictionary;
-import io.github.eb4j.ebview.dictionary.pdic.PdicDictionary;
+import io.github.eb4j.ebview.dictionary.pdic.PdicDict;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class PDic implements IDictionaryFactory {
     public Set<IDictionary> loadDict(final File file) {
         Set<IDictionary> result = new HashSet<>();
         try {
-            IDictionary dictionary = new PdicDictionary(file);
+            IDictionary dictionary = new PdicDict(file);
             result.add(dictionary);
         } catch (IOException e) {
             e.printStackTrace();

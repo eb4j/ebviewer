@@ -87,7 +87,7 @@ dependencies {
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
 
     // for pdic
-    implementation("com.ibm.icu:icu4j-charset:70.1")
+    implementation("io.github.eb4j:pdic4j:0.3.2")
 
     // for stardict
     implementation("io.github.dictzip:dictzip:0.9.5")
