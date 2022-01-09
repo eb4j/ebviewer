@@ -35,17 +35,17 @@ if (dotgit.exists()) {
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val details = versionDetails()
     val baseVersion = details.lastTag.substring(1)
-    if (details.isCleanTag) {  // release version
-        version = baseVersion
+    version = if (details.isCleanTag) {  // release version
+        baseVersion
     } else {  // snapshot version
-        version = baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
+        baseVersion + "-" + details.commitDistance + "-" + details.gitHash + "-SNAPSHOT"
     }
 } else if (props.exists()) { // when version.properties already exist, just use it.
     version = getProps(props).getProperty("version")
 }
 
 tasks.register("writeVersionFile") {
-    val folder = project.file("src/main/resources");
+    val folder = project.file("src/main/resources")
     if (!folder.exists()) {
         folder.mkdirs()
     }
@@ -63,7 +63,7 @@ application {
     mainClass.set("io.github.eb4j.ebview.EBViewer")
 }
 
-val home = System.getProperty("user.home")
+val home = System.getProperty("user.home")!!
 tasks.register<JavaExec>("projectorRun") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.eb4j.ebview.EBViewer")
