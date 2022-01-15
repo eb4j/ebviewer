@@ -106,7 +106,7 @@ dependencies {
     // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
 
-    implementation("com.formdev:flatlaf:1.6.5")
+    implementation("com.formdev:flatlaf:2.0")
 
     // for projector support
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
