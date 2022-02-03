@@ -25,6 +25,7 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +79,7 @@ public class LingvoDSL implements IDictionaryFactory {
          * @return list of results.
          */
         @Override
-        public List<DictionaryEntry> readArticles(final String word) {
+        public List<DictionaryEntry> readArticles(final String word) throws IOException {
             return readEntries(dictionary.lookup(word));
         }
 
@@ -90,7 +91,7 @@ public class LingvoDSL implements IDictionaryFactory {
          * @return list of results.
          */
         @Override
-        public List<DictionaryEntry> readArticlesPredictive(final String word) {
+        public List<DictionaryEntry> readArticlesPredictive(final String word) throws IOException {
             return readEntries(dictionary.lookupPredictive(word));
         }
 
