@@ -113,7 +113,7 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.35")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.java-websocket:Java-WebSocket:1.5.2")
-    implementation("dnsjava:dnsjava:2.1.9")
+    implementation("dnsjava:dnsjava:3.4.3")
     implementation("org.javassist:javassist:3.27.0-GA")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.2.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
