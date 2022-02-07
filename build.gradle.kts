@@ -88,24 +88,19 @@ dependencies {
 
     // for pdic
     implementation("io.github.eb4j:pdic4j:0.3.3")
-
     // for stardict
-    implementation("io.github.dictzip:dictzip:0.11.2")
-    implementation("com.github.takawitter:trie4j:0.9.8")
-
+    implementation("io.github.eb4j:stardict4j:0.3.0")
     // for lingvodsl
     implementation("io.github.eb4j:dsl4j:0.4.5")
-
     // for mdict
     implementation("io.github.eb4j:mdict4j:0.3.0")
     implementation("org.jsoup:jsoup:1.14.3")
-
     // for oxford-api
     implementation("tokyo.northside:java-oxford-dictionaries:0.3.1")
 
     // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
-
+    // GUI theme
     implementation("com.formdev:flatlaf:2.0.1")
 
     // for projector support
