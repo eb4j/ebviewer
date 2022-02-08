@@ -90,7 +90,7 @@ dependencies {
     implementation("io.github.eb4j:pdic4j:0.3.3")
 
     // for stardict
-    implementation("io.github.dictzip:dictzip:0.11.1")
+    implementation("io.github.dictzip:dictzip:0.11.2")
     implementation("com.github.takawitter:trie4j:0.9.8")
 
     // for lingvodsl
