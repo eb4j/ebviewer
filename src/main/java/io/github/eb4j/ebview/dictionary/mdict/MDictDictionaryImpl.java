@@ -96,25 +96,25 @@ public class MDictDictionaryImpl implements IDictionary {
             throws MDException {
         if (entry.getValue() instanceof Long) {
             result.add(new DictionaryEntry(entry.getKey(),
-                    retrieveDataAndUpdateLink(cleaHtmlArticle(mdictionary.getText((Long) entry.getValue()))),
+                    retrieveDataAndUpdateLink(cleanHtmlArticle(mdictionary.getText((Long) entry.getValue()))),
                     getDictionaryName()));
         } else {
             Long[] values = (Long[]) entry.getValue();
             for (int i = 0; i < values.length; i++) {
                 result.add(new DictionaryEntry(entry.getKey(),
-                        retrieveDataAndUpdateLink(cleaHtmlArticle(mdictionary.getText(values[i]))),
+                        retrieveDataAndUpdateLink(cleanHtmlArticle(mdictionary.getText(values[i]))),
                         getDictionaryName()));
             }
         }
     }
 
-    private String cleaHtmlArticle(final String mdictHtmlText) {
+    private String cleanHtmlArticle(final String htmlText) {
         Safelist whitelist = new Safelist();
         whitelist.addTags("b", "br");
         whitelist.addAttributes("font", "color", "face");
         whitelist.addAttributes("img", "src");
         whitelist.addAttributes("a", "href");
-        return Jsoup.clean(mdictHtmlText, whitelist);
+        return Jsoup.clean(htmlText, whitelist);
     }
 
     private String retrieveDataAndUpdateLink(final String mdictHtmlText) {
