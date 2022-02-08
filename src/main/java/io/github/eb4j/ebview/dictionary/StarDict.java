@@ -3,11 +3,10 @@ package io.github.eb4j.ebview.dictionary;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.stardict.StarDictDictionary;
-import io.github.eb4j.stardict.StarDictLoader;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -37,14 +36,16 @@ public class StarDict implements IDictionaryFactory {
     public static class StardictDict implements IDictionary {
 
         protected final StarDictDictionary dictionary;
+        protected final String dictionaryName;
 
         public StardictDict(final File file) throws Exception {
             dictionary = StarDictDictionary.loadDictionary(file);
+            dictionaryName = dictionary.getDictionaryName();
         }
 
         @Override
         public String getDictionaryName() {
-            return dictionary.getDictionaryName();
+            return dictionaryName;
         }
 
         /**
@@ -56,11 +57,9 @@ public class StarDict implements IDictionaryFactory {
          */
         @Override
         public List<DictionaryEntry> readArticles(final String word) {
-            List<DictionaryEntry> result = new ArrayList<>();
-            String dictionaryName = getDictionaryName();
             return dictionary.readArticles(word).stream()
-                    .filter(en -> useEntry(en.getType()))
-                    .map(en -> new DictionaryEntry(en.getWord(), en.getArticle(), dictionaryName))
+                    .filter(this::useEntry)
+                    .map(this::getEntry)
                     .collect(Collectors.toList());
         }
 
@@ -73,15 +72,29 @@ public class StarDict implements IDictionaryFactory {
          */
         @Override
         public List<DictionaryEntry> readArticlesPredictive(final String word) {
-            List<DictionaryEntry> result = new ArrayList<>();
-            String dictionaryName = getDictionaryName();
             return dictionary.readArticlesPredictive(word).stream()
-                    .filter(en -> useEntry(en.getType()))
-                    .map(en -> new DictionaryEntry(en.getWord(), en.getArticle(), dictionaryName))
+                    .filter(this::useEntry)
+                    .map(this::getEntry)
                     .collect(Collectors.toList());
         }
 
-        private static boolean useEntry(StarDictDictionary.EntryType type) {
+        private DictionaryEntry getEntry(StarDictDictionary.Entry en) {
+            if (en.getType() == StarDictDictionary.EntryType.HTML) {
+                return new DictionaryEntry(en.getWord(), cleanHtmlArticle(en.getArticle()), dictionaryName);
+            }
+            return new DictionaryEntry(en.getWord(), en.getArticle(), dictionaryName);
+        }
+
+        private String cleanHtmlArticle(final String htmlText) {
+            Safelist whitelist = new Safelist();
+            whitelist.addTags("b", "br");
+            whitelist.addAttributes("font", "color", "face");
+            whitelist.addAttributes("a", "href");
+            return Jsoup.clean(htmlText, whitelist);
+        }
+
+        private boolean useEntry(StarDictDictionary.Entry en) {
+            StarDictDictionary.EntryType type = en.getType();
             return type == StarDictDictionary.EntryType.MEAN
                     || type == StarDictDictionary.EntryType.PHONETIC
                     || type == StarDictDictionary.EntryType.HTML;
