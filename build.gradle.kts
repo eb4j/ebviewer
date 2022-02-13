@@ -1,6 +1,7 @@
 import java.io.File
 import java.io.FileInputStream
 import java.util.Properties
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
 plugins {
     groovy
@@ -169,7 +170,6 @@ nativeImage {
         add("--no-fallback")
         add("-Djava.awt.headless=false")
         add("-H:ConfigurationFileDirectories=config/native-image")
-        add("-H:+AddAllCharsets")
         add("--initialize-at-build-time=org.slf4j")
         add("--report-unsupported-elements-at-runtime")
     }
@@ -185,5 +185,29 @@ distributions {
             from (".")
             exclude ("out", "build", ".gradle", ".github", ".idea", ".gitignore")
         }
+    }
+}
+
+// generate native command distribution zip file for each supported platform.
+tasks.register<Zip>("zipExecutable") {
+    dependsOn(tasks.nativeImage)
+
+    // distribution contents
+    from("$buildDir/bin")
+    from("README.md")
+    from("COPYING")
+
+    // output zip file path and name
+    destinationDirectory.set(file("$buildDir/distributions"))
+    val osname = DefaultNativePlatform.getCurrentOperatingSystem().name
+    val archname = DefaultNativePlatform.getCurrentArchitecture().name
+    if (osname.startsWith("Windows")) {
+        archiveFileName.set("ebviewer-win32-${archname}-${project.version}.zip")
+    } else if (osname.startsWith("Mac")) {
+        archiveFileName.set("ebviewer-mac-${archname}-${project.version}.zip")
+    } else if (osname.startsWith("Linux")) {
+        archiveFileName.set("ebviewer-linux-${archname}-${project.version}.zip")
+    } else {
+        archiveFileName.set("ebviewer-other-${archname}-${project.version}.zip")
     }
 }
