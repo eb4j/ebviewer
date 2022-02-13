@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         version: ['22.0.0.2']
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: graalvm/setup-graalvm@v1
