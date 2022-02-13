@@ -21,7 +21,8 @@ jobs:
       - uses: gradle/gradle-build-action@v2
       - name: install dependencies
         run: |
-          sudo apt install upx libxi-dev libxt-dev libgles-dev libgl-dev
+          sudo apt update
+          sudo apt install -y upx libxi-dev libxt-dev libgles-dev libgl-dev
       - name: Build native image
         run: |
           ./gradlew build nativeImage
