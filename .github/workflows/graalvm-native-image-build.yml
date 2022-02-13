@@ -1,0 +1,29 @@
+name: GraalVM Native Image build
+
+on: push
+
+jobs:
+  build:
+    name: ${{ matrix.version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        version: ['22.0.0.2']
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: ${{ matrix.version }}
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: gradle/gradle-build-action@v2
+      - name: Build native image
+        run: |
+          ./gradlew build nativeImage
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ebviewer-${{ matrix.os }}
+          path: build/bin/*
