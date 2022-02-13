@@ -14,7 +14,7 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
     - uses: kiancross/checkstyle-annotations-action@v1
-    - uses: eskatos/gradle-command-action@v2
+    - uses: gradle/gradle-build-action@v2
       with:
         arguments: build
     - name: Upload artifact
@@ -23,10 +23,41 @@ jobs:
         name: release-files
         path: build/distributions/
 
+  nativeImage:
+    name: ${{ matrix.version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        version: ['22.0.0.2']
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y upx-ucl libxi-dev libxt-dev libgles-dev libgl-dev
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: ${{ matrix.version }}
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: gradle/gradle-build-action@v2
+      - name: Build native image
+        run: |
+          ./gradlew nativeImage
+          upx build/bin/ebviewer
+          ./gradlew zipExecutable
+      - name: Upload java dist asset
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-files
+          path: build/distributions/
+
   release:
     name: publish to github release
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, nativeImage]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
     - name: checkout code
@@ -35,7 +66,7 @@ jobs:
       id: get_version
       run: |
         echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
-    - name: Download artifact
+    - name: Download distributions artifact
       uses: actions/download-artifact@v2
       with:
         name: release-files
