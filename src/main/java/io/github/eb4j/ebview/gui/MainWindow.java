@@ -242,7 +242,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
         selectAllDictionary.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(final MouseEvent e) {
                 ebViewerModel.selectAllDict();
             }
         });

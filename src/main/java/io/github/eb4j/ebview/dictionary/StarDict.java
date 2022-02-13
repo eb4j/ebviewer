@@ -78,7 +78,7 @@ public class StarDict implements IDictionaryFactory {
                     .collect(Collectors.toList());
         }
 
-        private DictionaryEntry getEntry(StarDictDictionary.Entry en) {
+        private DictionaryEntry getEntry(final StarDictDictionary.Entry en) {
             if (en.getType() == StarDictDictionary.EntryType.HTML) {
                 return new DictionaryEntry(en.getWord(), cleanHtmlArticle(en.getArticle()), dictionaryName);
             }
@@ -93,7 +93,7 @@ public class StarDict implements IDictionaryFactory {
             return Jsoup.clean(htmlText, whitelist);
         }
 
-        private boolean useEntry(StarDictDictionary.Entry en) {
+        private boolean useEntry(final StarDictDictionary.Entry en) {
             StarDictDictionary.EntryType type = en.getType();
             return type == StarDictDictionary.EntryType.MEAN
                     || type == StarDictDictionary.EntryType.PHONETIC
