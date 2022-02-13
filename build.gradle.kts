@@ -13,6 +13,7 @@ plugins {
     id("com.github.spotbugs") version "5.0.5"
     id("com.diffplug.spotless") version "6.2.2"
     id("com.github.kt3k.coveralls") version "2.12.0"
+    // works with GraalVM-CE Java11
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
     id("com.palantir.git-version") version "0.13.0" apply false
 }
@@ -164,16 +165,11 @@ nativeImage {
     executableName = "ebviewer"
     outputDirectory = file("$buildDir/bin")
     arguments {
-        add("--verbose")
         add("--native-image-info")
         add("--no-fallback")
         add("-Djava.awt.headless=false")
-        add("-H:JNIConfigurationFiles=config/native-image/jni-config.json")
-        add("-H:ResourceConfigurationFiles=config/native-image/resource-config.json")
-        add("-H:ReflectionConfigurationFiles=config/native-image/reflect-config.json")
+        add("-H:ConfigurationFileDirectories=config/native-image")
         add("--initialize-at-build-time=org.slf4j")
-        add("--enable-all-security-services")
-        add("--initialize-at-run-time=sun.awt.dnd.SunDropTargetContextPeer\$EventDispatcher")
         add("--report-unsupported-elements-at-runtime")
     }
 }
