@@ -110,7 +110,7 @@ dependencies {
 
     // for projector support
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.slf4j:slf4j-simple:1.7.35")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.java-websocket:Java-WebSocket:1.5.2")
     implementation("dnsjava:dnsjava:2.1.9")
