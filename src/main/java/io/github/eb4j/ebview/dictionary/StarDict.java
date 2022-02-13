@@ -1,47 +1,20 @@
 package io.github.eb4j.ebview.dictionary;
 
-import io.github.eb4j.ebview.data.DictionaryData;
+import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
-import io.github.eb4j.ebview.dictionary.stardict.StarDictEntry;
-import io.github.eb4j.ebview.dictionary.stardict.StarDictFileDict;
-import io.github.eb4j.ebview.dictionary.stardict.StarDictZipDict;
+import io.github.eb4j.stardict.StarDictDictionary;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Stream;
-import java.util.zip.GZIPInputStream;
+import java.util.stream.Collectors;
 
 /**
  * Dictionary driver for StarDict format.
- * <p>
- * StarDict format described on https://github.com/huzheng001/stardict-3/blob/master/dict/doc/StarDictFileFormat
- * <p>
- * <h1>Files</h1>
- * Every dictionary consists of these files:
- * <ol><li>somedict.ifo
- * <li>somedict.idx or somedict.idx.gz
- * <li>somedict.dict or somedict.dict.dz
- * <li>somedict.syn (optional)
- * </ol>
- *
- * @author Alex Buloichik
  * @author Hiroshi Miura
- * @author Aaron Madlon-Kay
- * @author Suguru Oho
  */
 public class StarDict implements IDictionaryFactory {
 
@@ -52,120 +25,79 @@ public class StarDict implements IDictionaryFactory {
 
     @Override
     public Set<IDictionary> loadDict(final File ifoFile) throws Exception {
-        Set<IDictionary> result = new HashSet<>();
-        Map<String, String> header = readIFO(ifoFile);
-        String bookName = header.get("bookname");
-        String version = header.get("version");
-        if (!"2.4.2".equals(version) && !"3.0.0".equals(version)) {
-            throw new Exception("Invalid version of dictionary: " + version);
-        }
-        String sametypesequence = header.get("sametypesequence");
-        if (!"g".equals(sametypesequence)
-                && !"m".equals(sametypesequence)
-                && !"x".equals(sametypesequence)
-                && !"h".equals(sametypesequence)) {
-            throw new Exception("Invalid type of dictionary: " + sametypesequence);
-        }
-
-        /*
-         * Field in StarDict .ifo file, added in version 3.0.0. This must be
-         * retained in order to support idxoffsetbits=64 dictionaries (not yet implemented).
-         */
-        int idxoffsetbits = 32;
-        if ("3.0.0".equals(version)) {
-            String bitsString = header.get("idxoffsetbits");
-            if (bitsString != null) {
-                idxoffsetbits = Integer.parseInt(bitsString);
-            }
-        }
-
-        if (idxoffsetbits != 32) {
-            throw new Exception("StarDict dictionaries with idxoffsetbits=64 are not supported.");
-        }
-
-        String f = ifoFile.getPath();
-        if (f.endsWith(".ifo")) {
-            f = f.substring(0, f.length() - ".ifo".length());
-        }
-        String dictName = f;
-
-        File idxFile = getFile(dictName, ".idx.gz", ".idx")
-                .orElseThrow(() -> new FileNotFoundException("No .idx file could be found"));
-        DictionaryData<StarDictEntry> data = loadData(idxFile);
-
-        File dictFile = getFile(dictName, ".dict.dz", ".dict")
-                .orElseThrow(() -> new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName));
-
-        try {
-            if (dictFile.getName().endsWith(".dz")) {
-                result.add(new StarDictZipDict(bookName, dictFile, data));
-            } else {
-                result.add(new StarDictFileDict(bookName, dictFile, data));
-            }
-            return result;
-        } catch (IOException ex) {
-            throw new FileNotFoundException("No .dict.dz or .dict files were found for " + dictName);
-        }
+        return Collections.singleton(new StardictDict(ifoFile));
     }
 
     /**
-     * Read header.
+     * Dictionary implementation for stardict.
+     *
+     * @author Hiroshi Miura
      */
-    private Map<String, String> readIFO(final File ifoFile) throws Exception {
-        Map<String, String> result = new TreeMap<>();
-        try (BufferedReader rd = Files.newBufferedReader(ifoFile.toPath(), StandardCharsets.UTF_8)) {
-            String line;
-            String first = rd.readLine();
-            if (!"StarDict's dict ifo file".equals(first)) {
-                throw new Exception("Invalid header of .ifo file: " + first);
-            }
-            while ((line = rd.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-                int pos = line.indexOf('=');
-                if (pos < 0) {
-                    throw new Exception("Invalid format of .ifo file: " + line);
-                }
-                result.put(line.substring(0, pos), line.substring(pos + 1));
-            }
-        }
-        return result;
-    }
+    public static class StardictDict implements IDictionary {
 
-    private Optional<File> getFile(final String basename, final String... suffixes) {
-        return Stream.of(suffixes).map(suff -> new File(basename + suff)).filter(f -> f.isFile())
-                .findFirst();
-    }
+        protected final StarDictDictionary dictionary;
+        protected final String dictionaryName;
 
-    private DictionaryData<StarDictEntry> loadData(final File idxFile) throws IOException {
-        InputStream is = new FileInputStream(idxFile);
-        if (idxFile.getName().endsWith(".gz")) {
-            // BufferedInputStream.DEFAULT_BUFFER_SIZE = 8192
-            is = new GZIPInputStream(is, 8192);
+        public StardictDict(final File file) throws Exception {
+            dictionary = StarDictDictionary.loadDictionary(file);
+            dictionaryName = dictionary.getDictionaryName();
         }
-        DictionaryData<StarDictEntry> newData = new DictionaryData<>();
-        try (DataInputStream idx = new DataInputStream(new BufferedInputStream(is));
-              ByteArrayOutputStream mem = new ByteArrayOutputStream()) {
-            while (true) {
-                int b = idx.read();
-                if (b == -1) {
-                    break;
-                }
-                if (b == 0) {
-                    String key = new String(mem.toByteArray(), 0, mem.size(), StandardCharsets.UTF_8);
-                    mem.reset();
-                    int bodyOffset = idx.readInt();
-                    int bodyLength = idx.readInt();
-                    newData.add(key, new StarDictEntry(bodyOffset, bodyLength));
-                } else {
-                    mem.write(b);
-                }
+
+        @Override
+        public String getDictionaryName() {
+            return dictionaryName;
+        }
+
+        /**
+         * read article with exact match.
+         * @param word
+         *            The word to look up in the dictionary
+         *
+         * @return list of results.
+         */
+        @Override
+        public List<DictionaryEntry> readArticles(final String word) {
+            return dictionary.readArticles(word).stream()
+                    .filter(this::useEntry)
+                    .map(this::getEntry)
+                    .collect(Collectors.toList());
+        }
+
+        /**
+         * read article with predictive match.
+         * @param word
+         *            The word to look up in the dictionary
+         *
+         * @return list of results.
+         */
+        @Override
+        public List<DictionaryEntry> readArticlesPredictive(final String word) {
+            return dictionary.readArticlesPredictive(word).stream()
+                    .filter(this::useEntry)
+                    .map(this::getEntry)
+                    .collect(Collectors.toList());
+        }
+
+        private DictionaryEntry getEntry(StarDictDictionary.Entry en) {
+            if (en.getType() == StarDictDictionary.EntryType.HTML) {
+                return new DictionaryEntry(en.getWord(), cleanHtmlArticle(en.getArticle()), dictionaryName);
             }
+            return new DictionaryEntry(en.getWord(), en.getArticle(), dictionaryName);
         }
-        is.close();
-        newData.done();
-        return newData;
-    }
 
+        private String cleanHtmlArticle(final String htmlText) {
+            Safelist whitelist = new Safelist();
+            whitelist.addTags("b", "br");
+            whitelist.addAttributes("font", "color", "face");
+            whitelist.addAttributes("a", "href");
+            return Jsoup.clean(htmlText, whitelist);
+        }
+
+        private boolean useEntry(StarDictDictionary.Entry en) {
+            StarDictDictionary.EntryType type = en.getType();
+            return type == StarDictDictionary.EntryType.MEAN
+                    || type == StarDictDictionary.EntryType.PHONETIC
+                    || type == StarDictDictionary.EntryType.HTML;
+        }
+    }
 }
