@@ -3,7 +3,7 @@ name: GraalVM Native Image build
 on: push
 
 jobs:
-  build:
+  nativeImage:
     name: ${{ matrix.version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -19,9 +19,13 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: gradle/gradle-build-action@v2
+      - name: install dependencies
+        run: |
+          sudo apt install upx libxi-dev libxt-dev libgles-dev libgl-dev
       - name: Build native image
         run: |
           ./gradlew build nativeImage
+          upx build/bin/ebviewer
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
