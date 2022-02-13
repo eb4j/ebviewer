@@ -169,6 +169,7 @@ nativeImage {
         add("--no-fallback")
         add("-Djava.awt.headless=false")
         add("-H:ConfigurationFileDirectories=config/native-image")
+        add("-H:AddAllCharsets")
         add("--initialize-at-build-time=org.slf4j")
         add("--report-unsupported-elements-at-runtime")
     }
