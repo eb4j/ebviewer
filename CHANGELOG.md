@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.7.3]
+
+### Fixed
+* Jump to word failed when last one.
+
+### Added
+* Native Image build.(#111,#112)
+* Online Oxford Dicitonaries(experimental)
+  * merged but not enabled yet.
+
+### Changed
+* Use stardict4j#0.3.0
+* Bump versions
+  * spotless@6.2.B2
+  * slf4j@1.7.36
+  * flatlaf@2.0.1
+  * spotbugs@5.0.5
+  * mdict4j@0.3.0
+  * pdic4j@0.3.3
+  * eb4j@2.3.1
+  * gradle-git-vesrion@0.13.0
+  * dictzip@0.11.2
+  * dsl4j@0.4.5
+
 ## [0.7.2]
 ### Fixed
 * Allow MDX only dictionary for MDict
@@ -140,7 +164,8 @@ Beta release.
 ## 0.1.0
 * First release
 
-[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.3...HEAD
+[0.7.3]: https://github.com/eb4j/ebviewer/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/eb4j/ebviewer/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/eb4j/ebviewer/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/eb4j/ebviewer/compare/v0.6.0...v0.7.0
