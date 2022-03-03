@@ -12,7 +12,7 @@ plugins {
     distribution
     kotlin("jvm") version "1.6.0"
     id("com.github.spotbugs") version "5.0.6"
-    id("com.diffplug.spotless") version "6.2.2"
+    id("com.diffplug.spotless") version "6.3.0"
     id("com.github.kt3k.coveralls") version "2.12.0"
     // works with GraalVM-CE Java11
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
@@ -91,7 +91,7 @@ dependencies {
     // for pdic
     implementation("io.github.eb4j:pdic4j:0.3.3")
     // for stardict
-    implementation("io.github.eb4j:stardict4j:0.3.1")
+    implementation("io.github.eb4j:stardict4j:0.3.2")
     // for lingvodsl
     implementation("io.github.eb4j:dsl4j:0.5.2")
     // for mdict
