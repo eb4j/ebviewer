@@ -91,11 +91,11 @@ dependencies {
     // for pdic
     implementation("io.github.eb4j:pdic4j:0.3.3")
     // for stardict
-    implementation("io.github.eb4j:stardict4j:0.3.0")
+    implementation("io.github.eb4j:stardict4j:0.3.1")
     // for lingvodsl
-    implementation("io.github.eb4j:dsl4j:0.4.5")
+    implementation("io.github.eb4j:dsl4j:0.5.2")
     // for mdict
-    implementation("io.github.eb4j:mdict4j:0.3.0")
+    implementation("io.github.eb4j:mdict4j:0.3.1")
     implementation("org.jsoup:jsoup:1.14.3")
     // for oxford-api
     implementation("tokyo.northside:java-oxford-dictionaries:0.3.1")
