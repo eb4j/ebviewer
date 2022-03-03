@@ -43,7 +43,7 @@ public class MDictDictionaryImpl implements IDictionary {
 
     public MDictDictionaryImpl(final File mdxFile) throws MDException, IOException {
         String mdxPath = mdxFile.getPath();
-        mdictionary = MDictDictionary.loadDicitonary(mdxPath);
+        mdictionary = MDictDictionary.loadDictionary(mdxPath);
         MDictDictionary temp = null;
         try {
             if (mdictionary.getMdxVersion().equals("2.0")) {
