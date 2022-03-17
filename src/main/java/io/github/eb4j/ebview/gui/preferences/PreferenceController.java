@@ -24,6 +24,8 @@ import io.github.eb4j.ebview.utils.StaticUIUtils;
 
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 import java.awt.Window;
 
 public class PreferenceController {
@@ -34,16 +36,17 @@ public class PreferenceController {
     public void show(final Window parent) {
         JDialog dialog = new JDialog(parent);
         dialog.setTitle(LStrings.getString("PASSWORD_DIALOG_TITLE"));
-        dialog.setSize(400, 300);
+        dialog.setSize(450, 300);
         dialog.setModal(true);
         StaticUIUtils.setEscapeClosable(dialog);
         PreferencePanel preferencePanel = new PreferencePanel();
 
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setBorder(new LineBorder(Color.DARK_GRAY));
         secureStoreController = new SecureStoreController();
-        tabbedPane.addTab("Credentials", secureStoreController.getGui());
         oxfordApiController = new OxfordApiController();
         tabbedPane.addTab("Oxford dictionaries", oxfordApiController.getGui());
+        tabbedPane.addTab("Credentials", secureStoreController.getGui());
         preferencePanel.prefsPanel.add(tabbedPane);
 
         preferencePanel.okButton.addActionListener(e -> {
@@ -55,6 +58,8 @@ public class PreferenceController {
         preferencePanel.cancelButton.addActionListener(e -> StaticUIUtils.closeWindowByEvent(dialog));
 
         dialog.add(preferencePanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
     }
 

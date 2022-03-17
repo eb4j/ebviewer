@@ -24,6 +24,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.FlowLayout;
 
 public class OxfordApiPanel extends JPanel {
     /**
@@ -34,23 +35,22 @@ public class OxfordApiPanel extends JPanel {
     }
 
     private void initComponents() {
-        setMinimumSize(new java.awt.Dimension(250, 200));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel desc = new JLabel();
         desc.setText(LStrings.getString("PREFS_OXFORD_DESC"));
         add(desc);
         JPanel panel1 = new JPanel();
-        panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
+        panel1.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel appIdLabel = new JLabel();
         appIdLabel.setText(LStrings.getString("PREFS_OXFORD_APPID_LABEL"));
         panel1.add(appIdLabel);
-        appIdTextField = new JTextField();
+        appIdTextField = new JTextField(10);
         panel1.add(appIdTextField);
         JPanel panel2 = new JPanel();
-        panel2.setLayout(new BoxLayout(panel2, BoxLayout.X_AXIS));
+        panel2.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel appKeyLabel = new JLabel();
         appKeyLabel.setText(LStrings.getString("PREFS_OXFORD_APPKEY_LABEL"));
-        appKeyTextField = new JTextField();
+        appKeyTextField = new JTextField(30);
         panel2.add(appKeyLabel);
         panel2.add(appKeyTextField);
         add(panel1);
