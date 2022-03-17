@@ -3,6 +3,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.8.0]
+
+### Added
+* Can save preference in config file `~/.config/ebviewer/ebviewer.prefs` (#125)
+* Can save credentials in enrypted form (#125)
+* Add preference GUI menu (#125)
+
+### Changed
+* Oxford: use preference to save AppId/AppKey (#125)
+* Bump versions
+  * groovy-all@3.0.10
+  * java-oxford-dictionaries@0.4.0
+  * flatlaf@2.0.2
+  * dsl4j@0.5.2
+  * stardict4j@0.3.2
+* Update native-image configuration
+
 ## [0.7.3]
 
 ### Fixed
@@ -164,7 +181,8 @@ Beta release.
 ## 0.1.0
 * First release
 
-[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.7.3...HEAD
+[Unreleased]: https://github.com/eb4j/ebviewer/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/eb4j/ebviewer/compare/v0.7.3...v0.8.0
 [0.7.3]: https://github.com/eb4j/ebviewer/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/eb4j/ebviewer/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/eb4j/ebviewer/compare/v0.7.0...v0.7.1
