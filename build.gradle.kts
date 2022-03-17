@@ -106,7 +106,7 @@ dependencies {
     implementation("io.github.eb4j:mdict4j:0.3.1")
     implementation("org.jsoup:jsoup:1.14.3")
     // for oxford-api
-    implementation("tokyo.northside:java-oxford-dictionaries:0.3.1")
+    implementation("tokyo.northside:java-oxford-dictionaries:0.4.0")
 
     // for video replay
     implementation("uk.co.caprica:vlcj:4.7.1")
