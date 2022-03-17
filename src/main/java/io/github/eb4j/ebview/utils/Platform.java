@@ -1,7 +1,8 @@
 /*
  * EBViewer, a dictionary viewer application.
  * Copyright (C) 2022 Hiroshi Miura.
- *
+ *               2007 - Zoltan Bartko
+ *               2011 Alex Buloichik*
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
