@@ -61,7 +61,7 @@ public class OxfordDriver implements IDictionary {
         if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(appKey)) {
             return Collections.emptyList();
         }
-        OxfordClient client = new OxfordClient("id", "key");
+        OxfordClient client = new OxfordClient(appId, appKey);
         if (!cache.containsKey(word)) {
             List<DictionaryEntry> dictionaryEntries = new ArrayList<>();
             try {
