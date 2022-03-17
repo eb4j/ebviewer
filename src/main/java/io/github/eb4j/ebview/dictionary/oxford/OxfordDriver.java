@@ -2,6 +2,8 @@ package io.github.eb4j.ebview.dictionary.oxford;
 
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.utils.CredentialsManager;
+import org.apache.commons.lang3.StringUtils;
 import tokyo.northside.oxfordapi.OxfordClient;
 import tokyo.northside.oxfordapi.OxfordClientException;
 import tokyo.northside.oxfordapi.dtd.LexicalEntry;
@@ -15,15 +17,14 @@ import java.util.Map;
 
 public class OxfordDriver implements IDictionary {
 
-    private final OxfordClient client;
+    public static final String PROPERTY_API_ID = "oxford.api.id";
+    public static final String PROPERTY_API_KEY = "oxford.api.key";
+
     private final String source;
-    private static final String APPID = "";  // FIXME
-    private static final String APPKEY = "";  // FIXME: add GUI to set and store encrypted
     private final Map<String, List<DictionaryEntry>> cache = new HashMap<>();
 
     public OxfordDriver() {
         source = "en-gb";
-        client = new OxfordClient(APPID, APPKEY);
     }
 
     @Override
@@ -55,6 +56,12 @@ public class OxfordDriver implements IDictionary {
     }
 
     private List<DictionaryEntry> queryArticle(final String word, final boolean strict) {
+        String appId = CredentialsManager.getCredential(PROPERTY_API_ID);
+        String appKey = CredentialsManager.getCredential(PROPERTY_API_KEY);
+        if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(appKey)) {
+            return Collections.emptyList();
+        }
+        OxfordClient client = new OxfordClient("id", "key");
         if (!cache.containsKey(word)) {
             List<DictionaryEntry> dictionaryEntries = new ArrayList<>();
             try {
@@ -71,7 +78,6 @@ public class OxfordDriver implements IDictionary {
         }
         return cache.get(word);
     }
-
 
     @Override
     public void close() {
