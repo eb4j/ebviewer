@@ -32,6 +32,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.formdev.flatlaf.icons.FlatCapsLockIcon",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.formdev.flatlaf.icons.FlatFileChooserDetailsViewIcon",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -81,6 +85,14 @@
 },
 {
   "name":"com.formdev.flatlaf.icons.FlatMenuItemArrowIcon",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.formdev.flatlaf.icons.FlatRevealIcon",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -152,6 +164,10 @@
   "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
 },
 {
+  "name":"com.formdev.flatlaf.ui.FlatPasswordFieldUI",
+  "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
+},
+{
   "name":"com.formdev.flatlaf.ui.FlatPopupMenuBorder",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -173,6 +189,14 @@
 },
 {
   "name":"com.formdev.flatlaf.ui.FlatScrollPaneUI",
+  "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
+},
+{
+  "name":"com.formdev.flatlaf.ui.FlatTabbedPaneUI",
+  "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
+},
+{
+  "name":"com.formdev.flatlaf.ui.FlatTextAreaUI",
   "methods":[{"name":"createUI","parameterTypes":["javax.swing.JComponent"] }]
 },
 {
@@ -259,11 +283,22 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String[]"] }]
 },
 {
+  "name":"com.ibm.icu.text.Normalizer"
+},
+{
   "name":"com.sun.crypto.provider.AESCipher$General",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.sun.crypto.provider.DHParameters",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.PBEKeyFactory$PBEWithMD5AndDES",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.PBEWithMD5AndDESCipher",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -284,6 +319,7 @@
     {"name":"aboutActionPerformed","parameterTypes":[] }, 
     {"name":"closeActionPerformed","parameterTypes":[] }, 
     {"name":"openActionPerformed","parameterTypes":[] }, 
+    {"name":"prefActionPerformed","parameterTypes":[] }, 
     {"name":"quitActionPerformed","parameterTypes":[] }, 
     {"name":"trayActionPerformed","parameterTypes":[] }
   ]
@@ -421,6 +457,10 @@
   "name":"java.util.List"
 },
 {
+  "name":"javax.crypto.spec.PBEParameterSpec",
+  "methods":[{"name":"<init>","parameterTypes":["byte[]","int","java.security.spec.AlgorithmParameterSpec"] }]
+},
+{
   "name":"javax.imageio.spi.ImageReaderSpi"
 },
 {
@@ -457,6 +497,14 @@
 },
 {
   "name":"javax.swing.plaf.basic.BasicPopupMenuUI",
+  "methods":[{"name":"loadActionMap","parameterTypes":["javax.swing.plaf.basic.LazyActionMap"] }]
+},
+{
+  "name":"javax.swing.plaf.basic.BasicRootPaneUI",
+  "methods":[{"name":"loadActionMap","parameterTypes":["javax.swing.plaf.basic.LazyActionMap"] }]
+},
+{
+  "name":"javax.swing.plaf.basic.BasicTabbedPaneUI",
   "methods":[{"name":"loadActionMap","parameterTypes":["javax.swing.plaf.basic.LazyActionMap"] }]
 },
 {
@@ -876,6 +924,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"sun.security.provider.MD5",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"sun.security.provider.NativePRNG",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -897,6 +949,10 @@
 },
 {
   "name":"sun.security.provider.SHA5$SHA512",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SecureRandom",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {

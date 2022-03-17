@@ -29,6 +29,9 @@
       "pattern":"\\Qcom/ibm/icu/impl/data/icudt70b/cnvalias.icu\\E"
     }, 
     {
+      "pattern":"\\Qcom/ibm/icu/impl/data/icudt70b/nfc.nrm\\E"
+    }, 
+    {
       "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
     }, 
     {
