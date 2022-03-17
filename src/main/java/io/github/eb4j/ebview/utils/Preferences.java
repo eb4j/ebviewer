@@ -1,7 +1,17 @@
 /*
  * EBViewer, a dictionary viewer application.
  * Copyright (C) 2022 Hiroshi Miura.
- *
+ * Copyright (C) 2000-2006 Keith Godfrey, Maxym Mykhalchuk, and Henry Pijffers
+ *              2007 Zoltan Bartko
+ *              2008-2009 Didier Briel
+ *              2010 Wildrich Fourie, Antonio Vilei, Didier Briel
+ *              2011 John Moran, Didier Briel
+ *              2012 Martin Fleurke, Wildrich Fourie, Didier Briel, Thomas Cordonnier,
+ *                   Aaron Madlon-Kay
+ *              2013 Aaron Madlon-Kay, Zoltan Bartko
+ *              2014 Piotr Kulik, Aaron Madlon-Kay
+ *              2015 Aaron Madlon-Kay, Yu Tang, Didier Briel, Hiroshi Miura
+ *              2016 Aaron Madlon-Kay
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 
 public final class Preferences {
 
@@ -99,19 +108,6 @@ public final class Preferences {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public interface IPreferences {
-        String getPreference(String key);
-        boolean existsPreference(String key);
-        boolean isPreference(String key);
-        boolean isPreferenceDefault(String key, boolean defaultValue);
-        String getPreferenceDefault(String key, String value);
-        <T extends Enum<T>> T getPreferenceEnumDefault(String key, T defaultValue);
-        int getPreferenceDefault(String key, int defaultValue);
-        /** Return the old value, or null if not set */
-        Object setPreference(String key, Object value) throws Exception;
-        void save() throws IOException;
     }
 
     public static void init() throws JsonProcessingException {

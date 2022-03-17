@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PreferencesImpl implements Preferences.IPreferences {
+public class PreferencesImpl implements IPreferences {
 
     private final ObjectNode preferences;
     private final File preferenceFile;
