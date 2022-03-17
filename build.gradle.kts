@@ -86,7 +86,15 @@ repositories {
 dependencies {
     implementation("io.github.eb4j:eb4j:2.3.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("commons-io:commons-io:2.11.0")
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
+
+    // preference parser
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2")
+
+    // Credentials encryption
+    implementation("org.jasypt:jasypt:1.9.3")
 
     // for pdic
     implementation("io.github.eb4j:pdic4j:0.3.3")
@@ -127,6 +135,10 @@ tasks.getByName<Test>("test") {
     if (project.hasProperty("headless")) {
         systemProperty("java.awt.headless", "true")
     }
+}
+
+spotbugs {
+    reportLevel.set(com.github.spotbugs.snom.Confidence.HIGH)
 }
 
 jacoco {

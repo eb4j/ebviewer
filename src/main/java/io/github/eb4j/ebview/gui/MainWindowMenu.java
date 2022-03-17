@@ -3,6 +3,9 @@ package io.github.eb4j.ebview.gui;
 import io.github.eb4j.ebview.EBViewer;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
+import io.github.eb4j.ebview.gui.preferences.IPreferencesController;
+import io.github.eb4j.ebview.gui.preferences.PreferenceController;
+import io.github.eb4j.ebview.utils.LStrings;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -97,6 +100,15 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
         new AboutDialog(app).setVisible(true);
     }
 
+    public void prefActionPerformed() {
+        PreferenceController controller = new PreferenceController();
+        try {
+            controller.show(app);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @SuppressWarnings("avoidinlineconditionals")
     public void invokeAction(final String action, final int modifiers) {
         String methodName = action + "ActionPerformed";
@@ -148,21 +160,27 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
     }
 
     public void initMenuComponents() {
-        appMenu = new JMenu("Application");
+        appMenu = new JMenu(LStrings.getString("MENU_APP"));
         appMenu.setMnemonic(KeyEvent.VK_W);
         appMenu.addMenuListener(this);
         //
-        appTrayMenuItem = new JMenuItem("Quit to tray");
+        appPreferenceMenuItem = new JMenuItem(LStrings.getString("MENU_APP_PREFERENCE"));
+        appPreferenceMenuItem.setMnemonic(KeyEvent.VK_P);
+        appPreferenceMenuItem.setActionCommand("pref");
+        appPreferenceMenuItem.addActionListener(this);
+        //
+        appTrayMenuItem = new JMenuItem(LStrings.getString("MENU_APP_QUIT_TRAY"));
         appTrayMenuItem.setMnemonic(KeyEvent.VK_Q);
         appTrayMenuItem.setActionCommand("tray");
         appTrayMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
         appTrayMenuItem.addActionListener(this);
         //
-        appQuitMenuItem = new JMenuItem("Exit application");
+        appQuitMenuItem = new JMenuItem(LStrings.getString("MENU_APP_EXIT"));
         appQuitMenuItem.setMnemonic(KeyEvent.VK_E);
         appQuitMenuItem.setActionCommand("quit");
         appQuitMenuItem.addActionListener(this);
         //
+        appMenu.add(appPreferenceMenuItem);
         appMenu.add(appTrayMenuItem);
         appMenu.add(appQuitMenuItem);
         //
@@ -204,6 +222,7 @@ public class MainWindowMenu implements ActionListener, MenuListener, IMainMenu {
 
     private JMenuBar mainMenu;
     private JMenu appMenu;
+    private JMenuItem appPreferenceMenuItem;
     private JMenuItem appTrayMenuItem;
     private JMenuItem appQuitMenuItem;
     private JMenu dictMenu;
