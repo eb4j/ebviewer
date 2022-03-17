@@ -22,13 +22,14 @@ import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.dictionary.oxford.OxfordDriver;
 import io.github.eb4j.ebview.utils.Stemmer;
-import io.github.eb4j.ebview.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -60,6 +61,43 @@ public class DictionariesManager {
         stemmer = new Stemmer();
     }
 
+    /**
+     * Find files in subdirectories.
+     *
+     * @param dir
+     *            directory to start find
+     * @return list of filtered found files
+     */
+    private static List<File> findFiles(final File dir) {
+        final List<File> result = new ArrayList<>();
+        Set<String> knownDirs = new HashSet<>();
+        findFiles(dir, result, knownDirs);
+        return result;
+    }
+
+    private static void findFiles(final File dir, final List<File> result, final Set<String> knownDirs) {
+        String currDir;
+        try {
+            // check for recursive
+            currDir = dir.getCanonicalPath();
+            if (!knownDirs.add(currDir)) {
+                return;
+            }
+        } catch (IOException ex) {
+            return;
+        }
+        File[] list = dir.listFiles();
+        if (list != null) {
+            for (File f : list) {
+                if (f.isDirectory()) {
+                    findFiles(f, result, knownDirs);
+                } else {
+                    result.add(f);
+                }
+            }
+        }
+    }
+
     public void closeDictionaries() {
         synchronized (this) {
             dictionaries.stream().forEach(this::closeDict);
@@ -85,7 +123,7 @@ public class DictionariesManager {
      * @param dictionaryDirectory directory where dictionary stored.
      */
     public void loadDictionaries(final File dictionaryDirectory) {
-        List<File> listFiles = FileUtils.findFiles(dictionaryDirectory);
+        List<File> listFiles = findFiles(dictionaryDirectory);
         for (File f : listFiles) {
             try {
                 loadDictionary(f);
