@@ -19,6 +19,7 @@
 package io.github.eb4j.ebview;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.MainWindow;
 import io.github.eb4j.ebview.gui.MainWindowMenu;
@@ -32,29 +33,7 @@ import java.io.File;
 
 public class EBViewer implements Runnable {
 
-    private final DictionariesManager dictionariesManager;
-    private final MainWindow mw;
-
-    public EBViewer(final File dictionaryDirectory, final boolean remote) {
-        dictionariesManager = new DictionariesManager();
-        if (dictionaryDirectory != null) {
-            dictionariesManager.loadDictionaries(dictionaryDirectory);
-        }
-        mw = new MainWindow(dictionariesManager);
-        if (!remote) {
-            new MainWindowMenu(this);
-            mw.showMessage("Please add dictionaries from Dictionary menu at first.");
-        } else {
-            mw.showMessage("Please enter search word above input box.");
-        }
-    }
-
-    public DictionariesManager getDictionariesManager() {
-        return dictionariesManager;
-    }
-
-    public JFrame getApplicationFrame() {
-        return mw.getApplicationFrame();
+    public EBViewer() {
     }
 
     /**
@@ -76,7 +55,8 @@ public class EBViewer implements Runnable {
         }
         try {
             Preferences.init();
-            EBViewer viewer = new EBViewer(dictionaryDirectory, remote);
+            Core.initializeGUI(dictionaryDirectory, remote);
+            EBViewer viewer = new EBViewer();
             Thread t = new Thread(viewer);
             t.start();
         } catch (Exception e) {
@@ -97,6 +77,6 @@ public class EBViewer implements Runnable {
      */
     @Override
     public void run() {
-        mw.setVisible(true);
+        Core.run();
     }
 }

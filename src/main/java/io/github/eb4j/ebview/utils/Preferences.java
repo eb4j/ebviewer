@@ -56,6 +56,12 @@ public final class Preferences {
 
     public static final String FILE_PREFERENCES = "ebviewer.prefs";
 
+    public static final String APPEARANCE_CONDENSED_VIEW = "appearance.condensed.view";
+    public static final String APPEARANCE_FONT_NAME = "appearance.font.name";
+    public static final String APPEARANCE_FONT_DEFAULT = "dialog";
+    public static final String APPEARANCE_FONT_SIZE = "appearance.font.size";
+    public static final int APPEARANCE_FONT_SIZE_DEFAULT = 12;
+
     /**
      * Contains the location of the directory containing the configuration
      * files.
@@ -90,7 +96,7 @@ public final class Preferences {
         return preferences.getPreferenceEnumDefault(key, defaultValue);
     }
 
-    public int getPreferenceDefault(final String key, final int defaultValue) {
+    public static int getPreferenceDefault(final String key, final int defaultValue) {
         return preferences.getPreferenceDefault(key, defaultValue);
     }
 

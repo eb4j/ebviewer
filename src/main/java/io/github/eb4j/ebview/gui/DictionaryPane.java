@@ -1,5 +1,6 @@
 package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +40,12 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
 
     private final HTMLEditorKit htmlEditorKit = new HTMLEditorKit();
 
-    private StyleSheet baseStyleSheet;
-    private int zoomLevel = 0;
-
-    public DictionaryPane() {
+    public DictionaryPane(final Font font) {
         super();
         setContentType("text/html");
         ((HTMLDocument) getDocument()).setPreservesUnknownTags(false);
-        setFont(getFont());
-        setStyle();
-        htmlEditorKit.setStyleSheet(baseStyleSheet);
-        setEditorKit(htmlEditorKit);
+        setFont(font);
+        Core.registerFontChangedEventListener(this::setFont);
         FocusListener listener = new FocusAdapter() {
             @Override
             public void focusGained(final FocusEvent e) {
@@ -70,58 +66,27 @@ public class DictionaryPane extends JTextPane implements IThreadPane {
         Map attributes = font.getAttributes();
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
         super.setFont(font.deriveFont(attributes));
-        Document doc = getDocument();
-        if (!(doc instanceof HTMLDocument)) {
-            return;
+        if (htmlEditorKit != null) {
+            setStyle();
         }
     }
 
     @SuppressWarnings({"avoidinlineconditionals"})
     private void setStyle() {
         Font font = getFont();
-        baseStyleSheet = new StyleSheet();
+        StyleSheet baseStyleSheet = new StyleSheet();
         baseStyleSheet.addRule("body { font-family: " + font.getName() + "; "
                 + " font-size: " + font.getSize() + "; "
                 + " font-style: " + (font.getStyle() == Font.BOLD ? "bold"
                 : font.getStyle() == Font.ITALIC ? "italic" : "normal") + "; "
                 + " color: " + toHex(UIManager.getColor("TextPane.foreground")) + "; "
                 + " background: " + toHex(UIManager.getColor("TextPane.background")) + "; } "
-                + ".word {font-size: " + (zoomLevel + 2 + font.getSize()) + "; font-style: bold; }"
-                + ".article {font-size: " + (zoomLevel + font.getSize()) + "; }"
+                + ".word {font-size: " + (2 + font.getSize()) + "; font-style: bold; }"
+                + ".article {font-size: " + (font.getSize()) + "; }"
                 + ".reference { font-style: italic; }"
         );
         htmlEditorKit.setStyleSheet(baseStyleSheet);
-    }
-
-    private void limitZoom() {
-        int size = getFont().getSize();
-        if (size + zoomLevel > 64) {
-            zoomLevel = 64 - size;
-            return;
-        }
-        if (size + zoomLevel < 6) {
-            zoomLevel = size - 6;
-        }
-    }
-
-    public void increaseZoom() {
-        zoomLevel++;
-        limitZoom();
-        setStyle();
-    }
-
-    public void decreaseZoom() {
-        zoomLevel--;
-        limitZoom();
-        setStyle();
-    }
-
-    public String getZoomLevel() {
-        if (zoomLevel > 0) {
-            return "+" + zoomLevel;
-        } else {
-            return String.valueOf(zoomLevel);
-        }
+        setEditorKit(htmlEditorKit);
     }
 
     @Override
