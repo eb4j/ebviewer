@@ -61,6 +61,7 @@ public final class Preferences {
      * files.
      */
     private static String configDir = null;
+
     /** Private constructor, because this file is singleton */
     private Preferences() {
     }
@@ -178,18 +179,12 @@ public final class Preferences {
         }
 
         // check for Windows versions
-        if (os == Platform.OsType.WIN32 || os == Platform.OsType.WIN64) {
+        if (Platform.isWindows()) {
             String appData = null;
-
-            // We do not use %APPDATA%
-            // Trying first Vista/7, because "Application Data" exists also as virtual folder,
-            // so we would not be able to differentiate with 2000/XP otherwise
             File appDataFile = new File(home, "AppData\\Roaming");
             if (appDataFile.exists()) {
                 appData = appDataFile.getAbsolutePath();
             } else {
-                // Trying to locate "Application Data" for 2000 and XP
-                // C:\Documents and Settings\<User>\Application Data
                 appDataFile = new File(home, "Application Data");
                 if (appDataFile.exists()) {
                     appData = appDataFile.getAbsolutePath();
@@ -197,29 +192,15 @@ public final class Preferences {
             }
 
             if (!StringUtils.isEmpty(appData)) {
-                // if a valid application data dir has been found,
-                // append an OmegaT subdir to it
                 configDir = appData + WINDOWS_CONFIG_DIR;
             } else {
-                // otherwise set the config dir to the user's home directory,
-                // usually
-                // C:\Documents and Settings\<User>\OmegaT
                 configDir = home + WINDOWS_CONFIG_DIR;
             }
-            // Check for UNIX varieties
-            // Solaris is generally detected as SunOS
-        } else if (os == Platform.OsType.LINUX32 || os == Platform.OsType.LINUX64 || os == Platform.OsType.OTHER) {
-            // set the config dir to the user's home dir + "/.omegat/", so it's
-            // hidden
+        } else if (Platform.isLinux() || os == Platform.OsType.OTHER) {
             configDir = home + UNIX_CONFIG_DIR;
-            // check for Mac OS X
         } else if (Platform.isMacOSX()) {
-            // set the config dir to the user's home dir +
-            // "/Library/Preferences/OmegaT/"
             configDir = home + OSX_CONFIG_DIR;
-            // other OSes / default
         } else {
-            // use the user's home directory by default
             configDir = home + File.separator;
         }
 

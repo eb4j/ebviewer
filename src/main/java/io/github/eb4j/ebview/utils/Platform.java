@@ -61,7 +61,15 @@ public final class Platform {
     }
 
     /**
-     * Returns true if running on Mac OS X
+     * Returns true if running on Windoows.
+     */
+    public static boolean isWindows() {
+        OsType os = getOsType();
+        return os == OsType.WIN32 || os == OsType.WIN64;
+    }
+
+    /**
+     * Returns true if running on Mac OS X.
      */
     public static boolean isMacOSX() {
         OsType os = getOsType();
@@ -69,7 +77,7 @@ public final class Platform {
     }
 
     /**
-     * Returns true if running on Linux
+     * Returns true if running on Linux.
      */
     public static boolean isLinux() {
         OsType os = getOsType();
@@ -77,7 +85,7 @@ public final class Platform {
     }
 
     /**
-     * Returns true if the JVM (NOT the OS) is 64-bit
+     * Returns true if the JVM (NOT the OS) is 64-bit.
      */
     public static boolean is64Bit() {
         String osArch = System.getProperty("os.arch");
