@@ -18,8 +18,9 @@
 
 package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.data.DictionaryEntry;
-import io.github.eb4j.ebview.dictionary.DictionariesManager;
+import io.github.eb4j.ebview.utils.Preferences;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,10 +33,10 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.basic.BasicArrowButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Window;
@@ -55,28 +56,34 @@ import static io.github.eb4j.ebview.utils.ResourceUtil.APP_ICON_32X32;
  */
 public final class MainWindow extends JFrame implements IMainWindow {
     private final JButton searchButton = new JButton();
-    private final BasicArrowButton zoomUpButton = new BasicArrowButton(BasicArrowButton.NORTH);
-    private final BasicArrowButton zoomDownButton = new BasicArrowButton(BasicArrowButton.SOUTH);
 
-    private final DictionariesManager dictionariesManager;
     private final EBViewerModel ebViewerModel;
 
     private static JList<String> dictionaryInfoList;
-    private static final DictionaryPane DICTIONARY_PANE = new DictionaryPane();
 
     private static final JTextField SEARCH_WORD_FIELD = new JTextField();
 
-    private JLabel zoomLevel;
+    private final DictionaryPane dictionaryPane;
+
     private JLabel selectAllDictionary;
     private JList<String> headingsList;
     private JList<String> history;
 
-    public MainWindow(final DictionariesManager dictionariesManager) {
+    private final Font font;
+
+    public MainWindow() {
         super("EBViewer");
-        this.dictionariesManager = dictionariesManager;
         ebViewerModel = new EBViewerModel();
+        String fontName = Preferences.getPreferenceDefault(Preferences.APPEARANCE_FONT_NAME,
+                Preferences.APPEARANCE_FONT_DEFAULT);
+        int fontSize = Preferences.getPreferenceDefault(Preferences.APPEARANCE_FONT_SIZE,
+                Preferences.APPEARANCE_FONT_SIZE_DEFAULT);
+        font = new Font(fontName, Font.PLAIN, fontSize);
+        setFont(font);
         setWindowIcon(this);
+        dictionaryPane = new DictionaryPane(font);
         initializeGUI();
+        Core.registerFontChangedEventListener(this::setFont);
         setActions();
         pack();
         setResizable(true);
@@ -88,18 +95,8 @@ public final class MainWindow extends JFrame implements IMainWindow {
         window.setIconImages(icons);
     }
 
-
     public static String getSearchWord() {
         return SEARCH_WORD_FIELD.getText();
-    }
-
-    public static void setMessage(final String message) {
-        DICTIONARY_PANE.setText(message);
-    }
-
-    @Override
-    public DictionariesManager getDictionariesManager() {
-        return dictionariesManager;
     }
 
     @Override
@@ -107,9 +104,9 @@ public final class MainWindow extends JFrame implements IMainWindow {
         return this;
     }
 
-    public static void updateDictionaryPane(final List<DictionaryEntry> entries) {
-        DICTIONARY_PANE.setFoundResult(entries);
-        DICTIONARY_PANE.setCaretPosition(0);
+    @Override
+    public Font getApplicationFont() {
+        return font;
     }
 
     public static void updateDictionaryList(final int[] indecs) {
@@ -127,24 +124,17 @@ public final class MainWindow extends JFrame implements IMainWindow {
         //
         // GUI parts
         JPanel panel1 = new JPanel();
-        JLabel zoomLabel = new JLabel("zoom:");
-        zoomLevel = new JLabel();
-        zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
         panel1.setLayout(new FlowLayout());
         SEARCH_WORD_FIELD.setPreferredSize(new Dimension(500, 30));
         searchButton.setText("Search");
         panel1.add(SEARCH_WORD_FIELD);
         panel1.add(searchButton);
-        panel1.add(zoomLabel);
-        panel1.add(zoomDownButton);
-        panel1.add(zoomLevel);
-        panel1.add(zoomUpButton);
         //
         headingsList = new JList<>(ebViewerModel.getHeadingsModel());
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
-        JScrollPane articlePane = new JScrollPane(DICTIONARY_PANE);
+        JScrollPane articlePane = new JScrollPane(dictionaryPane);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
         JPanel infoPanel = new JPanel();
@@ -173,11 +163,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     public void showMessage(final String msg) {
-        DICTIONARY_PANE.setText(msg);
+        dictionaryPane.setText(msg);
     }
 
     private void startSearch() {
-        Searcher searchSwingWorker = new Searcher(ebViewerModel, dictionariesManager);
+        Searcher searchSwingWorker = new Searcher(ebViewerModel, Core.getDictionariesManager());
         searchSwingWorker.execute();
     }
 
@@ -190,16 +180,6 @@ public final class MainWindow extends JFrame implements IMainWindow {
             startSearch();
         });
 
-        zoomDownButton.addActionListener(e -> {
-            DICTIONARY_PANE.decreaseZoom();
-            zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
-        });
-
-        zoomUpButton.addActionListener(e -> {
-            DICTIONARY_PANE.increaseZoom();
-            zoomLevel.setText(DICTIONARY_PANE.getZoomLevel());
-        });
-
         headingsList.addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {
                 return;
@@ -208,7 +188,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
             if (index == -1) {
                 return;
             }
-            DICTIONARY_PANE.moveTo(index);
+            Core.moveTo(index);
             headingsList.clearSelection();
         });
 
@@ -264,5 +244,14 @@ public final class MainWindow extends JFrame implements IMainWindow {
                 ebViewerModel.selectAllDict();
             }
         });
+    }
+
+    public void updateDictionaryPane(final List<DictionaryEntry> entries) {
+        dictionaryPane.setFoundResult(entries);
+        dictionaryPane.setCaretPosition(0);
+    }
+
+    public void moveTo(final int index) {
+        dictionaryPane.moveTo(index);
     }
 }

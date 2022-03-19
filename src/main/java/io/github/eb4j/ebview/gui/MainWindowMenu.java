@@ -19,6 +19,7 @@
 package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.EBViewer;
+import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.gui.dialogs.AboutDialog;
 import io.github.eb4j.ebview.gui.preferences.PreferenceController;
@@ -51,9 +52,9 @@ public class MainWindowMenu implements ActionListener, MenuListener {
     private final DictionariesManager manager;
     private final TrayIcon trayIcon;
 
-    public MainWindowMenu(final EBViewer ebViewer) {
-        app = ebViewer.getApplicationFrame();
-        manager = ebViewer.getDictionariesManager();
+    public MainWindowMenu() {
+        app = Core.getApplicationFrame();
+        manager = Core.getDictionariesManager();
         trayIcon = new TrayIcon(APP_ICON_32X32, "EBViewer", null);
         initMenuComponents();
         initTray();
@@ -96,7 +97,7 @@ public class MainWindowMenu implements ActionListener, MenuListener {
             sb.append("<li>").append(dict).append("</li>");
         }
         sb.append("</li>");
-        MainWindow.setMessage(sb.toString());
+        Core.getMainWindow().showMessage(sb.toString());
     }
 
     public void closeActionPerformed() {

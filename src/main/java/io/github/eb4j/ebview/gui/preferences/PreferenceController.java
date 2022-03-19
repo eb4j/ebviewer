@@ -27,11 +27,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Window;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PreferenceController {
 
-    private IPreferencesController secureStoreController;
-    private IPreferencesController oxfordApiController;
+    private final Set<IPreferencesController> controllers = new HashSet<>();
+    private JTabbedPane tabbedPane;
 
     public void show(final Window parent) {
         JDialog dialog = new JDialog(parent);
@@ -41,17 +43,15 @@ public class PreferenceController {
         StaticUIUtils.setEscapeClosable(dialog);
         PreferencePanel preferencePanel = new PreferencePanel();
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(new LineBorder(Color.DARK_GRAY));
-        secureStoreController = new SecureStoreController();
-        oxfordApiController = new OxfordApiController();
-        tabbedPane.addTab("Oxford dictionaries", oxfordApiController.getGui());
-        tabbedPane.addTab("Credentials", secureStoreController.getGui());
+        addPanel("Appearance", new AppearanceController());
+        addPanel("Oxford Dictionaries", new OxfordApiController());
+        addPanel("Credentials", new SecureStoreController());
         preferencePanel.prefsPanel.add(tabbedPane);
 
         preferencePanel.okButton.addActionListener(e -> {
-            secureStoreController.persist();
-            oxfordApiController.persist();
+            controllers.forEach(IPreferencesController::persist);
             Preferences.save();
             StaticUIUtils.closeWindowByEvent(dialog);
         });
@@ -61,6 +61,11 @@ public class PreferenceController {
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
+    }
+
+    private void addPanel(final String title, final IPreferencesController controller) {
+        tabbedPane.addTab(title, controller.getGui());
+        controllers.add(controller);
     }
 
 }

@@ -53,9 +53,6 @@ public class Stemmer {
     }
 
     private static String[] tokenizeTextToStringsNoCache(final String str) {
-        if (StringUtils.isBlank(str)) {
-            return EMPTY_STRINGS_LIST;
-        }
         // create a new token list
         List<String> tokens = new ArrayList<>(64);
         // get a word breaker
@@ -76,7 +73,7 @@ public class Stemmer {
                 tokens.add(tokenStr);
             }
         }
-        return tokens.toArray(new String[tokens.size()]);
+        return tokens.toArray(new String[0]);
     }
 
 }

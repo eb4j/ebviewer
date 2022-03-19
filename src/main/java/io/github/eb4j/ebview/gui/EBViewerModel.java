@@ -18,6 +18,7 @@
 
 package io.github.eb4j.ebview.gui;
 
+import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 
 import javax.swing.DefaultListModel;
@@ -113,7 +114,7 @@ public final class EBViewerModel {
             }
         }
         updateHeadingsModel(wordList);
-        MainWindow.updateDictionaryPane(entries);
+        Core.updateDictionaryPane(entries);
     }
 
 }
