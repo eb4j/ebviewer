@@ -20,7 +20,6 @@ package io.github.eb4j.ebview.gui;
 
 import io.github.eb4j.ebview.core.Core;
 import io.github.eb4j.ebview.data.DictionaryEntry;
-import io.github.eb4j.ebview.dictionary.DictionariesManager;
 import io.github.eb4j.ebview.utils.Preferences;
 
 import javax.swing.BoxLayout;
@@ -64,7 +63,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
 
     private static final JTextField SEARCH_WORD_FIELD = new JTextField();
 
-    private final DictionaryPane DICTIONARY_PANE;
+    private final DictionaryPane dictionaryPane;
 
     private JLabel selectAllDictionary;
     private JList<String> headingsList;
@@ -82,7 +81,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         font = new Font(fontName, Font.PLAIN, fontSize);
         setFont(font);
         setWindowIcon(this);
-        DICTIONARY_PANE = new DictionaryPane(font);
+        dictionaryPane = new DictionaryPane(font);
         initializeGUI();
         Core.registerFontChangedEventListener(this::setFont);
         setActions();
@@ -135,7 +134,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
         JScrollPane headingsPane = new JScrollPane(headingsList);
         headingsPane.setPreferredSize(new Dimension(140, -1));
         //
-        JScrollPane articlePane = new JScrollPane(DICTIONARY_PANE);
+        JScrollPane articlePane = new JScrollPane(dictionaryPane);
         articlePane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         //
         JPanel infoPanel = new JPanel();
@@ -164,7 +163,7 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     public void showMessage(final String msg) {
-        DICTIONARY_PANE.setText(msg);
+        dictionaryPane.setText(msg);
     }
 
     private void startSearch() {
@@ -248,11 +247,11 @@ public final class MainWindow extends JFrame implements IMainWindow {
     }
 
     public void updateDictionaryPane(final List<DictionaryEntry> entries) {
-        DICTIONARY_PANE.setFoundResult(entries);
-        DICTIONARY_PANE.setCaretPosition(0);
+        dictionaryPane.setFoundResult(entries);
+        dictionaryPane.setCaretPosition(0);
     }
 
     public void moveTo(final int index) {
-        DICTIONARY_PANE.moveTo(index);
+        dictionaryPane.moveTo(index);
     }
 }
