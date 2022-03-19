@@ -11,7 +11,14 @@ Very simple dictionary search application supporting;
 - StarDict (.dict.dz)
 - PDIC/Unicode (PDIC format v6.00, 6.10) (.DIC)
 
+It also supports some online dictionary API
+
+- Oxford Dictionaries API
+
+A app looks like 
+
   ![Application image](https://raw.githubusercontent.com/eb4j/ebviewer/main/docs/img/screen_image.png)
+
 
 ## Install
 
@@ -47,7 +54,7 @@ ebviewer-0.7.3\ebviewer.bat
 
 You can download native binary distribution of EBViewer for linux.
 
-* [Download v0.7.3 native binary image](https://github.com/eb4j/ebviewer/releases/download/v0.7.3/ebviewer-linux-x86-64-0.7.3.zip)
+* [Download v0.8.1 native binary image](https://github.com/eb4j/ebviewer/releases/download/v0.8.1/ebviewer-linux-x86-64-0.8.1.zip)
 
 You don't need a Java runtime environment to run it.
 
