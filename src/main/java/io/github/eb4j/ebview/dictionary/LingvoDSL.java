@@ -23,11 +23,19 @@ import io.github.eb4j.dsl.DslResult;
 import io.github.eb4j.dsl.visitor.HtmlDslVisitor;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
+import io.github.eb4j.ebview.utils.Platform;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,9 +54,7 @@ public class LingvoDSL implements IDictionaryFactory {
 
     @Override
     public Set<IDictionary> loadDict(final File file) throws Exception {
-        Set<IDictionary> result = new HashSet<>();
-        result.add(new LingvoDSLDictionary(file));
-        return result;
+        return Collections.singleton(new LingvoDSLDictionary(file));
     }
 
     /**
@@ -62,8 +68,39 @@ public class LingvoDSL implements IDictionaryFactory {
         private final HtmlDslVisitor htmlVisitor;
 
         public LingvoDSLDictionary(final File file) throws Exception {
-            dictionary = DslDictionary.loadDictionary(file);
+            Path dictPath = Paths.get(file.toURI());
+            Path cachePath = getDictCachePath(dictPath);
+            dictionary = DslDictionary.loadDictionary(dictPath, cachePath, true);
             htmlVisitor = new HtmlDslVisitor(file.getParent());
+        }
+
+        private Path enforceCachePath(Path cachePath) {
+            if (!cachePath.getParent().toFile().exists()) {
+                boolean result = cachePath.getParent().toFile().mkdirs();
+                if (!result) {
+                    return null;
+                }
+            }
+            return cachePath;
+        }
+
+        private Path getDictCachePath(Path dictpath) {
+            String cacheDir = Platform.getCacheDir();
+            if (StringUtils.isEmpty(cacheDir)) {
+                return null;
+            }
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                digest.update(dictpath.toString().getBytes(StandardCharsets.UTF_8));
+                String hash = String.format("%020x", new BigInteger(1,  digest.digest()));
+                Path filename = dictpath.getFileName();
+                if (filename == null) {
+                    return null;
+                }
+                return enforceCachePath(Paths.get(cacheDir, hash).resolve(filename + ".idx"));
+            } catch (NoSuchAlgorithmException ex) {
+                return null;
+            }
         }
 
         @Override
