@@ -20,6 +20,7 @@ package io.github.eb4j.ebview.gui.preferences;
 
 import io.github.eb4j.ebview.dictionary.oxford.OxfordDriver;
 import io.github.eb4j.ebview.utils.CredentialsManager;
+import io.github.eb4j.ebview.utils.Preferences;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.JComponent;
@@ -37,16 +38,19 @@ public class OxfordApiController implements IPreferencesController {
     }
 
     protected void initFromPrefs() {
-        CredentialsManager credentialsManager = CredentialsManager.getInstance();
-        panel.appIdTextField.setText(credentialsManager.retrieve(OxfordDriver.PROPERTY_API_ID).orElse(""));
-        panel.appKeyTextField.setText(credentialsManager.retrieve(OxfordDriver.PROPERTY_API_KEY).orElse(""));
+        String appId = Preferences.getPreferenceDefault(OxfordDriver.PROPERTY_API_ID, "");
+        panel.appIdTextField.setText(appId);
+        if (appId != null) {
+            CredentialsManager credentialsManager = CredentialsManager.getInstance();
+            panel.appKeyTextField.setText(credentialsManager.retrieve(OxfordDriver.PROPERTY_API_KEY).orElse(""));
+        }
     }
 
     public void persist() {
         String appId = panel.appIdTextField.getText();
         if (!StringUtils.isEmpty(appId)) {
+            Preferences.setPreference(OxfordDriver.PROPERTY_API_ID, appId);
             CredentialsManager credentialsManager = CredentialsManager.getInstance();
-            credentialsManager.store(OxfordDriver.PROPERTY_API_ID, appId);
             credentialsManager.store(OxfordDriver.PROPERTY_API_KEY, panel.appKeyTextField.getText());
         }
     }

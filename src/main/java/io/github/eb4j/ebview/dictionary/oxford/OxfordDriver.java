@@ -3,6 +3,7 @@ package io.github.eb4j.ebview.dictionary.oxford;
 import io.github.eb4j.ebview.data.DictionaryEntry;
 import io.github.eb4j.ebview.data.IDictionary;
 import io.github.eb4j.ebview.utils.CredentialsManager;
+import io.github.eb4j.ebview.utils.Preferences;
 import org.apache.commons.lang3.StringUtils;
 import tokyo.northside.oxfordapi.OxfordClient;
 import tokyo.northside.oxfordapi.OxfordClientException;
@@ -56,9 +57,12 @@ public class OxfordDriver implements IDictionary {
     }
 
     private List<DictionaryEntry> queryArticle(final String word, final boolean strict) {
-        String appId = CredentialsManager.getCredential(PROPERTY_API_ID);
+        String appId = Preferences.getPreferenceDefault(PROPERTY_API_ID, "");
+        if (StringUtils.isEmpty(appId)) {
+            return Collections.emptyList();
+        }
         String appKey = CredentialsManager.getCredential(PROPERTY_API_KEY);
-        if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(appKey)) {
+        if (StringUtils.isEmpty(appKey)) {
             return Collections.emptyList();
         }
         OxfordClient client = new OxfordClient(appId, appKey);
