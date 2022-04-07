@@ -16,7 +16,7 @@ plugins {
     id("com.github.kt3k.coveralls") version "2.12.0"
     // works with GraalVM-CE Java11
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
-    id("com.palantir.git-version") version "0.14.0" apply false
+    id("com.palantir.git-version") version "0.15.0" apply false
 }
 
 fun getProps(f: File): Properties {
