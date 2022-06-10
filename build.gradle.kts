@@ -12,7 +12,7 @@ plugins {
     distribution
     kotlin("jvm") version "1.6.10"
     id("com.github.spotbugs") version "5.0.6"
-    id("com.diffplug.spotless") version "6.4.2"
+    id("com.diffplug.spotless") version "6.7.1"
     id("com.github.kt3k.coveralls") version "2.12.0"
     // works with GraalVM-CE Java11
     id("org.mikeneck.graalvm-native-image") version "1.4.1"
