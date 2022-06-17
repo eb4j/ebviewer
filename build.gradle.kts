@@ -90,7 +90,7 @@ dependencies {
     implementation("tokyo.northside:url-protocol-handler:0.1.4")
 
     // preference parser
-    implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.3")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     // Credentials encryption
