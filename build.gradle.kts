@@ -121,7 +121,7 @@ dependencies {
     implementation("dnsjava:dnsjava:2.1.9")
     implementation("org.javassist:javassist:3.29.0-GA")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     testImplementation("org.codehaus.groovy:groovy-all:3.0.11")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
