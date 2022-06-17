@@ -91,7 +91,7 @@ dependencies {
 
     // preference parser
     implementation("com.fasterxml.jackson.core:jackson-core:2.13.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     // Credentials encryption
     implementation("org.jasypt:jasypt:1.9.3")
