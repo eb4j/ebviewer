@@ -109,7 +109,7 @@ dependencies {
     implementation("tokyo.northside:java-oxford-dictionaries:0.4.3")
 
     // for video replay
-    implementation("uk.co.caprica:vlcj:4.7.2")
+    implementation("uk.co.caprica:vlcj:4.7.3")
     // GUI theme
     implementation("com.formdev:flatlaf:2.3")
 
