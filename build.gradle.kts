@@ -123,7 +123,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
-    testImplementation("org.codehaus.groovy:groovy-all:3.0.10")
+    testImplementation("org.codehaus.groovy:groovy-all:3.0.11")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
