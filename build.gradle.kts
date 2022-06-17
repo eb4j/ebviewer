@@ -11,7 +11,7 @@ plugins {
     application
     distribution
     kotlin("jvm") version "1.7.0"
-    id("com.github.spotbugs") version "5.0.6"
+    id("com.github.spotbugs") version "5.0.8"
     id("com.diffplug.spotless") version "6.7.2"
     id("com.github.kt3k.coveralls") version "2.12.0"
     // works with GraalVM-CE Java11
