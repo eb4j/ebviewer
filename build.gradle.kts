@@ -104,7 +104,7 @@ dependencies {
     implementation("io.github.eb4j:dsl4j:0.5.3")
     // for mdict
     implementation("io.github.eb4j:mdict4j:0.3.1")
-    implementation("org.jsoup:jsoup:1.14.3")
+    implementation("org.jsoup:jsoup:1.15.2")
     // for oxford-api
     implementation("tokyo.northside:java-oxford-dictionaries:0.4.3")
 
